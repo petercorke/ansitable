@@ -1,5 +1,3 @@
-![PyPI - Downloads](https://img.shields.io/pypi/dm/ansitable)
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/ansitable)](https://pypi.python.org/pypi/bdsim/)
 [![PyPI version fury.io](https://badge.fury.io/py/ansitable)](https://pypi.python.org/pypi/ansitable/)
 [![PyPI status](https://img.shields.io/pypi/status/ansicolortags.svg)](https://pypi.python.org/pypi/ansitable/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/petercorke/ansitable/graphs/commit-activity)
@@ -7,7 +5,7 @@
 
 - GitHub repository: [https://github.com/petercorke/ansitable](https://github.com/petercorke/ansitable)
 - Dependencies: `colored`
-- 
+
 # ANSI table
 
 This Python package allows you to simply create nice looking tables of data.
@@ -228,7 +226,7 @@ table.print()
 
 which yields
 
-![colored table](colortable.png) 
+![colored table](https://github.com/petercorke/ansitable/raw/master/figs/colortable.png) 
 
 # All options
 
