@@ -1,4 +1,4 @@
-[![PyPI version fury.io](https://badge.fury.io/py/ansitable)](https://pypi.python.org/pypi/ansitable/)
+[![PyPI version fury.io](https://badge.fury.io/py/ansitable.svg)](https://pypi.python.org/pypi/ansitable/)
 [![PyPI status](https://img.shields.io/pypi/status/ansicolortags.svg)](https://pypi.python.org/pypi/ansitable/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/petercorke/ansitable/graphs/commit-activity)
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/petercorke/ansitable/blob/master/LICENSE)
@@ -21,7 +21,7 @@ This Python package allows you to simply create nice looking tables of data.
  6	  table.add("aaaaaaaaa", 2.2, 3)
  7	  table.add("bbbbbbbbbbbbb", 5.5, 6)
  8	  table.add("ccccccc", 8.8, 9)
- 9   table.print()
+ 9	  table.print()
 
 ```
 Lines 1-5 constructs a `TableFormat` object and the arguments are a sequence of 
