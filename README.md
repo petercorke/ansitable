@@ -12,16 +12,16 @@ This Python package allows you to simply create nice looking tables of data.
 
 ## Starting simple
 
-```
- 1	  table = TableFormat(
- 2	          Column("col1"),
- 3	          Column("column 2 has a big header"),
- 4	          Column("column 3")
- 5	      )
- 6	  table.add("aaaaaaaaa", 2.2, 3)
- 7	  table.add("bbbbbbbbbbbbb", 5.5, 6)
- 8	  table.add("ccccccc", 8.8, 9)
- 9	  table.print()
+```python
+ 1 |  table = TableFormat(
+ 2 |            Column("col1"),
+ 3 |            Column("column 2 has a big header"),
+ 4 |            Column("column 3")
+ 5 |          )
+ 6 | table.add("aaaaaaaaa", 2.2, 3)
+ 7 | table.add("bbbbbbbbbbbbb", 5.5, 6)
+ 8 | table.add("ccccccc", 8.8, 9)
+ 9 | table.print()
 
 ```
 Lines 1-5 constructs a `TableFormat` object and the arguments are a sequence of 
@@ -43,7 +43,7 @@ bbbbbbbbbbbbb                        5.5         6
 We can specify a Python `format()` style format string for any column - by default it
 is the general formatting option `"{}"`
 
-```
+```python
 table = TableFormat(
         Column("col1"),
         Column("column 2 has a big header", "{:.3g}"),
@@ -71,7 +71,7 @@ the value to a string.
 The data in column 1 is quite long, we might wish to set a maximum column width which
 we can do using the `width` argument
 
-```
+```python
 table = TableFormat(
         Column("col1", width=10),
         Column("column 2 has a big header", "{:.3g}"),
@@ -100,8 +100,8 @@ charaters, with the `TableFormat` option `ellipsis=False`.
 ## Borders
 We can add a table border made up of regular ASCII characters
 
-```
-    table = TableFormat(
+```python
+table = TableFormat(
         Column("col1"),
         Column("column 2 has a big header"),
         Column("column 3"),
@@ -127,8 +127,8 @@ which yields
 Or we can construct a border using the [ANSI box-drawing characters](https://en.wikipedia.org/wiki/Box-drawing_character) which are supported by most terminal
 emulators
 
-```
-    table = TableFormat(
+```python
+table = TableFormat(
         Column("col1"),
         Column("column 2 has a big header"),
         Column("column 3"),
@@ -158,7 +158,7 @@ We can change the alignment of data in any column with the alignment flags "<" (
 ">" (right) and "^" (centered).
 
 ```
-    table = TableFormat(
+table = TableFormat(
         Column("col1"),
         Column("column 2 has a big header", colalign="^"),
         Column("column 3"),
@@ -183,8 +183,9 @@ which yields
 ```
 ***
 Header alignment within the column can be set for any column
-```
-    table = TableFormat(
+
+```python
+table = TableFormat(
         Column("col1", headalign="<"),
         Column("column 2 has a big header", colalign="^"),
         Column("column 3", colalign="<"),
@@ -211,7 +212,7 @@ yields
 If you have the `colored` package installed then you can set the foreground and
 background color of the header and column, and the border color.
 
-```
+```python
 table = TableFormat(
     Column("col1", headalign="<", colcolor="red", headstyle="underlined"),
     Column("column 2 has a big header", colalign="^", colstyle="reverse"),
