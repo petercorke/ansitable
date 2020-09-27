@@ -4,7 +4,7 @@
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/petercorke/ansitable/blob/master/LICENSE)
 
 - GitHub repository: [https://github.com/petercorke/ansitable](https://github.com/petercorke/ansitable)
-- Dependencies: `colored`
+- Dependencies: [`colored`](https://pypi.org/project/colored)
 
 # ANSI table
 
@@ -24,13 +24,13 @@ This Python package allows you to simply create nice looking tables of data.
  9 | table.print()
 
 ```
-Lines 1-5 constructs a `TableFormat` object and the arguments are a sequence of 
+Lines 1-5 construct a `TableFormat` object and the arguments are a sequence of 
 `Column` objects followed by `TableFormat` keyword arguments - there are none in this first example.  Since there are three column objects this this will be a 3-column table.
 Lines 6-8 add rows, 3 data values for each row.
 
 Line 9 prints the table and yields a tabular display
-with column width automatically chosen, and headings and column 
-data all left-justified
+with column widths automatically chosen, and headings and column 
+data all left-justified (default)
 
 ```
          col1  column 2 has a big header  column 3  
@@ -46,7 +46,7 @@ is the general formatting option `"{}"`
 ```python
 table = TableFormat(
         Column("col1"),
-        Column("column 2 has a big header", "{:.3g}"),
+        Column("column 2 has a big header", "{:.3g}"),  # CHANGE
         Column("column 3", "{:-10.4f}")
     )
 table.add("aaaaaaaaa", 2.2, 3)
@@ -73,7 +73,7 @@ we can do using the `width` argument
 
 ```python
 table = TableFormat(
-        Column("col1", width=10),
+        Column("col1", width=10),                      # CHANGE
         Column("column 2 has a big header", "{:.3g}"),
         Column("column 3", "{:-10.4f}")
     )
@@ -82,7 +82,7 @@ table.add("bbbbbbbbbbbbb", 5.5, 6)
 table.add("ccccccc", 8.8, 9)
 table.print()
 ```
-yields
+which yields
 
 
 ```
@@ -105,7 +105,7 @@ table = TableFormat(
         Column("col1"),
         Column("column 2 has a big header"),
         Column("column 3"),
-        border="ascii"
+        border="ascii"                          # CHANGE
     )
 table.add("aaaaaaaaa", 2.2, 3)
 table.add("bbbbbbbbbbbbb", 5.5, 6)
@@ -132,7 +132,7 @@ table = TableFormat(
         Column("col1"),
         Column("column 2 has a big header"),
         Column("column 3"),
-        border="thick"
+        border="thick"                           # CHANGE
     )
 table.add("aaaaaaaaa", 2.2, 3)
 table.add("bbbbbbbbbbbbb", 5.5, 6)
@@ -150,17 +150,18 @@ which yields
 ┃      ccccccc ┃                       8.8 ┃        9 ┃
 ┗━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━┛
 ```
+which actually looks better on the console than it does in GitHub markdown.
 
 Other border options include "thin", "rounded" (thin with round corners) and "double".
 
 ## Header and column alignment
-We can change the alignment of data in any column with the alignment flags "<" (left), 
+We can change the alignment of data and heading for any column with the alignment flags "<" (left), 
 ">" (right) and "^" (centered).
 
 ```
 table = TableFormat(
         Column("col1"),
-        Column("column 2 has a big header", colalign="^"),
+        Column("column 2 has a big header", colalign="^"),  # CHANGE
         Column("column 3"),
         border="thick"
     )
@@ -181,14 +182,15 @@ which yields
 ┃      ccccccc ┃            8.8            ┃        9 ┃
 ┗━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━┛
 ```
+where the data for column 2 has been centered.
 ***
-Header alignment within the column can be set for any column
+Heading and data alignment for any column can be set independently
 
 ```python
 table = TableFormat(
-        Column("col1", headalign="<"),
+        Column("col1", headalign="<"),                      # CHANGE
         Column("column 2 has a big header", colalign="^"),
-        Column("column 3", colalign="<"),
+        Column("column 3", colalign="<"),                   # CHANGE
         border="thick"
     )
 table.add("aaaaaaaaa", 2.2, 3)
@@ -207,17 +209,18 @@ yields
 ┃      ccccccc ┃            8.8            ┃ 9        ┃
 ┗━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━┛
 ```
+where we have left-justified the heading for column 1 and the data for column 3.
 
 ## Color
 If you have the `colored` package installed then you can set the foreground and
-background color of the header and column, and the border color.
+background color and style (bold, reverse, underlined, dim) of the header and column data, as well as the border color.
 
 ```python
 table = TableFormat(
-    Column("col1", headalign="<", colcolor="red", headstyle="underlined"),
-    Column("column 2 has a big header", colalign="^", colstyle="reverse"),
-    Column("column 3", colalign="<", colbgcolor="green"),
-    border="thick", bordercolor="blue"
+    Column("col1", headalign="<", colcolor="red", headstyle="underlined"),  # CHANGE
+    Column("column 2 has a big header", colalign="^", colstyle="reverse"),  # CHANGE
+    Column("column 3", colalign="<", colbgcolor="green"),                   # CHANGE
+    border="thick", bordercolor="blue"                                      # CHANGE
 )
 table.add("aaaaaaaaa", 2.2, 3)
 table.add("bbbbbbbbbbbbb", 5.5, 6)
