@@ -8,27 +8,27 @@
 
 # ANSI table
 
-This Python package allows you to simply create nice looking tables of data.
+Painless creation of nice-looking tables of data for Python.
+
+![colored table](https://github.com/petercorke/ansitable/raw/master/figs/colortable.png) 
 
 ## Starting simple
 
 ```python
- 1 |  table = TableFormat(
- 2 |            Column("col1"),
- 3 |            Column("column 2 has a big header"),
- 4 |            Column("column 3")
- 5 |          )
- 6 | table.add("aaaaaaaaa", 2.2, 3)
- 7 | table.add("bbbbbbbbbbbbb", 5.5, 6)
- 8 | table.add("ccccccc", 8.8, 9)
- 9 | table.print()
+ 1 | from ansitable import ANSITable, Column
+ 2 |
+ 3 | table = ANSITable("col1", "column 2 has a big header", "column 3")
+ 4 | table.row("aaaaaaaaa", 2.2, 3)
+ 5 | table.row("bbbbbbbbbbbbb", 5.5, 6)
+ 6 | table.row("ccccccc", 8.8, 9)
+ 7 | table.print()
 
 ```
-Lines 1-5 construct a `TableFormat` object and the arguments are a sequence of 
-`Column` objects followed by `TableFormat` keyword arguments - there are none in this first example.  Since there are three column objects this this will be a 3-column table.
-Lines 6-8 add rows, 3 data values for each row.
+Line 3 construct an `ANSITable` object and the arguments are a sequence of 
+column names followed by `ANSITable` keyword arguments - there are none in this first example.  Since there are three column objects this this will be a 3-column table.
+Lines 4-6 add rows, 3 data values for each row.
 
-Line 9 prints the table and yields a tabular display
+Line 7 prints the table and yields a tabular display
 with column widths automatically chosen, and headings and column 
 data all left-justified (default)
 
@@ -38,20 +38,44 @@ data all left-justified (default)
 bbbbbbbbbbbbb                        5.5         6  
       ccccccc                        8.8         9  
 ```
+we can provide a `file` option to `print()` to allow writing to an output stream, the
+default is `stdout`.
+
+The more general solution is to provide a sequence of `Column` objects which 
+allows many column specific options to be given, as we shall see later. 
+For now though, we could rewrite the example above as:
+
+```
+table = ANSITable(
+        Column("col1"),
+        Column("column 2 has a big header"),
+        Column("column 3")
+    )
+```
+
+or as
+
+```
+table = ANSITable()
+table.addcolumn("col1")
+table.addcolumn("column 2 has a big header")
+table.addcolumn("column 3")
+```
+
 
 ***
 We can specify a Python `format()` style format string for any column - by default it
 is the general formatting option `"{}"`
 
 ```python
-table = TableFormat(
+table = ANSITable(
         Column("col1"),
         Column("column 2 has a big header", "{:.3g}"),  # CHANGE
         Column("column 3", "{:-10.4f}")
     )
-table.add("aaaaaaaaa", 2.2, 3)
-table.add("bbbbbbbbbbbbb", 5.5, 6)
-table.add("ccccccc", 8.8, 9)
+table.row("aaaaaaaaa", 2.2, 3)
+table.row("bbbbbbbbbbbbb", 5.5, 6)
+table.row("ccccccc", 8.8, 9)
 table.print()
 ```
 which yields
@@ -72,14 +96,14 @@ The data in column 1 is quite long, we might wish to set a maximum column width 
 we can do using the `width` argument
 
 ```python
-table = TableFormat(
+table = ANSITable(
         Column("col1", width=10),                      # CHANGE
         Column("column 2 has a big header", "{:.3g}"),
         Column("column 3", "{:-10.4f}")
     )
-table.add("aaaaaaaaa", 2.2, 3)
-table.add("bbbbbbbbbbbbb", 5.5, 6)
-table.add("ccccccc", 8.8, 9)
+table.row("aaaaaaaaa", 2.2, 3)
+table.row("bbbbbbbbbbbbb", 5.5, 6)
+table.row("ccccccc", 8.8, 9)
 table.print()
 ```
 which yields
@@ -95,21 +119,21 @@ bbbbbbb...                        5.5      6.0000
 where we see that the data in column 1 has been truncated.
 
 If you don't like the ellipsis you can turn it off, and get to see three more
-charaters, with the `TableFormat` option `ellipsis=False`.
+charaters, with the `ANSITable` option `ellipsis=False`.
 
 ## Borders
 We can add a table border made up of regular ASCII characters
 
 ```python
-table = TableFormat(
+table = ANSITable(
         Column("col1"),
         Column("column 2 has a big header"),
         Column("column 3"),
         border="ascii"                          # CHANGE
     )
-table.add("aaaaaaaaa", 2.2, 3)
-table.add("bbbbbbbbbbbbb", 5.5, 6)
-table.add("ccccccc", 8.8, 9)
+table.row("aaaaaaaaa", 2.2, 3)
+table.row("bbbbbbbbbbbbb", 5.5, 6)
+table.row("ccccccc", 8.8, 9)
 table.print()
 ```
 which yields
@@ -128,15 +152,15 @@ Or we can construct a border using the [ANSI box-drawing characters](https://en.
 emulators
 
 ```python
-table = TableFormat(
+table = ANSITable(
         Column("col1"),
         Column("column 2 has a big header"),
         Column("column 3"),
         border="thick"                           # CHANGE
     )
-table.add("aaaaaaaaa", 2.2, 3)
-table.add("bbbbbbbbbbbbb", 5.5, 6)
-table.add("ccccccc", 8.8, 9)
+table.row("aaaaaaaaa", 2.2, 3)
+table.row("bbbbbbbbbbbbb", 5.5, 6)
+table.row("ccccccc", 8.8, 9)
 table.print()
 ```
 which yields
@@ -159,15 +183,15 @@ We can change the alignment of data and heading for any column with the alignmen
 ">" (right) and "^" (centered).
 
 ```
-table = TableFormat(
+table = ANSITable(
         Column("col1"),
         Column("column 2 has a big header", colalign="^"),  # CHANGE
         Column("column 3"),
         border="thick"
     )
-table.add("aaaaaaaaa", 2.2, 3)
-table.add("bbbbbbbbbbbbb", 5.5, 6)
-table.add("ccccccc", 8.8, 9)
+table.row("aaaaaaaaa", 2.2, 3)
+table.row("bbbbbbbbbbbbb", 5.5, 6)
+table.row("ccccccc", 8.8, 9)
 table.print()
 ```
 which yields
@@ -187,15 +211,15 @@ where the data for column 2 has been centered.
 Heading and data alignment for any column can be set independently
 
 ```python
-table = TableFormat(
+table = ANSITable(
         Column("col1", headalign="<"),                      # CHANGE
         Column("column 2 has a big header", colalign="^"),
         Column("column 3", colalign="<"),                   # CHANGE
         border="thick"
     )
-table.add("aaaaaaaaa", 2.2, 3)
-table.add("bbbbbbbbbbbbb", 5.5, 6)
-table.add("ccccccc", 8.8, 9)
+table.row("aaaaaaaaa", 2.2, 3)
+table.row("bbbbbbbbbbbbb", 5.5, 6)
+table.row("ccccccc", 8.8, 9)
 table.print()
 ```
 yields
@@ -216,15 +240,15 @@ If you have the `colored` package installed then you can set the foreground and
 background color and style (bold, reverse, underlined, dim) of the header and column data, as well as the border color.
 
 ```python
-table = TableFormat(
+table = ANSITable(
     Column("col1", headalign="<", colcolor="red", headstyle="underlined"),  # CHANGE
     Column("column 2 has a big header", colalign="^", colstyle="reverse"),  # CHANGE
     Column("column 3", colalign="<", colbgcolor="green"),                   # CHANGE
     border="thick", bordercolor="blue"                                      # CHANGE
 )
-table.add("aaaaaaaaa", 2.2, 3)
-table.add("bbbbbbbbbbbbb", 5.5, 6)
-table.add("ccccccc", 8.8, 9)
+table.row("aaaaaaaaa", 2.2, 3)
+table.row("bbbbbbbbbbbbb", 5.5, 6)
+table.row("ccccccc", 8.8, 9)
 table.print()
 ```
 
@@ -234,7 +258,7 @@ which yields
 
 # All options
 
-## TableFormat
+## ANSITable
 These keyword arguments control the styling of the entire table.
 
 | Keyword  | Default | Purpose |
@@ -250,16 +274,16 @@ These keyword arguments control the styling of a single column.
 
 | Keyword  | Default | Purpose |
 |----      |----     |----    |
-fmt | "{}" | format string for data in this column
-width || maximum width 
-colcolor || Text color 
+fmt | "{}" | format string for the column value, or a callable that maps the column value to a string
+width || maximum column width, excess will be truncated
+colcolor || Text color, see [possible values](https://pypi.org/project/colored)
 colbgcolor || Text background color, see [possible values](https://pypi.org/project/colored)
 colstyle  || Text style: "bold", "underlined", "reverse", "dim", "blink"
 colalign | ">" | Text alignment: ">" (left), "<" (right), "^" (centered)
-headcolor || Heading text color 
+headcolor || Heading text color, see [possible values](https://pypi.org/project/colored)
 headbgcolor || Heading text background color, see [possible values](https://pypi.org/project/colored)
 headstyle || Heading text style: "bold", "underlined", "reverse", "dim", "blink"
 headalign | ">" | Heading text alignment: ">" (left), "<" (right), "^" (centered)
-formatter | | A callable that maps the column value to a string
+
  
 Note that many terminal emulators do not support the "blink" style.
