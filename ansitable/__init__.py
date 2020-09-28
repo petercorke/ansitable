@@ -1,1 +1,1 @@
-from table import Table, Column
+from ansitable.table import ANSITable, Column
