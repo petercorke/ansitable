@@ -189,18 +189,18 @@ class ANSITable:
             return text
 
 
-    def _printline(self, header=False):
+    def _printline(self, row=None):
         if self.border is not None:
             b = self.border
             text = _spaces(self.offset - 1) + self._vline()
             for i, c in enumerate(self.columns):
 
-                ansi = c._settyle(header)
+                ansi = c._settyle(row is None)
                 text += ansi
-                if header:
+                if row is None:
                     text += _aligntext(c.headalign, c.name, c.width)
                 else:
-                    text += _aligntext(c.colalign, c.formatted[i], c.width)
+                    text += _aligntext(c.colalign, c.formatted[row], c.width)
                 if len(ansi) > 0:
                     text += ATTR(0)
 
@@ -214,12 +214,12 @@ class ANSITable:
             text = _spaces(self.offset)
 
             for i, c in enumerate(self.columns):
-                ansi = c._settyle(header)
+                ansi = c._settyle(row is None)
                 text += ansi
-                if header:
+                if row is None:
                     text += _aligntext(c.headalign, c.name, c.width)
                 else:
-                    text += _aligntext(c.colalign, c.formatted[i], c.width)
+                    text += _aligntext(c.colalign, c.formatted[row], c.width)
                 if len(ansi) > 0:
                     text += ATTR(0)
                 text +=  _spaces(self.colsep)
@@ -239,14 +239,14 @@ class ANSITable:
         # heading
         self._topline()
 
-        self._printline(header=True)
+        self._printline()
 
         self._midline()
 
         # rows
 
         for i in range(self.nrows):
-            self._printline(header=False)
+            self._printline(i)
         
         # footer
         self._bottomline()
