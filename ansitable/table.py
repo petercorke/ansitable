@@ -152,16 +152,18 @@ class ANSITable:
         self.nrows += 1
                     
     def _topline(self):
-        self._line(_tl, _tj, _tr)
+        return self._line(_tl, _tj, _tr)
 
     def _midline(self):
-        self._line(_lj, _xj, _rj)
+        return self._line(_lj, _xj, _rj)
 
     def _bottomline(self):
-        self._line(_bl, _bj, _br)
+        return self._line(_bl, _bj, _br)
 
     def _line(self, left, mid, right):
-        if self.border is not None:
+        if self.border is  None:
+            return ""
+        else:
             b = self.border
             c2 = self.colsep // 2
             text = _spaces(self.offset - 1)
@@ -175,7 +177,7 @@ class ANSITable:
             text += chr(right[b])
             if self.bordercolor is not None:
                 text += ATTR(0)
-            print(text, file=self.file)
+            return text + "\n"
 
     def _vline(self):
         if self.border is not None:
@@ -189,7 +191,7 @@ class ANSITable:
             return text
 
 
-    def _printline(self, row=None):
+    def _row(self, row=None):
         if self.border is not None:
             b = self.border
             text = _spaces(self.offset - 1) + self._vline()
@@ -224,7 +226,7 @@ class ANSITable:
                     text += ATTR(0)
                 text +=  _spaces(self.colsep)
 
-        print(text, file=self.file)
+        return text + "\n"
 
     def print(self, file=None):
         if file is None:
@@ -232,26 +234,33 @@ class ANSITable:
         else:
             self.file = file
 
+        print(str(self))
+
+    def __str__(self):
+
         for i, c in enumerate(self.columns):
             c.width = c.width or c.maxwidth
             c.last = i == len(self.columns) - 1
 
+        text = ""
+
         # heading
-        self._topline()
+        text += self._topline()
 
-        self._printline()
+        text += self._row()
 
-        self._midline()
+        text += self._midline()
 
         # rows
 
         for i in range(self.nrows):
-            self._printline(i)
+            text += self._row(i)
         
         # footer
-        self._bottomline()
-            
-            
+        text += self._bottomline()
+
+        return text
+ 
 if __name__ == "__main__":
     
     # table = ANSITable(
@@ -367,4 +376,4 @@ if __name__ == "__main__":
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", 5.5, 6)
     table.row("ccccccc", 8.8, 9)
-    table.print()  
+    table.print()
