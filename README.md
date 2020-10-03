@@ -43,11 +43,13 @@ bbbbbbbbbbbbb                        5.5         6
 we can provide a `file` option to `print()` to allow writing to an output stream, the
 default is `stdout`.
 
+You can obtain a string version of the table as `str(table)`.
+
 The more general solution is to provide a sequence of `Column` objects which 
 allows many column specific options to be given, as we shall see later. 
 For now though, we could rewrite the example above as:
 
-```
+```python
 table = ANSITable(
         Column("col1"),
         Column("column 2 has a big header"),
@@ -57,7 +59,7 @@ table = ANSITable(
 
 or as
 
-```
+```python
 table = ANSITable()
 table.addcolumn("col1")
 table.addcolumn("column 2 has a big header")
@@ -89,7 +91,7 @@ bbbbbbbbbbbbb                        5.5      6.0000
       ccccccc                        8.8      9.0000  
       
 ```
-Alternatively we can specify a `formatter` argument which is a function that converts
+Alternatively we can specify the format argument as a function that converts
 the value to a string.
 
 
@@ -184,7 +186,7 @@ Other border options include "thin", "rounded" (thin with round corners) and "do
 We can change the alignment of data and heading for any column with the alignment flags "<" (left), 
 ">" (right) and "^" (centered).
 
-```
+```python
 table = ANSITable(
         Column("col1"),
         Column("column 2 has a big header", colalign="^"),  # CHANGE
@@ -270,6 +272,8 @@ offset | 0 | Gap at start of each row, shifts the table to the left
 border | no border  | Border style
 bordercolor | |Border color, see [possible values](https://pypi.org/project/colored)
 ellipsis | True | Add an ellipsis if a wide column is truncated
+header | True | Include the column header row
+columns | | Specify the number of columns if `header=False` and no `Column` arguments are given
 
 ## Column
 These keyword arguments control the styling of a single column.
