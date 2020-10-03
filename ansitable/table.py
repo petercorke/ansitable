@@ -23,8 +23,9 @@ def ATTR(c): return attr(c) if _color else ''
 class Column():
     def __init__(self, name, fmt="{}", width=None,
         colcolor=None, colbgcolor=None, colstyle=None, colalign=">", 
-        headcolor=None, headbgcolor=None, headstyle=None, headalign=">",
-        formatter=None):
+        headcolor=None, headbgcolor=None, headstyle=None, headalign=">"
+        ):
+
         self.name = name
         self.fmt = fmt
         self.formatted = []
@@ -42,8 +43,6 @@ class Column():
         self.headalign = headalign
 
         self.width = width
-        
-        self.formatter = formatter
         self.maxwidth = len(name)
 
     def _settyle(self, header):
@@ -97,13 +96,14 @@ styledict = {"bold": 1, "dim": 2, "underlined": 4, "blink": 5, "reverse":7}
 
 class ANSITable:
     
-    def __init__(self, *pos, colsep = 2, offset=0, border=None, bordercolor=None, ellipsis=True):
+    def __init__(self, *pos, colsep = 2, offset=0, border=None, bordercolor=None, ellipsis=True, columns=None, header=True):
  
         self.colsep = colsep
         self.offset = offset
         self.ellipsis = ellipsis
         self.rows = []
         self.bordercolor = bordercolor
+        self.header = header
 
         if border is not None:
             # printing borderes, adjust some other parameters
@@ -124,6 +124,9 @@ class ANSITable:
                 self.columns.append(c)
             else:
                 raise TypeError('expecting a lists of Column objects')
+        if len(self.columns) == 0 and columns is not None:
+            for i in range(columns):
+                self.columns.append("")
 
     def addcolumn(self, name, **kwargs):
         self.columns.append(Column(name, **kwargs))
@@ -144,7 +147,7 @@ class ANSITable:
                 
             if c.width is not None and len(s) > c.width:
                 if self.ellipsis:
-                    s = s[:c.width - 3] + "..."
+                    s = s[:c.width - 1] + "\u2026"
                 else:
                     s = s[:c.width]
             c.maxwidth = max(c.maxwidth, len(s))
@@ -246,10 +249,9 @@ class ANSITable:
 
         # heading
         text += self._topline()
-
-        text += self._row()
-
-        text += self._midline()
+        if self.header:
+            text += self._row()
+            text += self._midline()
 
         # rows
 
