@@ -5,7 +5,6 @@ Created on Mon May 18 21:43:18 2020
 
 @author: corkep
 """
-import copy
 import sys
 
 try:
