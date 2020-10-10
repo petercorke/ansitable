@@ -125,7 +125,7 @@ class ANSITable:
             else:
                 raise TypeError('expecting a lists of Column objects')
         if len(self.columns) == 0 and columns is not None:
-            for i in range(columns):
+            for _ in range(columns):
                 self.columns.append("")
 
     def addcolumn(self, name, **kwargs):
@@ -133,7 +133,6 @@ class ANSITable:
 
     def row(self, *values):
         assert len(values) == len(self.columns), 'wrong number of data items added'
-        row = []
         for value, c in zip(values, self.columns):
 
             if c.fmt is None:
@@ -196,9 +195,8 @@ class ANSITable:
 
     def _row(self, row=None):
         if self.border is not None:
-            b = self.border
             text = _spaces(self.offset - 1) + self._vline()
-            for i, c in enumerate(self.columns):
+            for c in self.columns:
 
                 ansi = c._settyle(row is None)
                 text += ansi
@@ -218,7 +216,7 @@ class ANSITable:
             # no border
             text = _spaces(self.offset)
 
-            for i, c in enumerate(self.columns):
+            for c in self.columns:
                 ansi = c._settyle(row is None)
                 text += ansi
                 if row is None:
