@@ -26,13 +26,14 @@ Painless creation of nice-looking tables of data for Python.
  7 | table.print()
 
 ```
-Line 3 construct an `ANSITable` object and the arguments are a sequence of 
-column names followed by `ANSITable` keyword arguments - there are none in this first example.  Since there are three column objects this this will be a 3-column table.
+Line 3 constructs an `ANSITable` object and the arguments are a sequence of 
+column names followed by `ANSITable` keyword arguments - there are none in this first example.  Since there are three column names this this will be 
+a 3-column table.
 Lines 4-6 add rows, 3 data values for each row.
 
 Line 7 prints the table and yields a tabular display
 with column widths automatically chosen, and headings and column 
-data all left-justified (default)
+data all right-justified (default)
 
 ```
          col1  column 2 has a big header  column 3  
@@ -40,10 +41,12 @@ data all left-justified (default)
 bbbbbbbbbbbbb                        5.5         6  
       ccccccc                        8.8         9  
 ```
-we can provide a `file` option to `print()` to allow writing to an output stream, the
-default is `stdout`.
 
-You can obtain a string version of the table as `str(table)`.
+By default output is printed to the console (`stdout`) but we can also:
+
+- provide a `file` option to `.print()` to allow writing to a specified output stream, the
+default is `stdout`.
+- obtain a multi-line string version of the entire table as `str(table)`.
 
 The more general solution is to provide a sequence of `Column` objects which 
 allows many column specific options to be given, as we shall see later. 
@@ -65,11 +68,13 @@ table.addcolumn("col1")
 table.addcolumn("column 2 has a big header")
 table.addcolumn("column 3")
 ```
-
+where the keyword arguments to `.addcolumn()` are the same as those for
+`Column` and are given below.
 
 ***
-We can specify a Python `format()` style format string for any column - by default it
-is the general formatting option `"{}"`
+We can specify a [Python `format()` style format string](https://docs.python.org/3/library/string.html#formatspec) for any column - by default it
+is the general formatting option `"{}"`.
+You may choose to left or right justify values via the format string, `ansitable` provides control over how those resulting strings are justified within the column.
 
 ```python
 table = ANSITable(
@@ -116,14 +121,15 @@ which yields
 ```
       col1  column 2 has a big header    column 3  
  aaaaaaaaa                        2.2      3.0000  
-bbbbbbb...                        5.5      6.0000  
+bbbbbbbbb…                        5.5      6.0000  
    ccccccc                        8.8      9.0000  
 
 ```
 where we see that the data in column 1 has been truncated.
 
-If you don't like the ellipsis you can turn it off, and get to see three more
-charaters, with the `ANSITable` option `ellipsis=False`.
+If you don't like the ellipsis you can turn it off, and get to see one more
+character, with the `ANSITable` option `ellipsis=False`.  The Unicode ellipsis
+character u+2026 is used.
 
 ## Borders
 We can add a table border made up of regular ASCII characters
@@ -178,13 +184,13 @@ which yields
 ┃      ccccccc ┃                       8.8 ┃        9 ┃
 ┗━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━┛
 ```
-which actually looks better on the console than it does in GitHub markdown.
+_Note: this actually looks better on the console than it does in GitHub markdown._
 
 Other border options include "thin", "rounded" (thin with round corners) and "double".
 
 ## Header and column alignment
-We can change the alignment of data and heading for any column with the alignment flags "<" (left), 
-">" (right) and "^" (centered).
+We can change the alignment of data and heading for any column with the alignment flags `"<"` (left), 
+`">"` (right) and `"^"` (centered).
 
 ```python
 table = ANSITable(
@@ -273,23 +279,23 @@ border | no border  | Border style
 bordercolor | |Border color, see [possible values](https://pypi.org/project/colored)
 ellipsis | True | Add an ellipsis if a wide column is truncated
 header | True | Include the column header row
-columns | | Specify the number of columns if `header=False` and no `Column` arguments are given
+columns | | Specify the number of columns if `header=False` and no header name or `Column` arguments are given
 
 ## Column
 These keyword arguments control the styling of a single column.
 
 | Keyword  | Default | Purpose |
 |----      |----     |----    |
-fmt | "{}" | format string for the column value, or a callable that maps the column value to a string
+fmt | `"{}"` | format string for the column value, or a callable that maps the column value to a string
 width || maximum column width, excess will be truncated
 colcolor || Text color, see [possible values](https://pypi.org/project/colored)
 colbgcolor || Text background color, see [possible values](https://pypi.org/project/colored)
 colstyle  || Text style: "bold", "underlined", "reverse", "dim", "blink"
-colalign | ">" | Text alignment: ">" (left), "<" (right), "^" (centered)
+colalign | `">"` | Text alignment: `">"` (left), `"<"` (right), `"^"` (centered)
 headcolor || Heading text color, see [possible values](https://pypi.org/project/colored)
 headbgcolor || Heading text background color, see [possible values](https://pypi.org/project/colored)
 headstyle || Heading text style: "bold", "underlined", "reverse", "dim", "blink"
-headalign | ">" | Heading text alignment: ">" (left), "<" (right), "^" (centered)
+headalign | `">"` | Heading text alignment: `">"` (left), `"<"` (right), `"^"` (centered)
 
  
 Note that many terminal emulators do not support the "blink" style.
