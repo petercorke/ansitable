@@ -266,6 +266,17 @@ which yields
 
 ![colored table](https://github.com/petercorke/ansitable/raw/master/figs/colortable.png) 
 
+It is also possible to change the color of individual cells in the table
+by prefixing the value with a color enclosed in double angle brackets, for example `<<red>>`.
+
+```python
+table = ANSITable("col1", "column 2 has a big header", "column 3")
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row("<<red>>bbbbbbbbbbbbb", 5.5, 6)
+    table.row("<<blue>>ccccccc", 8.8, 9)
+    table.print()
+```
+
 # All options
 
 ## ANSITable

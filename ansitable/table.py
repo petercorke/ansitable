@@ -28,6 +28,7 @@ class Column():
         self.name = name
         self.fmt = fmt
         self.formatted = []
+        self.fgcolor = []
 
         if headalign is None:
             self.headalign = colalign
@@ -66,8 +67,10 @@ class Column():
 def _spaces(n):
     return " " * n
 
-def _aligntext(opt, text, n):
+def _aligntext(opt, text, n, color=None):
     gap = n - len(text)
+    if color:
+        text = FG(color) + text + ATTR(0)
     if  opt == '<':
         return text + _spaces(gap)
     elif opt == '>':
@@ -132,8 +135,8 @@ class ANSITable:
 
     def row(self, *values):
         assert len(values) == len(self.columns), 'wrong number of data items added'
-        for value, c in zip(values, self.columns):
 
+        for value, c in zip(values, self.columns):
             if c.fmt is None:
                 s = value
             elif isinstance(c.fmt, str):
@@ -142,14 +145,25 @@ class ANSITable:
                 s = c.fmt(value)
             else:
                 raise ValueError('fmt must be valid format string or callable')
-                
+
+            # handle a FG color specifier
+            if s.startswith('<<'):
+                # color specifier is given
+                end = s.find('>>')
+                color = s[2:end]
+                s = s[end+2:]
+            else:
+                color = None
+
             if c.width is not None and len(s) > c.width:
                 if self.ellipsis:
                     s = s[:c.width - 1] + "\u2026"
                 else:
                     s = s[:c.width]
             c.maxwidth = max(c.maxwidth, len(s))
+
             c.formatted.append(s)
+            c.fgcolor.append(color)
         self.nrows += 1
                     
     def _topline(self):
@@ -200,9 +214,11 @@ class ANSITable:
                 ansi = c._settyle(row is None)
                 text += ansi
                 if row is None:
+                    # header
                     text += _aligntext(c.headalign, c.name, c.width)
                 else:
-                    text += _aligntext(c.colalign, c.formatted[row], c.width)
+                    # table row proper
+                    text += _aligntext(c.colalign, c.formatted[row], c.width, c.fgcolor[row])
                 if len(ansi) > 0:
                     text += ATTR(0)
 
@@ -219,9 +235,11 @@ class ANSITable:
                 ansi = c._settyle(row is None)
                 text += ansi
                 if row is None:
+                    # header
                     text += _aligntext(c.headalign, c.name, c.width)
                 else:
-                    text += _aligntext(c.colalign, c.formatted[row], c.width)
+                    # table row proper
+                    text += _aligntext(c.colalign, c.formatted[row], c.width, c.fgcolor[row])
                 if len(ansi) > 0:
                     text += ATTR(0)
                 text +=  _spaces(self.colsep)
@@ -262,23 +280,16 @@ class ANSITable:
  
 if __name__ == "__main__":
     
-    # table = ANSITable(
-    #     Column("Axis", "{:d}", colalign="^", colcolor="red", headstyle="reverse"),
-    #     Column("q", "{}", width=10, colcolor="blue"),
-    #     Column("d", "{:.2f}"),
-    #     Column("a", "{:.2f}"),
-    #     Column("⍺", "{:.2f}"), offset=4, colsep=3, border="thick", bordercolor="green")
-
-    # table.row(1, "q1", 0, 0, 1)
-    # table.row(2456789, "q2 + 90", 0, 0, 1)
-    # table.row(3, "q3", 0, 0, 1)
-    # table.row(3, "q3abcdefghihklmnop", 0, 0, 1)
-
-    # table.print()
     table = ANSITable("col1", "column 2 has a big header", "column 3")
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", 5.5, 6)
     table.row("ccccccc", 8.8, 9)
+    table.print()
+
+    table = ANSITable("col1", "column 2 has a big header", "column 3")
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row("<<red>>bbbbbbbbbbbbb", 5.5, 6)
+    table.row("<<blue>>ccccccc", 8.8, 9)
     table.print()
 
     table = ANSITable(
