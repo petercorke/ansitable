@@ -9,7 +9,9 @@
 - GitHub repository: [https://github.com/petercorke/ansitable](https://github.com/petercorke/ansitable)
 - Dependencies: [`colored`](https://pypi.org/project/colored)
 
-# ANSI table
+Painless creation of nice-looking [tables of data](#tables) or [matrices](#matrices) in Python.
+
+# Tables
 
 Painless creation of nice-looking tables of data for Python.
 
@@ -278,22 +280,22 @@ table = ANSITable("col1", "column 2 has a big header", "column 3")
     table.print()
 ```
 
-# All options
+## All options
 
-## ANSITable
+### ANSITable
 These keyword arguments control the styling of the entire table.
 
 | Keyword  | Default | Purpose |
 |----      |----     |----    |
 colsep | 2 | Gap between columns (in spaces)
 offset | 0 | Gap at start of each row, shifts the table to the left
-border | no border  | Border style
+border | no border  | Border style: 'ascii', 'thin', 'thick', 'double'
 bordercolor | |Border color, see [possible values](https://pypi.org/project/colored)
 ellipsis | True | Add an ellipsis if a wide column is truncated
 header | True | Include the column header row
 columns | | Specify the number of columns if `header=False` and no header name or `Column` arguments are given
 
-## Column
+### Column
 These keyword arguments control the styling of a single column.
 
 | Keyword  | Default | Purpose |
@@ -311,3 +313,79 @@ headalign | `">"` | Heading text alignment: `">"` (left), `"<"` (right), `"^"` (
 
  
 Note that many terminal emulators do not support the "blink" style.
+
+# Matrices
+
+Painless creation of nice-looking matrices for Python.
+
+
+We can create a formatter for NumPy arrays (1D or 2D)
+
+```python
+from ansitable import ANSIMatrix
+formatter = ANSIMatrix(style='thick')
+```
+
+and then use it to format a NumPy array
+
+```python
+m = np.random.rand(4,4) - 0.5
+m[0,0] = 1.23456e-14
+formatter.print(m)
+```
+
+yields
+
+```
+┏                                           ┓
+┃ 0         -0.385     -0.106      0.296    ┃
+┃ 0.0432     0.339      0.119     -0.468    ┃
+┃ 0.405     -0.306      0.0165    -0.439    ┃
+┃ 0.203      0.4       -0.499     -0.487    ┃
+┗                                           ┛
+```
+
+we can also add suffixes
+
+
+```python
+formatter.print(m, suffix_super='T', suffix_sub='3')
+```
+
+yields
+
+```
+┏                                           ┓T
+┃ 0         -0.239      0.186     -0.414    ┃
+┃ 0.49       0.215     -0.0148     0.0529   ┃
+┃ 0.0473     0.0311     0.45       0.394    ┃
+┃-0.192      0.193     -0.455      0.0302   ┃
+┗                                           ┛3
+```
+
+By default output is printed to the console (stdout) but we can also:
+
+* provide a `file` option to `.print()` to allow writing to a specified output stream, the default is `stdout`.
+* obtain a multi-line string version of the entire table using the `.str()` method
+instead of `.print()`.
+
+The formatter takes additional arguments to control the numeric format and to 
+control the suppression of very small values.
+
+### ANSIMatrix
+These keyword arguments control the styling of the entire table.
+
+| Keyword  | Default | Purpose |
+|----      |----     |----    |
+style | `"thin"` | `"thin"`, `"round"`, `"thick"`, `"double"`
+fmt | `"{:< 10.3g}"` | format for each element
+squish | True | set small elements to zero
+squishtol | 100 | elements less than `squishtol * eps` are set to zero
+
+### Formatter
+These keyword arguments control the styling of a single column.
+
+| Keyword  | Default | Purpose |
+|----      |----     |----    |
+suffix_super | `""` | superscript suffix text
+suffix_sub | `""` | subscript suffix text

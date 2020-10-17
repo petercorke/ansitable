@@ -80,7 +80,7 @@ def _aligntext(opt, text, n, color=None):
         g2 = gap - g1
         return _spaces(g1) + text + _spaces(g2)
 
-# thin, thin+round, thick, double
+#       ascii, thin, thin+round, thick, double
 _tl = [ord('+'), 0x250c, 0x256d, 0x250f, 0x2554]
 _tr = [ord('+'), 0x2510, 0x256e, 0x2513, 0x2557]
 _bl = [ord('+'), 0x2514, 0x2570, 0x2517, 0x255a]
@@ -95,6 +95,47 @@ _vl = [ord('|'), 0x2502, 0x2502, 0x2503, 0x2551]
 
 borderdict = {"ascii": 0, "thin": 1, "round": 2, "thick": 3, "double": 4, "thick-thin": 5, "double-thin":6}
 styledict = {"bold": 1, "dim": 2, "underlined": 4, "blink": 5, "reverse":7}
+
+class ANSIMatrix:
+
+    def __init__(self, style='thin', fmt='{:< 10.3g}', squish=True, squishtol=100):
+
+        import numpy as np  # only import if matrix is used
+        self.style = borderdict[style]
+        self.fmt = fmt
+        self.width = len(fmt.format(1))
+        if squish:
+            self.squish = squishtol * np.finfo(float).eps
+        else:
+            self.squish = None
+
+    def str(self, matrix, suffix_super='', suffix_sub=''):
+
+        import numpy as np  # only import if matrix is used
+
+        if len(matrix.shape) == 1:
+            ncols = matrix.shape[0]
+            matrix = matrix.reshape((1, -1))
+        elif len(matrix.shape) == 2:
+            ncols = matrix.shape[1]
+        else:
+            raise ValueError('Only 1D and 2D arrays supported')
+
+        mwidth = ncols * self.width + (ncols - 1)
+        if self.squish is None:
+            m2 = matrix
+        else:
+            m2 = np.where(abs(matrix) < self.squish, 0, matrix)
+        b = self.style
+
+        s = chr(_tl[b]) + ' ' * mwidth + chr(_tr[b]) + suffix_super + '\n'
+        for row in m2:
+            s += chr(_vl[b]) + ' '.join([self.fmt.format(x) for x in row]) + chr(_vl[b]) + '\n'
+        s += chr(_bl[b]) + ' ' * mwidth + chr(_br[b]) + suffix_sub
+        return s
+
+    def print(self, matrix, *pos, file=sys.stdout, **kwargs):
+        print(self.str(matrix, *pos, **kwargs), file=file)
 
 class ANSITable:
     
@@ -279,111 +320,128 @@ class ANSITable:
         return text
  
 if __name__ == "__main__":
+
+    import numpy as np
+
+    m = np.random.rand(4,4) - 0.5
+    m[0,0] = 1.23456e-14
+    print(m)
+    print(np.array2string(m))
+
+    formatter = ANSIMatrix(style='thick', squish=True)
+
+    formatter.print(m)
+
+    formatter.print(m, suffix_super='T', suffix_sub='3')
+
+    m = np.random.rand(4) - 0.5
+    formatter.print(m, 'T')
+
     
-    table = ANSITable("col1", "column 2 has a big header", "column 3")
-    table.row("aaaaaaaaa", 2.2, 3)
-    table.row("bbbbbbbbbbbbb", 5.5, 6)
-    table.row("ccccccc", 8.8, 9)
-    table.print()
+    # table = ANSITable("col1", "column 2 has a big header", "column 3")
+    # table.row("aaaaaaaaa", 2.2, 3)
+    # table.row("bbbbbbbbbbbbb", 5.5, 6)
+    # table.row("ccccccc", 8.8, 9)
+    # table.print()
 
-    table = ANSITable("col1", "column 2 has a big header", "column 3")
-    table.row("aaaaaaaaa", 2.2, 3)
-    table.row("<<red>>bbbbbbbbbbbbb", 5.5, 6)
-    table.row("<<blue>>ccccccc", 8.8, 9)
-    table.print()
+    # table = ANSITable("col1", "column 2 has a big header", "column 3")
+    # table.row("aaaaaaaaa", 2.2, 3)
+    # table.row("<<red>>bbbbbbbbbbbbb", 5.5, 6)
+    # table.row("<<blue>>ccccccc", 8.8, 9)
+    # table.print()
 
-    table = ANSITable(
-        Column("col1"),
-        Column("column 2 has a big header"),
-        Column("column 3")
-    )
-    table.row("aaaaaaaaa", 2.2, 3)
-    table.row("bbbbbbbbbbbbb", 5.5, 6)
-    table.row("ccccccc", 8.8, 9)
-    table.print()
+    # table = ANSITable(
+    #     Column("col1"),
+    #     Column("column 2 has a big header"),
+    #     Column("column 3")
+    # )
+    # table.row("aaaaaaaaa", 2.2, 3)
+    # table.row("bbbbbbbbbbbbb", 5.5, 6)
+    # table.row("ccccccc", 8.8, 9)
+    # table.print()
 
-    table = ANSITable(
-        Column("col1"),
-        Column("column 2 has a big header", "{:.3g}"),
-        Column("column 3", "{:-10.4f}")
-    )
-    table.row("aaaaaaaaa", 2.2, 3)
-    table.row("bbbbbbbbbbbbb", 5.5, 6)
-    table.row("ccccccc", 8.8, 9)
-    table.print()
+    # table = ANSITable(
+    #     Column("col1"),
+    #     Column("column 2 has a big header", "{:.3g}"),
+    #     Column("column 3", "{:-10.4f}")
+    # )
+    # table.row("aaaaaaaaa", 2.2, 3)
+    # table.row("bbbbbbbbbbbbb", 5.5, 6)
+    # table.row("ccccccc", 8.8, 9)
+    # table.print()
 
-    table = ANSITable(
-        Column("col1", width=10),
-        Column("column 2 has a big header", "{:.3g}"),
-        Column("column 3", "{:-10.4f}")
-    )
-    table.row("aaaaaaaaa", 2.2, 3)
-    table.row("bbbbbbbbbbbbb", 5.5, 6)
-    table.row("ccccccc", 8.8, 9)
-    table.print()
+    # table = ANSITable(
+    #     Column("col1", width=10),
+    #     Column("column 2 has a big header", "{:.3g}"),
+    #     Column("column 3", "{:-10.4f}")
+    # )
+    # table.row("aaaaaaaaa", 2.2, 3)
+    # table.row("bbbbbbbbbbbbb", 5.5, 6)
+    # table.row("ccccccc", 8.8, 9)
+    # table.print()
 
-    table = ANSITable(
-        Column("col1"),
-        Column("column 2 has a big header"),
-        Column("column 3"),
-        border="ascii"
-    )
-    table.row("aaaaaaaaa", 2.2, 3)
-    table.row("bbbbbbbbbbbbb", 5.5, 6)
-    table.row("ccccccc", 8.8, 9)
-    table.print()
+    # table = ANSITable(
+    #     Column("col1"),
+    #     Column("column 2 has a big header"),
+    #     Column("column 3"),
+    #     border="ascii"
+    # )
+    # table.row("aaaaaaaaa", 2.2, 3)
+    # table.row("bbbbbbbbbbbbb", 5.5, 6)
+    # table.row("ccccccc", 8.8, 9)
+    # table.print()
 
-    table = ANSITable(
-        Column("col1"),
-        Column("column 2 has a big header"),
-        Column("column 3"),
-        border="thick"
-    )
-    table.row("aaaaaaaaa", 2.2, 3)
-    table.row("bbbbbbbbbbbbb", 5.5, 6)
-    table.row("ccccccc", 8.8, 9)
-    table.print()
+    # table = ANSITable(
+    #     Column("col1"),
+    #     Column("column 2 has a big header"),
+    #     Column("column 3"),
+    #     border="thick"
+    # )
+    # table.row("aaaaaaaaa", 2.2, 3)
+    # table.row("bbbbbbbbbbbbb", 5.5, 6)
+    # table.row("ccccccc", 8.8, 9)
+    # table.print()
 
-    table = ANSITable(
-        Column("col1"),
-        Column("column 2 has a big header", colalign="^"),
-        Column("column 3"),
-        border="thick"
-    )
-    table.row("aaaaaaaaa", 2.2, 3)
-    table.row("bbbbbbbbbbbbb", 5.5, 6)
-    table.row("ccccccc", 8.8, 9)
-    table.print()
+    # table = ANSITable(
+    #     Column("col1"),
+    #     Column("column 2 has a big header", colalign="^"),
+    #     Column("column 3"),
+    #     border="thick"
+    # )
+    # table.row("aaaaaaaaa", 2.2, 3)
+    # table.row("bbbbbbbbbbbbb", 5.5, 6)
+    # table.row("ccccccc", 8.8, 9)
+    # table.print()
 
-    table = ANSITable(
-        Column("col1", headalign="<"),
-        Column("column 2 has a big header", colalign="^"),
-        Column("column 3", colalign="<"),
-        border="thick"
-    )
-    table.row("aaaaaaaaa", 2.2, 3)
-    table.row("bbbbbbbbbbbbb", 5.5, 6)
-    table.row("ccccccc", 8.8, 9)
-    table.print()
+    # table = ANSITable(
+    #     Column("col1", headalign="<"),
+    #     Column("column 2 has a big header", colalign="^"),
+    #     Column("column 3", colalign="<"),
+    #     border="thick"
+    # )
+    # table.row("aaaaaaaaa", 2.2, 3)
+    # table.row("bbbbbbbbbbbbb", 5.5, 6)
+    # table.row("ccccccc", 8.8, 9)
+    # table.print()
 
-    table = ANSITable(
-        Column("col1", headalign="<"),
-        Column("column 2 has a big header", colalign="^", colstyle="reverse"),
-        Column("column 3", colalign="<"),
-        border="thick"
-    )
-    table.row("aaaaaaaaa", 2.2, 3)
-    table.row("bbbbbbbbbbbbb", 5.5, 6)
-    table.row("ccccccc", 8.8, 9)
-    table.print()
+    # table = ANSITable(
+    #     Column("col1", headalign="<"),
+    #     Column("column 2 has a big header", colalign="^", colstyle="reverse"),
+    #     Column("column 3", colalign="<"),
+    #     border="thick"
+    # )
+    # table.row("aaaaaaaaa", 2.2, 3)
+    # table.row("bbbbbbbbbbbbb", 5.5, 6)
+    # table.row("ccccccc", 8.8, 9)
+    # table.print()
 
-    table = ANSITable(
-        Column("col1", headalign="<", colcolor="red", headstyle="underlined"),
-        Column("column 2 has a big header", colalign="^", colstyle="reverse"),
-        Column("column 3", colalign="<", colbgcolor="green"),
-        border="thick", bordercolor="blue"
-    )
-    table.row("aaaaaaaaa", 2.2, 3)
-    table.row("bbbbbbbbbbbbb", 5.5, 6)
-    table.row("ccccccc", 8.8, 9)
-    table.print()
+    # table = ANSITable(
+    #     Column("col1", headalign="<", colcolor="red", headstyle="underlined"),
+    #     Column("column 2 has a big header", colalign="^", colstyle="reverse"),
+    #     Column("column 3", colalign="<", colbgcolor="green"),
+    #     border="thick", bordercolor="blue"
+    # )
+    # table.row("aaaaaaaaa", 2.2, 3)
+    # table.row("bbbbbbbbbbbbb", 5.5, 6)
+    # table.row("ccccccc", 8.8, 9)
+    # table.print()
