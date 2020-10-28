@@ -9,7 +9,16 @@
 - GitHub repository: [https://github.com/petercorke/ansitable](https://github.com/petercorke/ansitable)
 - Dependencies: [`colored`](https://pypi.org/project/colored)
 
+# Synopsis
+
 Painless creation of nice-looking [tables of data](#tables) or [matrices](#matrices) in Python.
+
+What's new:
+
+0.9.3:
+
+- create matrices as well as tables
+- option to suppress color output
 
 # Tables
 
@@ -294,6 +303,11 @@ bordercolor | |Border color, see [possible values](https://pypi.org/project/colo
 ellipsis | True | Add an ellipsis if a wide column is truncated
 header | True | Include the column header row
 columns | | Specify the number of columns if `header=False` and no header name or `Column` arguments are given
+color | True | Enable color 
+
+- Color is only possible if the `colored` package is installed
+- If `color` is False then no color escape sequences will be emitted, useful 
+  override for tables included in Sphinx documentation.
 
 ### Column
 These keyword arguments control the styling of a single column.
@@ -373,7 +387,7 @@ The formatter takes additional arguments to control the numeric format and to
 control the suppression of very small values.
 
 ### ANSIMatrix
-These keyword arguments control the styling of the entire table.
+These keyword arguments control the overall styling and operation of the formatter.
 
 | Keyword  | Default | Purpose |
 |----      |----     |----    |
@@ -383,7 +397,7 @@ squish | True | set small elements to zero
 squishtol | 100 | elements less than `squishtol * eps` are set to zero
 
 ### Formatter
-These keyword arguments control the styling of a single column.
+A formatter takes additional arguments to the styling for a particular call.
 
 | Keyword  | Default | Purpose |
 |----      |----     |----    |
