@@ -9,11 +9,11 @@ import sys
 
 try:
     from colored import fg, bg, attr
-    _color = True
+    _colored = True
     # print('using colored output')
 except ImportError:
     # print('colored not found')
-    _color = False
+    _colored = False
 
 
 class Column():
@@ -137,7 +137,8 @@ class ANSIMatrix:
         print(self.str(matrix, *pos, **kwargs), file=file)
 
 class ANSITable:
-    
+    _color = _colored
+
     def __init__(self, *pos, colsep = 2, offset=0, border=None, bordercolor=None, ellipsis=True, columns=None, header=True, color=True):
  
         self.colsep = colsep
@@ -146,7 +147,7 @@ class ANSITable:
         self.rows = []
         self.bordercolor = bordercolor
         self.header = header
-        self.color = color
+        self.color = color and self._color
 
         if border is not None:
             # printing borderes, adjust some other parameters
@@ -325,18 +326,19 @@ class ANSITable:
         return text
 
     def FG(self, c):
-        if self.color and _color and c is not None:
+        if self.color and c is not None:
             return fg(c)
         else:
             return ""
 
     def BG(self, c):
-        if self.color and _color and c is not None:
+        if self.color and c is not None:
             return bg(c)
         else:
             return ""
+
     def ATTR(self, c):
-        if self.color and _color and c is not None:
+        if self.color and c is not None:
             return attr(c)
         else:
             return "" 
