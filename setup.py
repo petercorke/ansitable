@@ -19,7 +19,7 @@ setup(
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:Simulate dynamic syst
-    description='Quick and easy display of tabular data with optional ANSI color and borders.', #TODO
+    description='Quick and easy display of tabular data and matrices with optional ANSI color and borders.', #TODO
     
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -52,7 +52,7 @@ setup(
 
     author_email='rvc@petercorke.com', #TODO
 
-    keywords='python table tabular color ANSI',
+    keywords='python table tabular matrix array border ansi-color ansi-art color ANSI',
 
     license='MIT', #TODO
 
