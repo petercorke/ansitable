@@ -15,12 +15,73 @@ except ImportError:
     # print('colored not found')
     _colored = False
 
+# ------------------------------------------------------------------------- #
 
 class Column():
     def __init__(self, name, fmt="{}", width=None,
         colcolor=None, colbgcolor=None, colstyle=None, colalign=">", 
         headcolor=None, headbgcolor=None, headstyle=None, headalign=">"
         ):
+        """
+        [summary]
+
+        :param name: Name of column, also the column heading
+        :type name: str
+        :param fmt: Python format string, defaults to "{}"
+        :type fmt: str, optional
+        :param width: Column width, defaults to auto-fit
+        :type width: int, optional
+        :param colcolor: Color of column text, defaults to None
+        :type colcolor: str, optional
+        :param colbgcolor: Color of column background, defaults to None
+        :type colbgcolor: str, optional
+        :param colstyle: Column text style, see table below, defaults to None
+        :type colstyle: str, optional
+        :param colalign: Column data alignement, see table below, defaults to ">"
+        :type colalign: str, optional
+        :param headcolor: Color of heading text, defaults to None
+        :type headcolor: str, optional
+        :param headbgcolor: Color of heading background, defaults to None
+        :type headbgcolor: str, optional
+        :param headstyle: Heading text style, see table below, defaults to None
+        :type headstyle: str, optional
+        :param headalign: Heading text alignement, see table below, defaults to ">"
+        :type headalign: str, optional
+
+        ===========   =======================
+        Alignment     Description
+        ===========   =======================
+        "<"           Left
+        "^"           Centre
+        ">"           Right (default)
+        ===========   =======================
+
+
+        ===========   ==========================================================
+        Border        Description
+        ===========   ==========================================================
+        ascii         Use ASCII +-| characters
+        thin          Use ANSI thin box-drawing characters
+        thin+round    Use ANSI thin box-drawing characters with rounded corners
+        thick         Use ANSI thick box-drawing characters
+        double        Use ANSI double-line box-drawing characters
+        ===========   ==========================================================
+
+
+        ===========   =============================================
+        Style         Description
+        ===========   =============================================
+        bold          bold font
+        dim           low brightness font
+        underlined    text is underlined
+        blink         text is blinking
+        reverse       text and background colors are reversed
+        ===========   =============================================
+
+        Implementation of these options depends heavily on the terminal emulator
+        used.
+        
+        """
 
         self.name = name
         self.fmt = fmt
@@ -95,9 +156,23 @@ _vl = [ord('|'), 0x2502, 0x2502, 0x2503, 0x2551]
 borderdict = {"ascii": 0, "thin": 1, "round": 2, "thick": 3, "double": 4, "thick-thin": 5, "double-thin":6}
 styledict = {"bold": 1, "dim": 2, "underlined": 4, "blink": 5, "reverse":7}
 
+# ------------------------------------------------------------------------- #
+
 class ANSIMatrix:
 
     def __init__(self, style='thin', fmt='{:< 10.3g}', squish=True, squishtol=100):
+        """
+        [summary]
+
+        :param style: Bracket format, defaults to 'thin'
+        :type style: str, optional
+        :param fmt: [description], defaults to '{:< 10.3g}'
+        :type fmt: str, optional
+        :param squish: [description], defaults to True
+        :type squish: bool, optional
+        :param squishtol: [description], defaults to 100
+        :type squishtol: int, optional
+        """
 
         import numpy as np  # only import if matrix is used
         self.style = borderdict[style]
@@ -109,6 +184,19 @@ class ANSIMatrix:
             self.squish = None
 
     def str(self, matrix, suffix_super='', suffix_sub=''):
+        """
+        Output the table as a string
+
+        :param matrix: NumPy matrix to format
+        :type matrix: 1d or 2d ndarray
+        :param suffix_super: Right superscript, defaults to ''
+        :type suffix_super: str, optional
+        :param suffix_sub: Right subscript, defaults to ''
+        :type suffix_sub: str, optional
+        :raises ValueError: [description]
+        :return: ANSI string
+        :rtype: str
+        """
 
         import numpy as np  # only import if matrix is used
 
@@ -134,13 +222,63 @@ class ANSIMatrix:
         return s
 
     def print(self, matrix, *pos, file=sys.stdout, **kwargs):
+        """
+        Print the matrix
+
+        :param file: Print the matrix to this file, defaults to stdout
+        :type file: writeable object, optional
+
+        .. note:: Accepts the same arguments as ``str``.
+
+        """
+
         print(self.str(matrix, *pos, **kwargs), file=file)
+
+# ------------------------------------------------------------------------- #
 
 class ANSITable:
     _color = _colored
 
     def __init__(self, *pos, colsep = 2, offset=0, border=None, bordercolor=None, ellipsis=True, columns=None, header=True, color=True):
- 
+        """
+        Create a table object
+
+        :param colsep: Separation between columns, defaults to 2
+        :type colsep: int, optional
+        :param offset: Horizontal offset of the whole table, defaults to 0
+        :type offset: int, optional
+        :param border: Type of border, defaults to None
+        :type border: [type], optional
+        :param bordercolor: Name of color to draw border in, defaults to None
+        :type bordercolor: str, optional
+        :param ellipsis: truncated lines are shown with an ellipsis, defaults to True
+        :type ellipsis: bool, optional
+        :param columns: [description], defaults to None
+        :type columns: [type], optional
+        :param header: Show table header, defaults to True
+        :type header: bool, optional
+        :param color: [description], defaults to True
+        :type color: bool, optional
+        :raises TypeError: [description]
+
+        A table can be created in several different ways::
+
+            table = ANSITable("col1", "column 2 has a big header", "column 3")
+
+            table = ANSITable(
+                Column("col1"),
+                Column("column 2 has a big header", "{:.3g}"),
+                Column("column 3", "{:-10.4f}")
+            )
+
+            table = ANSITable()
+            table.addcolumnColumn("col1"),
+            table.addcolumnColumn("column 2 has a big header", "{:.3g}"),
+            table.addcolumnColumn("column 3", "{:-10.4f}")
+
+        The first option is quick and easy but does not allow any control of
+        formatting or alignment.
+        """
         self.colsep = colsep
         self.offset = offset
         self.ellipsis = ellipsis
@@ -176,9 +314,38 @@ class ANSITable:
                 self.columns.append("")
 
     def addcolumn(self, name, **kwargs):
+        """
+        Add a column to the table
+
+        :param name: column heading
+        :type name: str
+
+        An alternative way to create a table, column at a time.
+
+        Example::
+
+            table = ANSITable()
+            table.addcolumnColumn("col1"),
+            table.addcolumnColumn("column 2 has a big header", "{:.3g}"),
+            table.addcolumnColumn("column 3", "{:-10.4f}")
+
+        .. note:: Additional arguments are passed directly to ``Column``.
+    
+        """
         self.columns.append(Column(name, **kwargs))
 
     def row(self, *values):
+        """
+        Add a row of data
+
+        :raises ValueError: invalid format string for the data provided
+
+        ``table.row(d1, d2, ... dN)`` add data items that comprise a row of the
+        table.  ``N`` is the number of columns.
+
+        The data items can be any type, but the format string specified at
+        table creation must be compatible.
+        """
         assert len(values) == len(self.columns), 'wrong number of data items added'
 
         for value, c in zip(values, self.columns):
@@ -210,7 +377,19 @@ class ANSITable:
             c.formatted.append(s)
             c.fgcolor.append(color)
         self.nrows += 1
-                    
+
+    def rule(self):
+        """
+        Add a rule to the table
+
+        This is a horizontal line across all columns, used to delineate parts
+        of the table.
+        """
+        for c in self.columns:
+            c.formatted.append(None)
+            c.fgcolor.append(None)
+        self.nrows += 1
+
     def _topline(self):
         return self._line(_tl, _tj, _tr)
 
@@ -252,7 +431,13 @@ class ANSITable:
 
 
     def _row(self, row=None):
+
+        if row is not None and self.columns[0].formatted[row] is None:
+            # it's a horizontal rule
+            return self._midline()
+
         if self.border is not None:
+            # has border
             text = _spaces(self.offset - 1) + self._vline()
             for c in self.columns:
 
@@ -294,6 +479,29 @@ class ANSITable:
         return text + "\n"
 
     def print(self, file=None):
+        """
+        Print the table
+
+        :param file: Print the table to this file, defaults to stdout
+        :type file: writeable object, optional
+
+        Example::
+
+            table = ANSITable("col1", "column 2 has a big header", "column 3")
+            table.row("aaaaaaaaa", 2.2, 3)
+            table.row("bbbbbbbbbbbbb", -5.5, 6)
+            table.row("ccccccc", 8.8, -9)
+            table.print()
+            
+            +--------------+---------------------------+----------+
+            |         col1 | column 2 has a big header | column 3 |
+            +--------------+---------------------------+----------+
+            |    aaaaaaaaa |                       2.2 |        3 |
+            |bbbbbbbbbbbbb |                      -5.5 |        6 |
+            |      ccccccc |                       8.8 |       -9 |
+            +--------------+---------------------------+----------+
+
+        """
         if file is None:
             self.file = sys.stdout
         else:
@@ -302,6 +510,12 @@ class ANSITable:
         print(str(self))
 
     def __str__(self):
+        """
+        Output the table as a string
+
+        :return: ANSI string
+        :rtype: str
+        """
 
         for i, c in enumerate(self.columns):
             c.width = c.width or c.maxwidth
@@ -316,7 +530,6 @@ class ANSITable:
             text += self._midline()
 
         # rows
-
         for i in range(self.nrows):
             text += self._row(i)
         
