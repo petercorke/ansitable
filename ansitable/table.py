@@ -325,6 +325,129 @@ class ANSITable:
 
         return text
 
+    def markdown(self):
+        """
+        Output the table in MarkDown format
+
+        :return: ASCII markdown text
+        :rtype: str
+
+        Example::
+
+            table = ANSITable("col1", "column 2 has a big header", "column 3")
+            table.row("aaaaaaaaa", 2.2, 3)
+            table.row("bbbbbbbbbbbbb", -5.5, 6)
+            table.row("ccccccc", 8.8, -9)
+            table.markdown()
+            
+            |          col1 | column 2 has a big header | column 3 |
+            | ------------: | ------------------------: | -------: |
+            |     aaaaaaaaa |                       2.2 |        3 |
+            | bbbbbbbbbbbbb |                      -5.5 |        6 |
+            |       ccccccc |                       8.8 |       -9 |
+
+        .. note::
+            - supports column alignment
+            - does not support header alignment, same as column
+        """
+
+        # markdown table setup
+        s = ''
+
+        # column headers
+        for c in self.columns:
+            s += '| ' + _aligntext(c.headalign, c.name, c.width) + ' '
+        s += "|\n"
+
+        for c in self.columns:
+            if c.headalign == '<':
+                bar = ':' + '-' * (c.width - 1)
+            elif c.headalign == '^':
+                bar = ':' + '-' * (c.width - 2) + ':'
+            elif c.headalign == '>':
+                bar = '-' * (c.width - 1) + ':'
+            s += '| ' + bar + ' '
+        s += "|\n"
+
+        # rows
+        for i in range(self.nrows):
+            for c in self.columns:
+                s += '| ' + _aligntext(c.colalign, c.formatted[i], c.width) + ' '
+            s += "|\n"
+
+        return s
+
+    def latex(self):
+        r"""
+        Output the table in LaTeX format
+
+        :return: ASCII markdown text
+        :rtype: str
+
+        Example::
+
+            table = ANSITable("col1", "column 2 has a big header", "column 3")
+            table.row("aaaaaaaaa", 2.2, 3)
+            table.row("bbbbbbbbbbbbb", -5.5, 6)
+            table.row("ccccccc", 8.8, -9)
+            table.latex()
+
+            \begin{tabular}{ |r|r|r| }\hline
+            \multicolumn{1}{|r|}{col1} & \multicolumn{1}{|r|}{column 2 has a big header} & \multicolumn{1}{|r|}{column 3}\\\hline\hline
+            aaaaaaaaa & 2.2 & 3 \\
+            bbbbbbbbbbbbb & -5.5 & 6 \\
+            ccccccc & 8.8 & -9 \\
+            \hline
+            \end{tabular}
+
+        .. note::
+            - supports column alignment
+            - supports header alignment
+        """
+
+        # LaTeX tabular setup
+        s = "\\begin{tabular}{ |"
+        for c in self.columns:
+            if c.colalign == '<':
+                s += 'l|'
+            elif c.colalign == '^':
+                s += 'c|'
+            elif c.colalign == '>':
+                s += 'r|'
+        s += " }\\hline\n"
+
+        # column headers
+        first = True
+        for c in self.columns:
+            if first:
+                first = False
+            else:
+                s += ' & '
+
+            s += '\\multicolumn{1}{'
+            if c.headalign == '<':
+                s += '|l|'
+            elif c.headalign == '^':
+                s += '|c|'
+            elif c.headalign == '>':
+                s += '|r|'
+            s += "}{" + c.name + "}"
+
+        s += "\\\\\\hline\\hline\n"
+        # rows
+        for i in range(self.nrows):
+            first = True
+            for c in self.columns:
+                if first:
+                    first = False
+                else:
+                    s += ' & '
+                s += c.formatted[i]
+            s += " \\\\\n"
+        s += "\\hline\n"
+        s += "\\end{tabular}\n"
+        return s
+
     def FG(self, c):
         if self.color and c is not None:
             return fg(c)
@@ -467,5 +590,15 @@ if __name__ == "__main__":
     )
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", -5.5, 6)
+    table.rule()
     table.row("ccccccc", 8.8, -9)
     table.print()
+
+
+    table = ANSITable("col1", "column 2 has a big header", "column 3")
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row("bbbbbbbbbbbbb", -5.5, 6)
+    table.row("ccccccc", 8.8, -9)
+    table.print()
+    print(table.latex())
+    print(table.markdown())
