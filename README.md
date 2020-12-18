@@ -15,6 +15,11 @@ Painless creation of nice-looking [tables of data](#tables) or [matrices](#matri
 
 What's new:
 
+0.9.5:
+
+- methods to format table as MarkDown or LaTeX
+- work with Python 3.4
+
 0.9.3:
 
 - create matrices as well as tables
