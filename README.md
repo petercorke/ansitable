@@ -328,6 +328,49 @@ headalign | `">"` | Heading text alignment: `">"` (left), `"<"` (right), `"^"` (
  
 Note that many terminal emulators do not support the "blink" style.
 
+# Output in other tabular formats
+
+The main use for this package is to generate tables on the console that are easy to read, but
+sometimes you might want the table in a different format to include in
+documentation.
+
+```python
+table = ANSITable("col1", "column 2 has a big header", "column 3")
+table.row("aaaaaaaaa", 2.2, 3)
+table.row("bbbbbbbbbbbbb", -5.5, 6)
+table.row("ccccccc", 8.8, -9)
+table.print()
+```
+
+can be rendered into Markdown
+
+```
+table.markdown()
+
+|          col1 | column 2 has a big header | column 3 |
+| ------------: | ------------------------: | -------: |
+|     aaaaaaaaa |                       2.2 |        3 |
+| bbbbbbbbbbbbb |                      -5.5 |        6 |
+|       ccccccc |                       8.8 |       -9 |
+```
+or LaTex
+
+```
+table.latex()
+
+\begin{tabular}{ |r|r|r| }\hline
+\multicolumn{1}{|r|}{col1} & \multicolumn{1}{|r|}{column 2 has a big header} & \multicolumn{1}{|r|}{column 3}\\\hline\hline
+aaaaaaaaa & 2.2 & 3 \\
+bbbbbbbbbbbbb & -5.5 & 6 \\
+ccccccc & 8.8 & -9 \\
+\hline
+\end{tabular}
+```
+
+In both cases the method returns a string and column alignment is supported.
+MarkDown doesn't allow the header to have different alignment to the data.
+
+
 # Matrices
 
 Painless creation of nice-looking matrices for Python.
