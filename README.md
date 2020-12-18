@@ -1,4 +1,4 @@
-![PyPI - Downloads](https://img.shields.io/pypi/dm/ansitable)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/ansitable)](https://pypistats.org/packages/ansitable)
 [![PyPI version fury.io](https://badge.fury.io/py/ansitable.svg)](https://pypi.python.org/pypi/ansitable/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/petercorke/ansitable.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/petercorke/ansitable/context:python)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/ansitable)](https://pypi.python.org/pypi/ansitable/)
