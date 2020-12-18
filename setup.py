@@ -56,7 +56,7 @@ setup(
 
     license='MIT', #TODO
 
-    python_requires='>=3.6',
+    python_requires='>=3.4',
 
     packages=find_packages(exclude=["test_*", "TODO*"]),
 
