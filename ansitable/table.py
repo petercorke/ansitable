@@ -470,7 +470,8 @@ if __name__ == "__main__":
 
     import numpy as np
 
-    m = np.random.rand(4,4) - 0.5
+    # -------------------------------- test ANSIMatrix
+    m = np.arange(16).reshape((4,4)) /10 - 0.8
     m[0,0] = 1.23456e-14
     print(m)
     print(np.array2string(m))
@@ -481,11 +482,12 @@ if __name__ == "__main__":
 
     formatter.print(m, suffix_super='T', suffix_sub='3')
 
-    m = np.random.rand(4) - 0.5
+    m = np.arange(4) / 4 - 0.5
     formatter.print(m, 'T')
 
-    
-    table = ANSITable("col1", "column 2 has a big header", "column 3")
+    # -------------------------------- test ANSITable
+
+    table = ANSITable("col1", "column 2 has a big header", "column 3", color=False)
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", -5.5, 6)
     table.row("ccccccc", 8.8, -9)
