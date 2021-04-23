@@ -287,15 +287,9 @@ class ANSITable:
         self.header = header
         self.color = color and self._color
 
-        if border is not None:
-            # printing borderes, adjust some other parameters
-            if self.offset == 0:
-                self.offset = 1
-            self.colsep |= 1  # make it odd
 
-            self.border = borderdict[border]
-        else:
-            self.border = None
+
+        self.border = border
         
         self.nrows = 0
         self.columns = []
@@ -400,10 +394,10 @@ class ANSITable:
         return self._line(_bl, _bj, _br)
 
     def _line(self, left, mid, right):
-        if self.border is  None:
+        if self.borderdict is  None:
             return ""
         else:
-            b = self.border
+            b = self.borderdict
             c2 = self.colsep // 2
             text = _spaces(self.offset - 1)
             if self.bordercolor is not None:
@@ -419,9 +413,9 @@ class ANSITable:
             return text + "\n"
 
     def _vline(self):
-        if self.border is not None:
+        if self.borderdict is not None:
             text = ""
-            b = self.border
+            b = self.borderdict
             if self.bordercolor is not None:
                 text += self.FG(self.bordercolor)
             text += chr(_vl[b])
@@ -436,7 +430,7 @@ class ANSITable:
             # it's a horizontal rule
             return self._midline()
 
-        if self.border is not None:
+        if self.borderdict is not None:
             # has border
             text = _spaces(self.offset - 1) + self._vline()
             for c in self.columns:
@@ -502,12 +496,12 @@ class ANSITable:
             +--------------+---------------------------+----------+
 
         """
-        if file is None:
-            self.file = sys.stdout
-        else:
-            self.file = file
 
-        print(str(self))
+        try:
+            print(str(self), file=file)
+        except UnicodeEncodeError:
+            self.border = 'ascii'
+            print(str(self), file=file)
 
     def __str__(self):
         """
@@ -516,6 +510,16 @@ class ANSITable:
         :return: ANSI string
         :rtype: str
         """
+
+        if self.border is not None:
+            # printing borders, adjust some other parameters
+            if self.offset == 0:
+                self.offset = 1
+            self.colsep |= 1  # make it odd
+
+            self.borderdict = borderdict[self.border]
+        else:
+            self.borderdict = None
 
         for i, c in enumerate(self.columns):
             c.width = c.width or c.maxwidth
