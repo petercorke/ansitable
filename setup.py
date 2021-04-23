@@ -41,8 +41,8 @@ setup(
 
     project_urls={
         #'Documentation': 'https://petercorke.github.io/bdsim',
-        'Source': 'https://github.com/petercorke/bdsim',
-        'Tracker': 'https://github.com/petercorke/bdsim/issues',
+        'Source': 'https://github.com/petercorke/ansitable',
+        'Tracker': 'https://github.com/petercorke/ansitable/issues',
         #'Coverage': 'https://codecov.io/gh/petercorke/spatialmath-python',
     },
 
