@@ -1,1 +1,1 @@
-from ansitable.table import ANSITable, Column, ANSIMatrix
+from ansitable.table import ANSITable, Column, ANSIMatrix, options

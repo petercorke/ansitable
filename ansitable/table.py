@@ -15,6 +15,45 @@ except ImportError:
     # print('colored not found')
     _colored = False
 
+# _colored use color ANSI escape sequences via colored package
+# _unicode use box characters for table edges and separators
+#   from ansitable.table import _unicode
+#    _unicode = False
+
+_unicode = True
+
+def options(unicode, color=None):
+    """
+    Control ANSI/Unicode generation
+
+    :param unicode: enable generation of Unicode characters
+    :type unicode: bool
+    :param color: enable generation of ANSI color control sequences, defaults to None
+    :type color: bool, optional
+
+    ANSItable by default uses Unicode characters to create nice table outlines
+    and the colored package to allow colored text and fields.  For some 
+    applications it is useful to turn this off globally, rather than on a
+    table by table basis.
+
+    Unicode and ANSI color can be controlled individually.  If only one parameter
+    is given then:
+
+    * ``ansitable.options(True)`` enable Unicode, and ANSI characters if colored
+      package is installed.
+    * ``ansitable.options(False)`` disable Unicode, and ANSI characters
+
+    If ``unicode=False`` and a border is specified it is set to ``"ascii"``.
+
+    """
+    global _colored, _unicode
+
+    _unicode = unicode
+    if color is None:
+        color = False
+
+    _colored = color
+
 # ------------------------------------------------------------------------- #
 
 class Column():
@@ -175,6 +214,9 @@ class ANSIMatrix:
         """
 
         import numpy as np  # only import if matrix is used
+
+        if not _unicode:
+            style = 'ascii'
         self.style = borderdict[style]
         self.fmt = fmt
         self.width = len(fmt.format(1))
@@ -279,6 +321,8 @@ class ANSITable:
         The first option is quick and easy but does not allow any control of
         formatting or alignment.
         """
+        global _unicode
+
         self.colsep = colsep
         self.offset = offset
         self.ellipsis = ellipsis
@@ -287,8 +331,8 @@ class ANSITable:
         self.header = header
         self.color = color and self._color
 
-
-
+        if border is not None and not _unicode:
+            border = 'ascii'
         self.border = border
         
         self.nrows = 0
