@@ -199,7 +199,7 @@ styledict = {"bold": 1, "dim": 2, "underlined": 4, "blink": 5, "reverse":7}
 
 class ANSIMatrix:
 
-    def __init__(self, style='thin', fmt='{:< 10.3g}', squish=True, squishtol=100):
+    def __init__(self, style='thin', fmt='{:< 10.3g}', squish=100):
         """
         [summary]
 
@@ -207,10 +207,9 @@ class ANSIMatrix:
         :type style: str, optional
         :param fmt: [description], defaults to '{:< 10.3g}'
         :type fmt: str, optional
-        :param squish: [description], defaults to True
-        :type squish: bool, optional
-        :param squishtol: [description], defaults to 100
-        :type squishtol: int, optional
+        :param squish: elements smaller than this times eps are displayed as
+                       zero, defaults to 100
+        :type squish: int, optional
         """
 
         import numpy as np  # only import if matrix is used
@@ -220,10 +219,11 @@ class ANSIMatrix:
         self.style = borderdict[style]
         self.fmt = fmt
         self.width = len(fmt.format(1))
-        if squish:
-            self.squish = squishtol * np.finfo(float).eps
-        else:
+        if squish == 0:
             self.squish = None
+        else:
+            self.squish = squish * np.finfo(float).eps
+            
 
     def str(self, matrix, suffix_super='', suffix_sub=''):
         """
