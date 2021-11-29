@@ -62,7 +62,7 @@ class Column():
         headcolor=None, headbgcolor=None, headstyle=None, headalign=">"
         ):
         """
-        [summary]
+        Create a table column
 
         :param name: Name of column, also the column heading
         :type name: str
@@ -179,6 +179,7 @@ def _aligntext(opt, text, n, color=None):
         g2 = gap - g1
         return _spaces(g1) + text + _spaces(g2)
 
+# unicode box drawing characters, see https://en.wikipedia.org/wiki/Box-drawing_character
 #       ascii, thin, thin+round, thick, double
 _tl = [ord('+'), 0x250c, 0x256d, 0x250f, 0x2554]
 _tr = [ord('+'), 0x2510, 0x256e, 0x2513, 0x2557]
@@ -201,16 +202,36 @@ class ANSIMatrix:
 
     def __init__(self, style='thin', fmt='{:< 10.3g}', squish=100):
         """
-        [summary]
+        Create a matrix formatter
 
         :param style: Bracket format, defaults to 'thin'
         :type style: str, optional
-        :param fmt: [description], defaults to '{:< 10.3g}'
+        :param fmt: number format string, defaults to '{:< 10.3g}'
         :type fmt: str, optional
         :param squish: elements smaller than this times eps are displayed as
                        zero, defaults to 100
         :type squish: int, optional
+
+        Creates a formatter, or template, for formatting matrices.
+
+        .. code::
+
+            from ansitable import ANSIMatrix
+            import numpy as np
+
+            formatter = ANSIMatrix(style='thick')
+            m = np.random.rand(4,4) - 0.5
+            formatter.print(m)
+
+            +                                           +
+            | 0.23      -0.00542   -0.282      0.229    |
+            | 0.433      0.229      0.489     -0.414    |
+            | 0.0901    -0.351     -0.413     -0.418    |
+            | 0.433      0.233      0.0495     0.000281 |
+            +                                           +
         """
+
+        # TODO: add colored fields, specify by tuples (rowstart, rowend, colstart, colend, color)
 
         import numpy as np  # only import if matrix is used
 
@@ -466,7 +487,6 @@ class ANSITable:
             if self.bordercolor is not None:
                 text += self.ATTR(0)
             return text
-
 
     def _row(self, row=None):
 
@@ -731,6 +751,8 @@ if __name__ == "__main__":
 
     import numpy as np
 
+    ANSITable._unicode = False
+
     # -------------------------------- test ANSIMatrix
     m = np.arange(16).reshape((4,4)) /10 - 0.8
     m[0,0] = 1.23456e-14
@@ -865,3 +887,4 @@ if __name__ == "__main__":
     table.print()
     print(table.latex())
     print(table.markdown())
+
