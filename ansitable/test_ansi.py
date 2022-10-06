@@ -211,8 +211,22 @@ bbbbbbbbb…                       -5.5      6.0000
 ┃ 0          0.1        0.2        0.3      ┃
 ┃ 0.4        0.5        0.6        0.7      ┃
 ┗                                           ┛"""
-        formatter = ANSIMatrix(style='thick', squish=True)
+        formatter = ANSIMatrix(style='thick')
+        self.assertEqual(formatter.str(m), ans)
 
+        m[0,0] = -1.23456e-14
+        formatter = ANSIMatrix(style='thick')
+        self.assertEqual(formatter.str(m), ans)
+
+        m[0,0] = 1.23456e-14
+
+        ans = r"""┏                                           ┓
+┃ 1.23e-14  -0.7       -0.6       -0.5      ┃
+┃-0.4       -0.3       -0.2       -0.1      ┃
+┃ 0          0.1        0.2        0.3      ┃
+┃ 0.4        0.5        0.6        0.7      ┃
+┗                                           ┛"""
+        formatter = ANSIMatrix(style='thick', squish=10)
         self.assertEqual(formatter.str(m), ans)
 
     def test_matrix_2(self):
@@ -226,7 +240,7 @@ bbbbbbbbb…                       -5.5      6.0000
 ┃ 0          0.1        0.2        0.3      ┃
 ┃ 0.4        0.5        0.6        0.7      ┃
 ┗                                           ┛3"""
-        formatter = ANSIMatrix(style='thick', squish=True)
+        formatter = ANSIMatrix(style='thick')
 
         self.assertEqual(formatter.str(m, suffix_super='T', suffix_sub='3'), ans)
 
