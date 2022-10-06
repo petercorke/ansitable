@@ -730,19 +730,19 @@ class ANSITable:
         return s
 
     def FG(self, c):
-        if self.color and c is not None:
+        if _unicode and self.color and c is not None:
             return fg(c)
         else:
             return ""
 
     def BG(self, c):
-        if self.color and c is not None:
+        if _unicode and self.color and c is not None:
             return bg(c)
         else:
             return ""
 
     def ATTR(self, c):
-        if self.color and c is not None:
+        if _unicode and self.color and c is not None:
             return attr(c)
         else:
             return "" 
