@@ -30,7 +30,7 @@ docupdate: docs
 
 dist: .FORCE
 	#$(MAKE) test
-	python setup.py sdist
+	python -m build
 
 upload: .FORCE
 	twine upload dist/*
