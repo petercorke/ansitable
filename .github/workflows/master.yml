@@ -32,4 +32,4 @@ jobs:
         pip install pytest
     - name: Test with pytest
       run: |
-        pytest -s --ignore=W605 --timeout=50 --timeout_method=thread
+        pytest -s --ignore=W605
