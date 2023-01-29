@@ -18,23 +18,14 @@ coverage:
 	coverage run --omit=\*/test_\* -m unittest
 	coverage report
 
-docs: .FORCE
-	(cd docsrc; make html)
-	open docsrc/build/html/index.html
-
-docupdate: docs
-	cp -r docsrc/build/html/. docs
-	git add docs
-	git commit -m "rebuilt docs"
-	git push origin master
-
 dist: .FORCE
 	#$(MAKE) test
 	python -m build
+	ls -lh dist
 
 upload: .FORCE
 	twine upload dist/*
 
 clean: .FORCE
 	-rm -r *.egg-info
-	-rm -r dist
+	-rm -r dist build

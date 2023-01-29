@@ -1,0 +1,62 @@
+[project]
+name = "ansitable"
+version = "0.9.8"
+authors = [
+  { name="Peter Corke", email="rvc@petercorke.com" },
+]
+description = "Quick and easy display of tabular data and matrices with optional ANSI color and borders"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    # Indicate who your project is intended for
+    "Intended Audience :: Developers",
+    # Specify the Python versions you support here.
+    "Programming Language :: Python :: 3.4",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+keywords = [
+    "table", "table layout", "table format",
+    "tabular", "tabular layout", "tabular format",
+    "ANSI", "ANSI art", "ANSI box characters", 
+    "color", "ANSI color",
+    "matrix format",
+]
+
+dependencies = [
+    "colored",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/petercorke/ansitable"
+"Bug Tracker" = "https://github.com/petercorke/ansitable/issues"
+"Documentation" = "https://github.com/petercorke/ansitable"
+"Source" = "https://github.com/petercorke/ansitable"
+
+[project.optional-dependencies]
+
+
+[build-system]
+
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+
+packages = [
+    "ansitable",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py37']
+exclude = "camera_derivatives.py"

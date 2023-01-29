@@ -2,7 +2,6 @@
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/ansitable)](https://pypistats.org/packages/ansitable)
 [![Anaconda version](https://anaconda.org/conda-forge/ansitable/badges/version.svg)](https://anaconda.org/conda-forge/ansitable)
 [![pyversions](https://img.shields.io/pypi/pyversions/ansitable)](https://pypi.python.org/pypi/ansitable/)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/petercorke/ansitable.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/petercorke/ansitable/context:python)
 [![PyPI status](https://img.shields.io/pypi/status/ansitable.svg)](https://pypi.python.org/pypi/ansitable/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/petercorke/ansitable/graphs/commit-activity)
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/petercorke/ansitable/blob/master/LICENSE)
