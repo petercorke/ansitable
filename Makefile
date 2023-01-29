@@ -12,7 +12,7 @@ help:
 	@echo " make help - this message$(BLACK)"
 
 test:
-	python -m unittest
+	pytest 
 
 coverage:
 	coverage run --omit=\*/test_\* -m unittest
