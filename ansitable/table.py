@@ -9,7 +9,6 @@ import sys
 
 try:
     from colored import fg, bg, attr
-
     _colored = True
     # print('using colored output')
 except ImportError:
@@ -23,7 +22,6 @@ except ImportError:
 
 _unicode = True
 
-
 def options(unicode, color=None):
     """
     Control ANSI/Unicode generation
@@ -34,7 +32,7 @@ def options(unicode, color=None):
     :type color: bool, optional
 
     ANSItable by default uses Unicode characters to create nice table outlines
-    and the colored package to allow colored text and fields.  For some
+    and the colored package to allow colored text and fields.  For some 
     applications it is useful to turn this off globally, rather than on a
     table by table basis.
 
@@ -56,25 +54,13 @@ def options(unicode, color=None):
 
     _colored = color
 
-
 # ------------------------------------------------------------------------- #
 
-
-class Column:
-    def __init__(
-        self,
-        name,
-        fmt="{}",
-        width=None,
-        colcolor=None,
-        colbgcolor=None,
-        colstyle=None,
-        colalign=">",
-        headcolor=None,
-        headbgcolor=None,
-        headstyle=None,
-        headalign=">",
-    ):
+class Column():
+    def __init__(self, name, fmt="{}", width=None,
+        colcolor=None, colbgcolor=None, colstyle=None, colalign=">", 
+        headcolor=None, headbgcolor=None, headstyle=None, headalign=">"
+        ):
         """
         Create a table column
 
@@ -133,7 +119,7 @@ class Column:
 
         Implementation of these options depends heavily on the terminal emulator
         used.
-
+        
         """
 
         self.name = name
@@ -176,56 +162,45 @@ class Column:
             text += self.table.ATTR(styledict[style])
         return text
 
-
 def _spaces(n):
     return " " * n
-
 
 def _aligntext(opt, text, n, color=None):
     gap = n - len(text)
     if color:
         # text = FG(color) + text + ATTR(0)
         text = color[0] + text + color[1]
-    if opt == "<":
+    if  opt == '<':
         return text + _spaces(gap)
-    elif opt == ">":
+    elif opt == '>':
         return _spaces(gap) + text
-    elif opt == "^":
+    elif opt == '^':
         g1 = gap // 2
         g2 = gap - g1
         return _spaces(g1) + text + _spaces(g2)
 
-
 # unicode box drawing characters, see https://en.wikipedia.org/wiki/Box-drawing_character
 #       ascii, thin, thin+round, thick, double
-_tl = [ord("+"), 0x250C, 0x256D, 0x250F, 0x2554]
-_tr = [ord("+"), 0x2510, 0x256E, 0x2513, 0x2557]
-_bl = [ord("+"), 0x2514, 0x2570, 0x2517, 0x255A]
-_br = [ord("+"), 0x2518, 0x256F, 0x251B, 0x255C]
-_lj = [ord("+"), 0x251C, 0x251C, 0x2523, 0x2560]
-_rj = [ord("+"), 0x2524, 0x2524, 0x252B, 0x2563]
-_tj = [ord("+"), 0x252C, 0x252C, 0x2533, 0x2566]
-_bj = [ord("+"), 0x2534, 0x2534, 0x253B, 0x2569]
-_xj = [ord("+"), 0x253C, 0x253C, 0x254B, 0x256C]
-_hl = [ord("-"), 0x2500, 0x2500, 0x2501, 0x2550]
-_vl = [ord("|"), 0x2502, 0x2502, 0x2503, 0x2551]
+_tl = [ord('+'), 0x250c, 0x256d, 0x250f, 0x2554]
+_tr = [ord('+'), 0x2510, 0x256e, 0x2513, 0x2557]
+_bl = [ord('+'), 0x2514, 0x2570, 0x2517, 0x255a]
+_br = [ord('+'), 0x2518, 0x256f, 0x251b, 0x255c]
+_lj = [ord('+'), 0x251c, 0x251c, 0x2523, 0x2560]
+_rj = [ord('+'), 0x2524, 0x2524, 0x252b, 0x2563]
+_tj = [ord('+'), 0x252c, 0x252c, 0x2533, 0x2566]
+_bj = [ord('+'), 0x2534, 0x2534, 0x253b, 0x2569]
+_xj = [ord('+'), 0x253c, 0x253c, 0x254b, 0x256c]
+_hl = [ord('-'), 0x2500, 0x2500, 0x2501, 0x2550]
+_vl = [ord('|'), 0x2502, 0x2502, 0x2503, 0x2551]
 
-borderdict = {
-    "ascii": 0,
-    "thin": 1,
-    "round": 2,
-    "thick": 3,
-    "double": 4,
-    "thick-thin": 5,
-    "double-thin": 6,
-}
-styledict = {"bold": 1, "dim": 2, "underlined": 4, "blink": 5, "reverse": 7}
+borderdict = {"ascii": 0, "thin": 1, "round": 2, "thick": 3, "double": 4, "thick-thin": 5, "double-thin":6}
+styledict = {"bold": 1, "dim": 2, "underlined": 4, "blink": 5, "reverse":7}
 
 # ------------------------------------------------------------------------- #
 
-
 class ANSIMatrix:
-    def __init__(self, style="thin", fmt="{:< 10.3g}", squish=100):
+
+    def __init__(self, style='thin', fmt='{:< 10.3g}', squish=100):
         """
         Create a matrix formatter
 
@@ -261,7 +236,7 @@ class ANSIMatrix:
         import numpy as np  # only import if matrix is used
 
         if not _unicode:
-            style = "ascii"
+            style = 'ascii'
         self.style = borderdict[style]
         self.fmt = fmt
         self.width = len(fmt.format(1))
@@ -269,8 +244,9 @@ class ANSIMatrix:
             self.squish = None
         else:
             self.squish = squish * np.finfo(float).eps
+            
 
-    def str(self, matrix, suffix_super="", suffix_sub=""):
+    def str(self, matrix, suffix_super='', suffix_sub=''):
         """
         Output the table as a string
 
@@ -293,7 +269,7 @@ class ANSIMatrix:
         elif len(matrix.shape) == 2:
             ncols = matrix.shape[1]
         else:
-            raise ValueError("Only 1D and 2D arrays supported")
+            raise ValueError('Only 1D and 2D arrays supported')
 
         mwidth = ncols * self.width + (ncols - 1)
         if self.squish is None:
@@ -302,15 +278,10 @@ class ANSIMatrix:
             m2 = np.where(abs(matrix) < self.squish, 0, matrix)
         b = self.style
 
-        s = chr(_tl[b]) + " " * mwidth + chr(_tr[b]) + suffix_super + "\n"
+        s = chr(_tl[b]) + ' ' * mwidth + chr(_tr[b]) + suffix_super + '\n'
         for row in m2:
-            s += (
-                chr(_vl[b])
-                + " ".join([self.fmt.format(x) for x in row])
-                + chr(_vl[b])
-                + "\n"
-            )
-        s += chr(_bl[b]) + " " * mwidth + chr(_br[b]) + suffix_sub
+            s += chr(_vl[b]) + ' '.join([self.fmt.format(x) for x in row]) + chr(_vl[b]) + '\n'
+        s += chr(_bl[b]) + ' ' * mwidth + chr(_br[b]) + suffix_sub
         return s
 
     def print(self, matrix, *pos, file=sys.stdout, **kwargs):
@@ -326,25 +297,12 @@ class ANSIMatrix:
 
         print(self.str(matrix, *pos, **kwargs), file=file)
 
-
 # ------------------------------------------------------------------------- #
-
 
 class ANSITable:
     _color = _colored
 
-    def __init__(
-        self,
-        *pos,
-        colsep=2,
-        offset=0,
-        border=None,
-        bordercolor=None,
-        ellipsis=True,
-        columns=None,
-        header=True,
-        color=True,
-    ):
+    def __init__(self, *pos, colsep = 2, offset=0, border=None, bordercolor=None, ellipsis=True, columns=None, header=True, color=True):
         """
         Create a table object
 
@@ -395,9 +353,9 @@ class ANSITable:
         self.color = color and self._color
 
         if border is not None and not _unicode:
-            border = "ascii"
+            border = 'ascii'
         self.border = border
-
+        
         self.nrows = 0
         self.columns = []
         for c in pos:
@@ -409,7 +367,7 @@ class ANSITable:
                 c.table = self
                 self.columns.append(c)
             else:
-                raise TypeError("expecting a lists of Column objects")
+                raise TypeError('expecting a lists of Column objects')
         if len(self.columns) == 0 and columns is not None:
             for _ in range(columns):
                 self.columns.append("")
@@ -431,21 +389,14 @@ class ANSITable:
             table.addcolumnColumn("column 3", "{:-10.4f}")
 
         .. note:: Additional arguments are passed directly to ``Column``.
-
+    
         """
         self.columns.append(Column(name, **kwargs))
 
-    def row(self, *values, rowcolor=None, rowbgcolor=None, rowstyle=None,):
+    def row(self, *values):
         """
         Add a row of data
 
-        :param values: sequence of values, one per column
-        :param rowcolor: Color of row text, defaults to None
-        :type rowcolor: str, optional
-        :param rowbgcolor: Color of row background, defaults to None
-        :type colbgcolor: str, optional
-        :param rowstyle: Row text style, see table below, defaults to None
-        :type colstyle: str, optional
         :raises ValueError: invalid format string for the data provided
 
         ``table.row(d1, d2, ... dN)`` add data items that comprise a row of the
@@ -454,7 +405,7 @@ class ANSITable:
         The data items can be any type, but the format string specified at
         table creation must be compatible.
         """
-        assert len(values) == len(self.columns), "wrong number of data items added"
+        assert len(values) == len(self.columns), 'wrong number of data items added'
 
         for value, c in zip(values, self.columns):
             if c.fmt is None:
@@ -464,22 +415,22 @@ class ANSITable:
             elif callable(c.fmt):
                 s = c.fmt(value)
             else:
-                raise ValueError("fmt must be valid format string or callable")
+                raise ValueError('fmt must be valid format string or callable')
 
             # handle a FG color specifier
-            if s.startswith("<<"):
+            if s.startswith('<<'):
                 # color specifier is given
-                end = s.find(">>")
+                end = s.find('>>')
                 color = s[2:end]
-                s = s[end + 2 :]
+                s = s[end+2:]
             else:
                 color = None
 
             if c.width is not None and len(s) > c.width:
                 if self.ellipsis:
-                    s = s[: c.width - 1] + "\u2026"
+                    s = s[:c.width - 1] + "\u2026"
                 else:
-                    s = s[: c.width]
+                    s = s[:c.width]
             c.maxwidth = max(c.maxwidth, len(s))
 
             c.formatted.append(s)
@@ -508,7 +459,7 @@ class ANSITable:
         return self._line(_bl, _bj, _br)
 
     def _line(self, left, mid, right):
-        if self.borderdict is None:
+        if self.borderdict is  None:
             return ""
         else:
             b = self.borderdict
@@ -520,7 +471,7 @@ class ANSITable:
             for c in self.columns:
                 text += chr(_hl[b]) * (c.width + c2)
                 if not c.last:
-                    text += chr(mid[b]) + chr(_hl[b]) * c2
+                    text += chr(mid[b]) + chr(_hl[b]) * c2 
             text += chr(right[b])
             if self.bordercolor is not None:
                 text += self.ATTR(0)
@@ -555,18 +506,14 @@ class ANSITable:
                     text += _aligntext(c.headalign, c.name, c.width)
                 else:
                     # table row proper
-                    text += _aligntext(
-                        c.colalign,
-                        c.formatted[row],
-                        c.width,
-                        (self.FG(c.fgcolor[row]), self.ATTR(0)),
-                    )
+                    text += _aligntext(c.colalign, c.formatted[row], c.width, 
+                        (self.FG(c.fgcolor[row]), self.ATTR(0)))
                 if len(ansi) > 0:
                     text += self.ATTR(0)
 
                 c2 = self.colsep // 2
                 if not c.last:
-                    text += _spaces(c2) + self._vline() + _spaces(c2)
+                    text += _spaces(c2) + self._vline() +  _spaces(c2)
                 else:
                     text += _spaces(c2) + self._vline()
         else:
@@ -581,19 +528,15 @@ class ANSITable:
                     text += _aligntext(c.headalign, c.name, c.width)
                 else:
                     # table row proper
-                    text += _aligntext(
-                        c.colalign,
-                        c.formatted[row],
-                        c.width,
-                        (self.FG(c.fgcolor[row]), self.ATTR(0)),
-                    )
+                    text += _aligntext(c.colalign, c.formatted[row], c.width, 
+                                (self.FG(c.fgcolor[row]), self.ATTR(0)))
                 if len(ansi) > 0:
                     text += self.ATTR(0)
-                text += _spaces(self.colsep)
+                text +=  _spaces(self.colsep)
 
         return text + "\n"
 
-    def ansi(self, file=None):
+    def print(self, file=None):
         """
         Print the table
 
@@ -607,7 +550,7 @@ class ANSITable:
             table.row("bbbbbbbbbbbbb", -5.5, 6)
             table.row("ccccccc", 8.8, -9)
             table.print()
-
+            
             +--------------+---------------------------+----------+
             |         col1 | column 2 has a big header | column 3 |
             +--------------+---------------------------+----------+
@@ -621,7 +564,7 @@ class ANSITable:
         try:
             print(str(self), file=file)
         except UnicodeEncodeError:
-            self.border = "ascii"
+            self.border = 'ascii'
             print(str(self), file=file)
 
     def __str__(self):
@@ -657,7 +600,7 @@ class ANSITable:
         # rows
         for i in range(self.nrows):
             text += self._row(i)
-
+        
         # footer
         text += self._bottomline()
 
@@ -677,7 +620,7 @@ class ANSITable:
             table.row("bbbbbbbbbbbbb", -5.5, 6)
             table.row("ccccccc", 8.8, -9)
             table.markdown()
-
+            
             |          col1 | column 2 has a big header | column 3 |
             | ------------: | ------------------------: | -------: |
             |     aaaaaaaaa |                       2.2 |        3 |
@@ -690,27 +633,27 @@ class ANSITable:
         """
 
         # markdown table setup
-        s = ""
+        s = ''
 
         # column headers
         for c in self.columns:
-            s += "| " + _aligntext(c.headalign, c.name, c.width) + " "
+            s += '| ' + _aligntext(c.headalign, c.name, c.width) + ' '
         s += "|\n"
 
         for c in self.columns:
-            if c.headalign == "<":
-                bar = ":" + "-" * (c.width - 1)
-            elif c.headalign == "^":
-                bar = ":" + "-" * (c.width - 2) + ":"
-            elif c.headalign == ">":
-                bar = "-" * (c.width - 1) + ":"
-            s += "| " + bar + " "
+            if c.headalign == '<':
+                bar = ':' + '-' * (c.width - 1)
+            elif c.headalign == '^':
+                bar = ':' + '-' * (c.width - 2) + ':'
+            elif c.headalign == '>':
+                bar = '-' * (c.width - 1) + ':'
+            s += '| ' + bar + ' '
         s += "|\n"
 
         # rows
         for i in range(self.nrows):
             for c in self.columns:
-                s += "| " + _aligntext(c.colalign, c.formatted[i], c.width) + " "
+                s += '| ' + _aligntext(c.colalign, c.formatted[i], c.width) + ' '
             s += "|\n"
 
         return s
@@ -746,12 +689,12 @@ class ANSITable:
         # LaTeX tabular setup
         s = "\\begin{tabular}{ |"
         for c in self.columns:
-            if c.colalign == "<":
-                s += "l|"
-            elif c.colalign == "^":
-                s += "c|"
-            elif c.colalign == ">":
-                s += "r|"
+            if c.colalign == '<':
+                s += 'l|'
+            elif c.colalign == '^':
+                s += 'c|'
+            elif c.colalign == '>':
+                s += 'r|'
         s += " }\\hline\n"
 
         # column headers
@@ -760,15 +703,15 @@ class ANSITable:
             if first:
                 first = False
             else:
-                s += " & "
+                s += ' & '
 
-            s += "\\multicolumn{1}{"
-            if c.headalign == "<":
-                s += "|l|"
-            elif c.headalign == "^":
-                s += "|c|"
-            elif c.headalign == ">":
-                s += "|r|"
+            s += '\\multicolumn{1}{'
+            if c.headalign == '<':
+                s += '|l|'
+            elif c.headalign == '^':
+                s += '|c|'
+            elif c.headalign == '>':
+                s += '|r|'
             s += "}{" + c.name + "}"
 
         s += "\\\\\\hline\\hline\n"
@@ -779,10 +722,7 @@ class ANSITable:
                 if first:
                     first = False
                 else:
-                    s += " & "
-                if c.formatted[i] is None:
-                    s += "\\hline\n"
-                    break
+                    s += ' & '
                 s += c.formatted[i]
             s += " \\\\\n"
         s += "\\hline\n"
@@ -805,18 +745,7 @@ class ANSITable:
         if _unicode and self.color and c is not None:
             return attr(c)
         else:
-            return ""
-
-    def print(self, format="ansi", file=None, **kwargs):
-        if format == "ansi":
-            self.ansi(file=None, **kwargs)
-        elif format == "latex":
-            s = self.latex(**kwargs)
-            print(s, file=file)
-        elif format == "markdown":
-            s = self.markdown(**kwargs)
-            print(s, file=file)
-
+            return "" 
 
 if __name__ == "__main__":
 
@@ -825,19 +754,19 @@ if __name__ == "__main__":
     ANSITable._unicode = False
 
     # -------------------------------- test ANSIMatrix
-    m = np.arange(16).reshape((4, 4)) / 10 - 0.8
-    m[0, 0] = 1.23456e-14
+    m = np.arange(16).reshape((4,4)) /10 - 0.8
+    m[0,0] = 1.23456e-14
     print(m)
     print(np.array2string(m))
 
-    formatter = ANSIMatrix(style="thick", squish=True)
+    formatter = ANSIMatrix(style='thick', squish=True)
 
     formatter.print(m)
 
-    formatter.print(m, suffix_super="T", suffix_sub="3")
+    formatter.print(m, suffix_super='T', suffix_sub='3')
 
     m = np.arange(4) / 4 - 0.5
-    formatter.print(m, "T")
+    formatter.print(m, 'T')
 
     # -------------------------------- test ANSITable
 
@@ -854,7 +783,9 @@ if __name__ == "__main__":
     table.print()
 
     table = ANSITable(
-        Column("col1"), Column("column 2 has a big header"), Column("column 3")
+        Column("col1"),
+        Column("column 2 has a big header"),
+        Column("column 3")
     )
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", -5.5, 6)
@@ -864,7 +795,7 @@ if __name__ == "__main__":
     table = ANSITable(
         Column("col1"),
         Column("column 2 has a big header", "{:.3g}"),
-        Column("column 3", "{:-10.4f}"),
+        Column("column 3", "{:-10.4f}")
     )
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", -5.5, 6)
@@ -874,7 +805,7 @@ if __name__ == "__main__":
     table = ANSITable(
         Column("col1", width=10),
         Column("column 2 has a big header", "{:.3g}"),
-        Column("column 3", "{:-10.4f}"),
+        Column("column 3", "{:-10.4f}")
     )
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", -5.5, 6)
@@ -885,7 +816,7 @@ if __name__ == "__main__":
         Column("col1"),
         Column("column 2 has a big header"),
         Column("column 3"),
-        border="ascii",
+        border="ascii"
     )
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", -5.5, 6)
@@ -896,7 +827,7 @@ if __name__ == "__main__":
         Column("col1"),
         Column("column 2 has a big header"),
         Column("column 3"),
-        border="thick",
+        border="thick"
     )
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", -5.5, 6)
@@ -907,7 +838,7 @@ if __name__ == "__main__":
         Column("col1"),
         Column("column 2 has a big header", colalign="^"),
         Column("column 3"),
-        border="thick",
+        border="thick"
     )
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", -5.5, 6)
@@ -918,7 +849,7 @@ if __name__ == "__main__":
         Column("col1", headalign="<"),
         Column("column 2 has a big header", colalign="^"),
         Column("column 3", colalign="<"),
-        border="thick",
+        border="thick"
     )
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", -5.5, 6)
@@ -929,7 +860,7 @@ if __name__ == "__main__":
         Column("col1", headalign="<"),
         Column("column 2 has a big header", colalign="^", colstyle="reverse"),
         Column("column 3", colalign="<"),
-        border="thick",
+        border="thick"
     )
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", -5.5, 6)
@@ -940,8 +871,7 @@ if __name__ == "__main__":
         Column("col1", headalign="<", colcolor="red", headstyle="underlined"),
         Column("column 2 has a big header", colalign="^", colstyle="reverse"),
         Column("column 3", colalign="<", colbgcolor="green", fmt="{: d}"),
-        border="thick",
-        bordercolor="blue",
+        border="thick", bordercolor="blue"
     )
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", -5.5, 6)
@@ -949,10 +879,12 @@ if __name__ == "__main__":
     table.row("ccccccc", 8.8, -9)
     table.print()
 
+
     table = ANSITable("col1", "column 2 has a big header", "column 3")
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", -5.5, 6)
     table.row("ccccccc", 8.8, -9)
     table.print()
-    table.print(format="latex")
-    table.print(format="markdown")
+    print(table.latex())
+    print(table.markdown())
+
