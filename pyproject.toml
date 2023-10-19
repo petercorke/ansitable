@@ -1,40 +1,34 @@
 [project]
 name = "ansitable"
-version = "0.9.8"
-authors = [
-  { name="Peter Corke", email="rvc@petercorke.com" },
-]
+version = "0.9.9"
+authors = [{ name = "Peter Corke", email = "rvc@petercorke.com" }]
+
+dependencies = ["colored"]
+license = { file = "LICENSE" }
+
 description = "Quick and easy display of tabular data and matrices with optional ANSI color and borders"
 readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    # Indicate who your project is intended for
-    "Intended Audience :: Developers",
-    # Specify the Python versions you support here.
-    "Programming Language :: Python :: 3.4",
-    "Programming Language :: Python :: 3.5",
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-
+    "Programming Language :: Python :: 3 :: Only",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 keywords = [
-    "table", "table layout", "table format",
-    "tabular", "tabular layout", "tabular format",
-    "ANSI", "ANSI art", "ANSI box characters", 
-    "color", "ANSI color",
+    "table",
+    "table layout",
+    "table format",
+    "tabular",
+    "tabular layout",
+    "tabular format",
+    "ANSI",
+    "ANSI art",
+    "ANSI box characters",
+    "color",
+    "ANSI color",
     "matrix format",
 ]
 
-dependencies = [
-    "colored",
-]
 
 [project.urls]
 "Homepage" = "https://github.com/petercorke/ansitable"
@@ -48,13 +42,12 @@ dependencies = [
 [build-system]
 
 requires = ["setuptools"]
+#requires = ['setuptools==63.4.3']
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 
-packages = [
-    "ansitable",
-]
+packages = ["ansitable"]
 
 [tool.black]
 line-length = 88
