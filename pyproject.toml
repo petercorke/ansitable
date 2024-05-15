@@ -1,6 +1,6 @@
 [project]
 name = "ansitable"
-version = "0.9.10"
+version = "0.9.11"
 authors = [{ name = "Peter Corke", email = "rvc@petercorke.com" }]
 description = "Quick and easy display of tabular data and matrices with optional ANSI color and borders"
 readme = "README.md"
@@ -37,7 +37,7 @@ keywords = [
     "matrix format",
 ]
 
-dependencies = ["colored<1.5.0"]
+dependencies = ["colored"]
 
 [project.urls]
 "Homepage" = "https://github.com/petercorke/ansitable"
