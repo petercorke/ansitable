@@ -140,6 +140,8 @@ class Column:
         self.fmt = fmt
         self.formatted = []
         self.fgcolor = []
+        self.bgcolor = []
+        self.style = []
         self.table = None
 
         if headalign is None:
@@ -157,7 +159,7 @@ class Column:
         self.width = width
         self.maxwidth = len(name)
 
-    def _settyle(self, header):
+    def _setstyle(self, header):
         if header:
             color = self.headcolor
             bgcolor = self.headbgcolor
@@ -176,39 +178,105 @@ class Column:
             text += self.table.ATTR(styledict[style])
         return text
 
+    def _formatcolumn(
+        self,
+        text,
+        header,
+        plain=False,
+        fgcolor=None,
+        bgcolor=None,
+        style=None,
+    ):
+        """
+        Format text in a column
+
+        :param text: text to be aligned
+        :type text: str
+        :param header: header row of column
+        :type header: bool
+        :return: aligned string
+        :rtype: str
+        """
+        if header:
+            fgcolor = self.headcolor
+            bgcolor = self.headbgcolor
+            style = self.headstyle
+            align = self.headalign
+        else:
+            fgcolor = fgcolor or self.colcolor
+            bgcolor = bgcolor or self.colbgcolor
+            style = style or self.colstyle
+            align = self.colalign
+
+        if plain:
+            # used for LaTeX and markdown tables
+            fgcolor = None
+            bgcolor = None
+
+        gap = self.width - len(text)  # amount of padding required
+        if align == "<":
+            # left justified, spaces after text
+            gap1 = _spaces(self.table.colsep)
+            gap2 = _spaces(gap + self.table.colsep)
+        elif align == ">":
+            # right justified, spaces before text
+            gap1 = _spaces(gap + self.table.colsep)
+            gap2 = _spaces(self.table.colsep)
+        elif align == "^":
+            # centred, split the gap
+            g1 = gap // 2  # left side gap
+            g2 = gap - g1  # right side gap
+            gap1 = _spaces(g1 + self.table.colsep)
+            gap2 = _spaces(g2 + self.table.colsep)
+
+        if fgcolor:
+            text = self.table.FG(fgcolor) + text + self.table.FG(0)
+
+        if style == "underlined":
+            text = self.table.ATTR(styledict[style]) + text + self.table.ATTR(0)
+
+        text = gap1 + text + gap2
+
+        if bgcolor:
+            text = self.table.BG(bgcolor) + text + self.table.BG(0)
+
+        if style and style != "underlined":
+            text = self.table.ATTR(styledict[style]) + text + self.table.ATTR(0)
+        return text
+
 
 def _spaces(n):
+    """
+    return n spaces
+
+    :param n: number of spaes
+    :type n: int
+    :return: string containing spaces
+    :rtype: str
+    """
     return " " * n
 
 
-def _aligntext(opt, text, n, color=None):
-    gap = n - len(text)
-    if color:
-        # text = FG(color) + text + ATTR(0)
-        text = color[0] + text + color[1]
-    if opt == "<":
-        return text + _spaces(gap)
-    elif opt == ">":
-        return _spaces(gap) + text
-    elif opt == "^":
-        g1 = gap // 2
-        g2 = gap - g1
-        return _spaces(g1) + text + _spaces(g2)
-
+"""
+gap  FG text OFF gap
+BG gap FG text BG gap OFF
+STYLE gap FG text gap OFF
+STYLE BG gap FG text BG gap OFF
+"""
 
 # unicode box drawing characters, see https://en.wikipedia.org/wiki/Box-drawing_character
 #       ascii, thin, thin+round, thick, double
-_tl = [ord("+"), 0x250C, 0x256D, 0x250F, 0x2554]
-_tr = [ord("+"), 0x2510, 0x256E, 0x2513, 0x2557]
-_bl = [ord("+"), 0x2514, 0x2570, 0x2517, 0x255A]
-_br = [ord("+"), 0x2518, 0x256F, 0x251B, 0x255C]
-_lj = [ord("+"), 0x251C, 0x251C, 0x2523, 0x2560]
-_rj = [ord("+"), 0x2524, 0x2524, 0x252B, 0x2563]
-_tj = [ord("+"), 0x252C, 0x252C, 0x2533, 0x2566]
-_bj = [ord("+"), 0x2534, 0x2534, 0x253B, 0x2569]
-_xj = [ord("+"), 0x253C, 0x253C, 0x254B, 0x256C]
-_hl = [ord("-"), 0x2500, 0x2500, 0x2501, 0x2550]
-_vl = [ord("|"), 0x2502, 0x2502, 0x2503, 0x2551]
+_tl = [ord("+"), 0x250C, 0x256D, 0x250F, 0x2554]  # top left
+_tr = [ord("+"), 0x2510, 0x256E, 0x2513, 0x2557]  # top right
+_bl = [ord("+"), 0x2514, 0x2570, 0x2517, 0x255A]  # bottom left
+_br = [ord("+"), 0x2518, 0x256F, 0x251B, 0x255C]  # bottom right
+_lj = [ord("+"), 0x251C, 0x251C, 0x2523, 0x2560]  # left join
+_rj = [ord("+"), 0x2524, 0x2524, 0x252B, 0x2563]  # right join
+_tj = [ord("+"), 0x252C, 0x252C, 0x2533, 0x2566]  # top join
+_bj = [ord("+"), 0x2534, 0x2534, 0x253B, 0x2569]  # bottom join
+_xj = [ord("+"), 0x253C, 0x253C, 0x254B, 0x256C]  # allway join
+_hl = [ord("-"), 0x2500, 0x2500, 0x2501, 0x2550]  # horizontal line
+_vl = [ord("|"), 0x2502, 0x2502, 0x2503, 0x2551]  # vertical line
 
 borderdict = {
     "ascii": 0,
@@ -337,7 +405,7 @@ class ANSITable:
     def __init__(
         self,
         *pos,
-        colsep=2,
+        colsep=1,
         offset=0,
         border=None,
         bordercolor=None,
@@ -349,7 +417,7 @@ class ANSITable:
         """
         Create a table object
 
-        :param colsep: Separation between columns, defaults to 2
+        :param colsep: Blank padding on each side of column separator, defaults to 1
         :type colsep: int, optional
         :param offset: Horizontal offset of the whole table, defaults to 0
         :type offset: int, optional
@@ -436,10 +504,16 @@ class ANSITable:
         """
         self.columns.append(Column(name, **kwargs))
 
-    def row(self, *values):
+    def row(self, *values, fgcolor=None, bgcolor=None, style=None):
         """
         Add a row of data
 
+        :param fgcolor: foreground color override for all columns in the row, defaults to None
+        :type fgcolor: str, optional
+        :param bgcolor: background color override for all columns in the row, defaults to None
+        :type bgcolor: str, optional
+        :param style: style override for all columns in the row, defaults to None
+        :type style: str, optional
         :raises ValueError: invalid format string for the data provided
 
         ``table.row(d1, d2, ... dN)`` add data items that comprise a row of the
@@ -447,6 +521,10 @@ class ANSITable:
 
         The data items can be any type, but the format string specified at
         table creation must be compatible.
+
+        The column data is formatted with the color and style given when the ``Column``
+        was created, but it can be overridden for a specific row by specifying the
+        options ``fgcolor``, ``bgcolor``, or ``style``.
         """
         assert len(values) == len(self.columns), "wrong number of data items added"
 
@@ -477,12 +555,14 @@ class ANSITable:
             c.maxwidth = max(c.maxwidth, len(s))
 
             c.formatted.append(s)
-            c.fgcolor.append(color)
+            c.fgcolor.append(fgcolor)
+            c.bgcolor.append(bgcolor)
+            c.style.append(style)
         self.nrows += 1
 
     def rule(self):
         """
-        Add a rule to the table
+        Add a horizontal rule to the table
 
         This is a horizontal line across all columns, used to delineate parts
         of the table.
@@ -490,48 +570,107 @@ class ANSITable:
         for c in self.columns:
             c.formatted.append(None)
             c.fgcolor.append(None)
+            c.bgcolor.append(None)
+            c.style.append(None)
         self.nrows += 1
 
     def _topline(self):
+        """
+        Create the top line of the table
+
+        :return: ansi code for the top line
+        :rtype: str
+        """
         return self._line(_tl, _tj, _tr)
 
     def _midline(self):
+        """
+        Create a middle line of the table
+
+        :return: ansi code for the middle line
+        :rtype: str
+        """
         return self._line(_lj, _xj, _rj)
 
     def _bottomline(self):
+        """
+        Create the bottom line of the table
+
+        :return: ansi code for the bottom line
+        :rtype: str
+        """
         return self._line(_bl, _bj, _br)
 
     def _line(self, left, mid, right):
+        """
+        Create a general horizontal line in the table
+
+        :param left: left hand side character
+        :type left: list of str
+        :param mid: column join characters
+        :type mid: list of str
+        :param right: right hand side character
+        :type right: list of str
+        :return: ansi code for line
+        :rtype: str
+
+        The line's color is specified by the ```bordercolor``` property.
+        """
         if self.borderdict is None:
             return ""
         else:
             b = self.borderdict
-            c2 = self.colsep // 2
             text = _spaces(self.offset - 1)
             if self.bordercolor is not None:
                 text += self.FG(self.bordercolor)
             text += chr(left[b])
             for c in self.columns:
-                text += chr(_hl[b]) * (c.width + c2)
+                text += chr(_hl[b]) * (c.width + 2 * self.colsep)
                 if not c.last:
-                    text += chr(mid[b]) + chr(_hl[b]) * c2
+                    text += chr(mid[b])
             text += chr(right[b])
             if self.bordercolor is not None:
                 text += self.ATTR(0)
             return text + "\n"
 
     def _vline(self):
+        """
+        Vertical line string
+
+        :return: ansi code for the vertical line
+        :rtype: str
+
+        A vertical line occurs on the left- and right-hand side of every
+        cell in the table.  Its color is specified by the ``bordercolor``
+        property.
+        """
         if self.borderdict is not None:
-            text = ""
-            b = self.borderdict
+            # set color
             if self.bordercolor is not None:
-                text += self.FG(self.bordercolor)
+                text = self.FG(self.bordercolor)
+            else:
+                text = ""
+
+            # get vertical line from dict
+            b = self.borderdict
             text += chr(_vl[b])
+
+            # turn off color
             if self.bordercolor is not None:
                 text += self.ATTR(0)
             return text
 
     def _row(self, row=None):
+        """
+        Format a row of the table
+
+        :param row: row number starting at 0, defaults to None
+        :type row: int, optional
+        :return: unicode string for the row
+        :rtype: str
+
+        The row can be the header row (```row=None```) or a data row
+        """
 
         if row is not None and self.columns[0].formatted[row] is None:
             # it's a horizontal rule
@@ -539,50 +678,52 @@ class ANSITable:
 
         if self.borderdict is not None:
             # has border
+
+            # add left-hand edge of table
             text = _spaces(self.offset - 1) + self._vline()
+
+            # add each column
             for c in self.columns:
 
-                ansi = c._settyle(row is None)
-                text += ansi
                 if row is None:
                     # header
-                    text += _aligntext(c.headalign, c.name, c.width)
+                    text += c._formatcolumn(
+                        c.name,
+                        header=True,
+                    )
                 else:
                     # table row proper
-                    text += _aligntext(
-                        c.colalign,
+                    text += c._formatcolumn(
                         c.formatted[row],
-                        c.width,
-                        (self.FG(c.fgcolor[row]), self.ATTR(0)),
+                        header=False,
+                        fgcolor=c.fgcolor[row],
+                        bgcolor=c.bgcolor[row],
+                        style=c.style[row],
                     )
-                if len(ansi) > 0:
-                    text += self.ATTR(0)
 
-                c2 = self.colsep // 2
-                if not c.last:
-                    text += _spaces(c2) + self._vline() + _spaces(c2)
-                else:
-                    text += _spaces(c2) + self._vline()
+                text += self._vline()
+
+                # if c.last:
+                #     # last cell on row
+                #     text += _spaces(c2) + self._vline()
+                # else:
+                #     text += _spaces(c2) + self._vline() + _spaces(c1)
         else:
             # no border
             text = _spaces(self.offset)
 
             for c in self.columns:
-                ansi = c._settyle(row is None)
-                text += ansi
+                # ansi = c._setstyle(row is None)
+                # text += ansi
                 if row is None:
                     # header
-                    text += _aligntext(c.headalign, c.name, c.width)
+                    text += c._formatcolumn(c.name, header=True)
                 else:
                     # table row proper
-                    text += _aligntext(
-                        c.colalign,
-                        c.formatted[row],
-                        c.width,
-                        (self.FG(c.fgcolor[row]), self.ATTR(0)),
-                    )
-                if len(ansi) > 0:
-                    text += self.ATTR(0)
+                    text += c._formatcolumn(c.formatted[row], header=False)
+
+                # if len(ansi) > 0:
+                #     text += self.ATTR(0)
                 text += _spaces(self.colsep)
 
         return text + "\n"
@@ -630,12 +771,14 @@ class ANSITable:
             # printing borders, adjust some other parameters
             if self.offset == 0:
                 self.offset = 1
-            self.colsep |= 1  # make it odd
+            # self.colsep |= 1  # make it odd
 
             self.borderdict = borderdict[self.border]
         else:
             self.borderdict = None
 
+        # find the width of each column and flag if it is
+        # the last column in the table
         for i, c in enumerate(self.columns):
             c.width = c.width or c.maxwidth
             c.last = i == len(self.columns) - 1
@@ -645,12 +788,12 @@ class ANSITable:
         # heading
         text += self._topline()
         if self.header:
-            text += self._row()
-            text += self._midline()
+            text += self._row()  # add the headers
+            text += self._midline()  # add a separator line
 
         # rows
         for i in range(self.nrows):
-            text += self._row(i)
+            text += self._row(i)  # add a row
 
         # footer
         text += self._bottomline()
@@ -688,7 +831,7 @@ class ANSITable:
 
         # column headers
         for c in self.columns:
-            s += "| " + _aligntext(c.headalign, c.name, c.width) + " "
+            s += "| " + c._formatcolumn(c.name, header=True, plain=True) + " "
         s += "|\n"
 
         for c in self.columns:
@@ -704,7 +847,11 @@ class ANSITable:
         # rows
         for i in range(self.nrows):
             for c in self.columns:
-                s += "| " + _aligntext(c.colalign, c.formatted[i], c.width) + " "
+                s += (
+                    "| "
+                    + c._formatcolumn(c.formatted[i], header=False, plain=True)
+                    + " "
+                )
             s += "|\n"
 
         return s
@@ -881,6 +1028,7 @@ if __name__ == "__main__":
     )
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", -5.5, 6)
+    table.rule()
     table.row("ccccccc", 8.8, -9)
     table.print()
 
@@ -930,6 +1078,20 @@ if __name__ == "__main__":
     table.row("ccccccc", 8.8, -9)
     table.print()
 
+    table = ANSITable(
+        Column("col1", headalign="^", colcolor="red", headstyle="underlined"),
+        Column("column 2 has a big header", colalign="^"),
+        Column("column 3", colalign="<", colbgcolor="green", fmt="{: d}"),
+        border="thick",
+        bordercolor="blue",
+        colsep=2,
+    )
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row("bbbbbbbbbbbbb", -5.5, 6)
+    table.row("ccccccc", 8.8, -9)
+    table.print()
+
+    # markdown/latex example
     table = ANSITable("col1", "column 2 has a big header", "column 3")
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", -5.5, 6)
