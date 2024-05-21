@@ -15,6 +15,17 @@ Painless creation of nice-looking [tables of data](#tables) or [matrices](#matri
 
 What's new:
 
+0.10.0:
+
+- `colsep` is now the number of padding spaces on each side of the cell data.  `colsep=1` means one space on the left and one on the right, previously this was achieved by `colsep=2`.
+- the padding now has `bgcolor`
+- the method `rule()` adds a horizontal dividing line across the table (actually this is from a few releases ago)
+- `row()` has arguments to override the fgcolor, bgcolor and style of all columns in the row, useful for highlighting a row.
+
+0.9.10:
+
+- fix problems due to changes with [`colored`](https://pypi.org/project/colored) 2.x
+  
 0.9.5:
 
 - methods to format table as MarkDown or LaTeX
@@ -245,22 +256,50 @@ table = ANSITable(
         border="thick"
     )
 table.row("aaaaaaaaa", 2.2, 3)
-table.row("bbbbbbbbbbbbb", 5.5, 6)
-table.row("ccccccc", 8.8, 9)
+table.row("bbbbbbbbbbbbb", -5.5, 6)
+table.row("ccccccc", 8.8, -9)
 table.print()
 ```
 yields
 
 ```
-┏━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┓
-┃col1          ┃ column 2 has a big header ┃ column 3 ┃
-┣━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━━━┫
-┃    aaaaaaaaa ┃            2.2            ┃ 3        ┃
-┃bbbbbbbbbbbbb ┃            5.5            ┃ 6        ┃
-┃      ccccccc ┃            8.8            ┃ 9        ┃
-┗━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━┛
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┓
+┃          col1 ┃ column 2 has a big header ┃ column 3 ┃
+┣━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━━━┫
+┃     aaaaaaaaa ┃                       2.2 ┃        3 ┃
+┃ bbbbbbbbbbbbb ┃                      -5.5 ┃        6 ┃
+┃       ccccccc ┃                       8.8 ┃       -9 ┃
+┗━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━┛
 ```
 where we have left-justified the heading for column 1 and the data for column 3.
+
+We can easily add a dividing line
+```python
+table = ANSITable(
+        Column("col1", headalign="<"),
+        Column("column 2 has a big header", colalign="^"),
+        Column("column 3", colalign="<"),
+        border="thick"
+    )
+table.row("aaaaaaaaa", 2.2, 3)
+table.row("bbbbbbbbbbbbb", -5.5, 6)
+table.rule()                                                # CHANGE
+table.row("ccccccc", 8.8, -9)
+table.print()
+```
+yields
+
+```
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┓
+┃          col1 ┃ column 2 has a big header ┃ column 3 ┃
+┣━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━━━┫
+┃     aaaaaaaaa ┃                       2.2 ┃        3 ┃
+┃ bbbbbbbbbbbbb ┃                      -5.5 ┃        6 ┃
+┣━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━━━┫
+┃       ccccccc ┃                       8.8 ┃       -9 ┃
+┗━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━┛
+```
+
 
 ## Color
 If you have the `colored` package installed then you can set the foreground and
@@ -268,20 +307,40 @@ background color and style (bold, reverse, underlined, dim) of the header and co
 
 ```python
 table = ANSITable(
-    Column("col1", headalign="<", colcolor="red", headstyle="underlined"),  # CHANGE
-    Column("column 2 has a big header", colalign="^", colstyle="reverse"),  # CHANGE
-    Column("column 3", colalign="<", colbgcolor="green"),                   # CHANGE
-    border="thick", bordercolor="blue"                                      # CHANGE
+    Column("col1", headalign="<", colcolor="red", headstyle="underlined"),      # CHANGE
+    Column("column 2 has a big header", colalign="^", colstyle="reverse"),      # CHANGE
+    Column("column 3", colalign="<", colbgcolor="green"),                       # CHANGE
+    border="thick", bordercolor="blue"                                          # CHANGE
 )
-table.row("aaaaaaaaa", 2.2, 3)
-table.row("bbbbbbbbbbbbb", 5.5, 6)
-table.row("ccccccc", 8.8, 9)
-table.print()
+   table = ANSITable(
+        Column("col1", headalign="^", colcolor="red", headstyle="underlined"),  # CHANGE
+        Column("column 2 has a big header", colalign="^"),                      # CHANGE
+        Column("column 3", colalign="<", colbgcolor="green", fmt="{: d}"),      # CHANGE
+        border="thick",
+        bordercolor="blue",
+        colsep=2,
+    )
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row("bbbbbbbbbbbbb", -5.5, 6, bgcolor="yellow")                        # CHANGE
+    table.row("ccccccc", 8.8, -9)
+    table.print()
 ```
 
 which yields
 
 ![colored table](https://github.com/petercorke/ansitable/raw/master/figs/colortable.png) 
+
+It is possible the change the color of a single row of the table by
+
+```python
+table.row("aaaaaaaaa", 2.2, 3)
+table.row("bbbbbbbbbbbbb", 5.5, 6, bgcolor="red")
+table.row("ccccccc", 8.8, 9)
+```
+
+which yields
+
+![colored table](https://github.com/petercorke/ansitable/raw/master/figs/colortable2.png) 
 
 It is also possible to change the color of individual cells in the table
 by prefixing the value with a color enclosed in double angle brackets, for example `<<red>>`.
@@ -330,8 +389,16 @@ headbgcolor || Heading text background color, see [possible values](https://pypi
 headstyle || Heading text style: "bold", "underlined", "reverse", "dim", "blink"
 headalign | `">"` | Heading text alignment: `">"` (left), `"<"` (right), `"^"` (centered)
 
- 
 Note that many terminal emulators do not support the "blink" style.
+
+### Row
+These keyword arguments control the styling of a single row.
+
+| Keyword  | Default | Purpose |
+|----      |----     |----    |
+fgcolor || Text color, see [possible values](https://pypi.org/project/colored)
+bgcolor || Text background color, see [possible values](https://pypi.org/project/colored)
+style  || Text style: "bold", "underlined", "reverse", "dim", "blink"
 
 # Output in other tabular formats
 
