@@ -993,6 +993,93 @@ class ANSITable:
             s += "\n"
 
         return s
+
+    def pandas(self, underscores=True):
+        r"""
+        Convert the table to a Pandas dataframe
+
+        :param underscores: replace spaces in column names with underscores, defaults to True
+        :type underscores: bool, optional
+        :return: Pandas dataframe
+        :rtype: `DataFrame` object
+
+        Example::
+
+            table = ANSITable("col1", "column 2 has a big header", "column 3")
+            table.row("aaaaaaaaa", 2.2, 3)
+            table.row("bbbbbbbbbbbbb", -5.5, 6)
+            table.row("ccccccc", 8.8, -9)
+            df = table.pandas()
+            print(df)
+
+                        col1 column_2_has_a_big_header column_3
+            0      aaaaaaaaa                       2.2        3
+            1  bbbbbbbbbbbbb                      -5.5        6
+            2        ccccccc                       8.8       -9
+
+        .. note::
+            - does not support header or column alignment
+            - ANSItable column headings can contain spaces, but Pandas column names
+              with spaces cannot be used as attributes. By default spaces are replaced
+              with underscores, but this can be disabled by passing ``underscores=False``.
+        """
+
+        try:
+            import pandas as pd
+        except ImportError:
+            raise ImportError("pandas is not installed: pip install pandas")
+
+        data = {}
+        for c in self.columns:
+            if underscores:
+                colname = c.name.replace(" ", "_")
+            else:
+                colname = c.name
+            data[colname] = c.formatted
+        return pd.DataFrame(data)
+
+    @staticmethod
+    def Pandas(df, **kwargs):
+        """
+        Convert a Pandas dataframe to an ANSITable
+
+        :param df: Pandas dataframe
+        :type df: ``DataFrame``
+        :param kwargs: additional arguments to pass to the ANSITable constructor
+        :return: ANSITable object
+        :rtype: ANSITable
+
+        Example::
+
+            import pandas as pd
+            from ansitable import ANSITable
+
+            df = pd.DataFrame({"calories": [420, 380, 390], "duration": [50, 40, 45]})
+            table = ANSITable.Pandas(df, border="thin")
+            table.print()
+
+            ┌──────────┬──────────┐
+            │ calories │ duration │
+            ├──────────┼──────────┤
+            │      420 │       50 │
+            │      380 │       40 │
+            │      390 │       45 │
+            └──────────┴──────────┘
+
+        .. note::
+            - options for header and column alignment and format are not supported
+            -
+        """
+        try:
+            import pandas as pd
+        except ImportError:
+            raise ImportError("pandas is not installed: pip install pandas")
+
+        table = ANSITable(*list(df.columns), **kwargs)
+        for i in range(len(df)):
+            table.row(*df.iloc[i])
+        return table
+
     def FG(self, c):
         if _unicode and self.color and c is not None:
             return fore(c)
