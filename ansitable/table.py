@@ -560,6 +560,14 @@ class ANSITable:
             c.style.append(style)
         self.nrows += 1
 
+    def __len__(self):
+        """Length of table
+
+        :return: Number of rows in the table
+        :rtype: int
+        """
+        return self.nrows
+
     def rule(self):
         """
         Add a horizontal rule to the table
