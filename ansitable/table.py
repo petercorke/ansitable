@@ -767,6 +767,13 @@ class ANSITable:
             self.border = "ascii"
             print(str(self), file=file)
 
+    def _findwidths(self):
+        # find the width of each column and flag if it is
+        # the last column in the table
+        for i, c in enumerate(self.columns):
+            c.width = c.width or c.maxwidth
+            c.last = i == len(self.columns) - 1
+
     def __str__(self):
         """
         Output the table as a string
@@ -785,11 +792,7 @@ class ANSITable:
         else:
             self.borderdict = None
 
-        # find the width of each column and flag if it is
-        # the last column in the table
-        for i, c in enumerate(self.columns):
-            c.width = c.width or c.maxwidth
-            c.last = i == len(self.columns) - 1
+        self._findwidths()
 
         text = ""
 
@@ -833,6 +836,8 @@ class ANSITable:
             - supports column alignment
             - does not support header alignment, same as column
         """
+
+        self._findwidths()
 
         # markdown table setup
         s = ""
@@ -891,6 +896,7 @@ class ANSITable:
             - supports column alignment
             - supports header alignment
         """
+        self._findwidths()
 
         # LaTeX tabular setup
         s = "\\begin{tabular}{ |"
