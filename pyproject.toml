@@ -39,7 +39,7 @@ keywords = [
     "matrix format",
 ]
 
-dependencies = ["colored>=2.0"]
+dependencies = ["colored"]
 
 [project.urls]
 "Homepage" = "https://github.com/petercorke/ansitable"
