@@ -15,6 +15,12 @@ Painless creation of nice-looking [tables of data](#tables) or [matrices](#matri
 
 What's new:
 
+0.11.0:
+
+- [Pandas integration](https://pandas.pydata.org). Convert a Pandas DataFrame to a table, or vice versa
+- export a table in CSV format
+- added unit tests for the various conversion methods
+
 0.10.0:
 
 - `colsep` is now the number of padding spaces on each side of the cell data.  `colsep=1` means one space on the left and one on the right, previously this was achieved by `colsep=2`.
@@ -438,9 +444,72 @@ ccccccc & 8.8 & -9 \\
 \hline
 \end{tabular}
 ```
+or CSV format
 
-In both cases the method returns a string and column alignment is supported.
+```
+table.csv()
+
+col1,column 2 has a big header,column 3
+aaaaaaaaa,2.2,3
+bbbbbbbbbbbbb,-5.5,6
+ccccccc,8.8,-9
+```
+The delimter character can be set, but defaults to comma.
+
+In all cases the method returns a string. Column alignment is supported for the LaTeX
+and markdown cases.
 MarkDown doesn't allow the header to have different alignment to the data.
+
+## Pandas integration
+
+Pandas is THE tool to use for tabular data so we support conversions in both directions.
+
+To convert a Pandas DataFrame to an ANSItable is just
+
+```
+import pandas as pd
+
+df = pd.DataFrame({"calories": [420, 380, 390], "duration": [50, 40, 45]})
+table = ANSITable.Pandas(df, border="thin")
+table.print()
+
+┌──────────┬──────────┐
+│ calories │ duration │
+├──────────┼──────────┤
+│      420 │       50 │
+│      380 │       40 │
+│      390 │       45 │
+└──────────┴──────────┘
+```
+``Pandas()`` is a static method that acts like a constructor. This is the simplest way to display CSV format data in an ANSItable by using Pandas ``read_csv()`` to load the data into a ``DataFrame``.
+
+To export an ANSItable as a Pandas DataFrame is simply
+
+```
+table = ANSITable("col1", "column 2 has a big header", "column 3")
+table.row("aaaaaaaaa", 2.2, 3)
+table.row("bbbbbbbbbbbbb", -5.5, 6)
+table.row("ccccccc", 8.8, -9)
+
+df = table.pandas()
+print(df)
+
+            col1 column_2_has_a_big_header column_3
+0      aaaaaaaaa                       2.2        3
+1  bbbbbbbbbbbbb                      -5.5        6
+2        ccccccc                       8.8       -9
+```
+Note that the column names have been modified, spaces changed to underscores, which
+allows the columns to be accessed as attributes:
+
+```
+print(df.column_2_has_a_big_header.to_string())
+
+0     2.2
+1    -5.5
+2     8.8
+```
+which shows the column as a Pandas `Series` object. This column name-changing behaviour can be disabled by passing ``underscores=False``.
 
 
 # Matrices

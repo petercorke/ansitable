@@ -1252,3 +1252,13 @@ if __name__ == "__main__":
     table.print()
     print(table.latex())
     print(table.markdown())
+    print(table.csv())
+    df = table.pandas()
+    print(df)
+    print(df.column_2_has_a_big_header.to_string())
+
+    import pandas as pd
+
+    df = pd.DataFrame({"calories": [420, 380, 390], "duration": [50, 40, 45]})
+    table = ANSITable.Pandas(df, border="thin")
+    table.print()
