@@ -31,6 +31,7 @@ jobs:
         pip install .
         pip install pytest
         pip install numpy
+        pip install pandas
     - name: Test with pytest
       run: |
         pytest -s --ignore=W605
