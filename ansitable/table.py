@@ -941,6 +941,58 @@ class ANSITable:
         s += "\\end{tabular}\n"
         return s
 
+    def csv(self, delimiter=","):
+        r"""
+        Output the table in comma separated column (CSV) format
+
+        :param delimiter: column delimiter, defaults to ","
+        :type delimiter: str, optional
+        :return: ASCII CSV text
+        :rtype: str
+
+        Example::
+
+            table = ANSITable("col1", "column 2 has a big header", "column 3")
+            table.row("aaaaaaaaa", 2.2, 3)
+            table.row("bbbbbbbbbbbbb", -5.5, 6)
+            table.row("ccccccc", 8.8, -9)
+            table.csv()
+
+            col1,column 2 has a big header,column 3
+            aaaaaaaaa,2.2,3
+            bbbbbbbbbbbbb,-5.5,6
+            ccccccc,8.8,-9
+
+        .. note::
+            - does not support header or column alignment
+        """
+
+        self._findwidths()
+
+        # column headers
+
+        first = True
+        s = ""
+        for c in self.columns:
+            if first:
+                first = False
+            else:
+                s += delimiter
+            s += c.name
+        s += "\n"
+
+        # rows
+        for i in range(self.nrows):
+            first = True
+            for c in self.columns:
+                if first:
+                    first = False
+                else:
+                    s += delimiter
+                s += c.formatted[i]
+            s += "\n"
+
+        return s
     def FG(self, c):
         if _unicode and self.color and c is not None:
             return fore(c)
