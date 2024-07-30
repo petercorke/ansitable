@@ -406,7 +406,7 @@ fgcolor || Text color, see [possible values](https://pypi.org/project/colored)
 bgcolor || Text background color, see [possible values](https://pypi.org/project/colored)
 style  || Text style: "bold", "underlined", "reverse", "dim", "blink"
 
-# Render as LaTeX, HTML, Markdown, CSV
+## Render as LaTeX, HTML, Markdown, CSV
 
 The main use for this package is to generate tables on the console that are easy to read, but
 sometimes you might want the table in a different format to include in
@@ -512,7 +512,7 @@ MarkDown doesn't allow the header to have different alignment to the data.
 HTML also supports the ANSItable header and column foreground and background
 color options.
 
-# Pandas integration
+## Pandas integration
 
 Pandas is THE tool to use for tabular data so we support conversions in both directions.
 
