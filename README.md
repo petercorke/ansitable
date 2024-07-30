@@ -15,9 +15,10 @@ Painless creation of nice-looking [tables of data](#tables) or [matrices](#matri
 
 What's new:
 
-0.11.1:
+0.11.2:
 
 - export a table in HTML format
+- export a table in ReST format
 
 0.11.0:
 
@@ -410,11 +411,13 @@ fgcolor || Text color, see [possible values](https://pypi.org/project/colored)
 bgcolor || Text background color, see [possible values](https://pypi.org/project/colored)
 style  || Text style: "bold", "underlined", "reverse", "dim", "blink"
 
-## Render as LaTeX, HTML, Markdown, CSV
+## Render table as Markdown, HTML, LaTeX, ReST, or CSV
 
 The main use for this package is to generate tables on the console that are easy to read, but
 sometimes you might want the table in a different format to include in
 documentation.
+
+We create a simple table
 
 ```python
 table = ANSITable("col1", "column 2 has a big header", "column 3")
@@ -424,42 +427,35 @@ table.row("ccccccc", 8.8, -9)
 table.print()
 ```
 
-can be rendered into Markdown
+In all cases the render methods returns a string. Support for alignment and color options depends on the capability of the format that is being exported to.
+Column alignment is supported for the LaTeX, HTML and markdown cases.
+MarkDown doesn't allow the header to have different alignment to the data.
+HTML is the only format that supports the ANSItable header and column foreground and background color options.
+
+### Markdown
+
+The table can be rendered into Markdown format by
 
 ```
 table.markdown()
-
+```
+which generates
+```
 |          col1 | column 2 has a big header | column 3 |
 | ------------: | ------------------------: | -------: |
 |     aaaaaaaaa |                       2.2 |        3 |
 | bbbbbbbbbbbbb |                      -5.5 |        6 |
 |       ccccccc |                       8.8 |       -9 |
 ```
-or LaTex
+
+### HTML
+
+The table can be rendered into Markdown format by
 
 ```
-table.latex()
-
-\begin{tabular}{ |r|r|r| }\hline
-\multicolumn{1}{|r|}{col1} & \multicolumn{1}{|r|}{column 2 has a big header} & \multicolumn{1}{|r|}{column 3}\\\hline\hline
-aaaaaaaaa & 2.2 & 3 \\
-bbbbbbbbbbbbb & -5.5 & 6 \\
-ccccccc & 8.8 & -9 \\
-\hline
-\end{tabular}
+table.html()
 ```
-or CSV format, the delimter character can be set, but defaults to comma.
-
-```
-table.csv()
-
-col1,column 2 has a big header,column 3
-aaaaaaaaa,2.2,3
-bbbbbbbbbbbbb,-5.5,6
-ccccccc,8.8,-9
-```
-
-or HTML format
+which generates
 
 ```
 <table style=''>
@@ -510,11 +506,59 @@ which renders as
   </tr>
 </table>
 
+CSS styling options can be applied to the table, rows and cells.
 
-In all cases the methods returns a string. Column alignment is supported for the LaTeX, HTML and markdown cases.
-MarkDown doesn't allow the header to have different alignment to the data.
-HTML also supports the ANSItable header and column foreground and background
-color options.
+### ReStructedText
+or ReStructedText (ReST) format
+
+```
+table.rest()
+
+=============  =========================  ========
+         col1  column 2 has a big header  column 3
+=============  =========================  ========
+    aaaaaaaaa                        2.2         3
+bbbbbbbbbbbbb                       -5.5         6
+      ccccccc                        8.8        -9
+=============  =========================  ========
+```
+
+
+### LaTex
+
+The table can be rendered into LaTeX format by
+
+```
+table.latex()
+
+\begin{tabular}{ |r|r|r| }\hline
+\multicolumn{1}{|r|}{col1} & \multicolumn{1}{|r|}{column 2 has a big header} & \multicolumn{1}{|r|}{column 3}\\\hline\hline
+aaaaaaaaa & 2.2 & 3 \\
+bbbbbbbbbbbbb & -5.5 & 6 \\
+ccccccc & 8.8 & -9 \\
+\hline
+\end{tabular}
+```
+
+
+
+### CSV
+
+The table can be rendered into CSV format by
+
+```
+table.csv()
+```
+which generates
+```
+col1,column 2 has a big header,column 3
+aaaaaaaaa,2.2,3
+bbbbbbbbbbbbb,-5.5,6
+ccccccc,8.8,-9
+```
+ The delimiter character defaults to comma, but can be set.  
+
+CSV format data can be included in ReST documentation using the `csv-table` directive.
 
 ## Pandas integration
 
