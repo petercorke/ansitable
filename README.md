@@ -15,6 +15,10 @@ Painless creation of nice-looking [tables of data](#tables) or [matrices](#matri
 
 What's new:
 
+0.11.1:
+
+- export a table in HTML format
+
 0.11.0:
 
 - [Pandas integration](https://pandas.pydata.org). Convert a Pandas DataFrame to a table, or vice versa
