@@ -37,6 +37,10 @@ keywords = [
     "color",
     "ANSI color",
     "matrix format",
+    "CSV",
+    "Markdown table",
+    "HTML table",
+    "LaTeX table",
 ]
 
 dependencies = ["colored"]
