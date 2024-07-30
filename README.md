@@ -406,7 +406,7 @@ fgcolor || Text color, see [possible values](https://pypi.org/project/colored)
 bgcolor || Text background color, see [possible values](https://pypi.org/project/colored)
 style  || Text style: "bold", "underlined", "reverse", "dim", "blink"
 
-# Output in other tabular formats
+# Render as LaTeX, HTML, Markdown, CSV
 
 The main use for this package is to generate tables on the console that are easy to read, but
 sometimes you might want the table in a different format to include in
@@ -444,7 +444,7 @@ ccccccc & 8.8 & -9 \\
 \hline
 \end{tabular}
 ```
-or CSV format
+or CSV format, the delimter character can be set, but defaults to comma.
 
 ```
 table.csv()
@@ -454,13 +454,65 @@ aaaaaaaaa,2.2,3
 bbbbbbbbbbbbb,-5.5,6
 ccccccc,8.8,-9
 ```
-The delimter character can be set, but defaults to comma.
 
-In all cases the method returns a string. Column alignment is supported for the LaTeX
-and markdown cases.
+or HTML format
+
+```
+<table style=''>
+  <tr style=''>
+    <th style='text-align:right;'>col1</th>
+    <th style='text-align:right;'>column 2 has a big header</th>
+    <th style='text-align:right;'>column 3</th>
+  </tr>
+  <tr style=''>
+    <td style='text-align:right;'>aaaaaaaaa</td>
+    <td style='text-align:right;'>2.2</td>
+    <td style='text-align:right;'>3</td>
+  </tr>
+  <tr style=''>
+    <td style='text-align:right;'>bbbbbbbbbbbbb</td>
+    <td style='text-align:right;'>-5.5</td>
+    <td style='text-align:right;'>6</td>
+  </tr>
+  <tr style=''>
+    <td style='text-align:right;'>ccccccc</td>
+    <td style='text-align:right;'>8.8</td>
+    <td style='text-align:right;'>-9</td>
+  </tr>
+</table>
+```
+which renders as
+
+<table style=''>
+  <tr style=''>
+    <th style='text-align:right;'>col1</th>
+    <th style='text-align:right;'>column 2 has a big header</th>
+    <th style='text-align:right;'>column 3</th>
+  </tr>
+  <tr style=''>
+    <td style='text-align:right;'>aaaaaaaaa</td>
+    <td style='text-align:right;'>2.2</td>
+    <td style='text-align:right;'>3</td>
+  </tr>
+  <tr style=''>
+    <td style='text-align:right;'>bbbbbbbbbbbbb</td>
+    <td style='text-align:right;'>-5.5</td>
+    <td style='text-align:right;'>6</td>
+  </tr>
+  <tr style=''>
+    <td style='text-align:right;'>ccccccc</td>
+    <td style='text-align:right;'>8.8</td>
+    <td style='text-align:right;'>-9</td>
+  </tr>
+</table>
+
+
+In all cases the methods returns a string. Column alignment is supported for the LaTeX, HTML and markdown cases.
 MarkDown doesn't allow the header to have different alignment to the data.
+HTML also supports the ANSItable header and column foreground and background
+color options.
 
-## Pandas integration
+# Pandas integration
 
 Pandas is THE tool to use for tabular data so we support conversions in both directions.
 
