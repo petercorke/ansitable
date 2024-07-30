@@ -869,6 +869,61 @@ class ANSITable:
 
         return s
 
+    def rest(self):
+        """
+        Output the table in ReST format
+
+        :return: ASCII text for a ReST "simple table"
+        :rtype: str
+
+        Example::
+
+            table = ANSITable("col1", "column 2 has a big header", "column 3")
+            table.row("aaaaaaaaa", 2.2, 3)
+            table.row("bbbbbbbbbbbbb", -5.5, 6)
+            table.row("ccccccc", 8.8, -9)
+            table.rest()
+
+            =============  =========================  ========
+                     col1  column 2 has a big header  column 3
+            =============  =========================  ========
+                aaaaaaaaa                        2.2         3
+            bbbbbbbbbbbbb                       -5.5         6
+                  ccccccc                        8.8        -9
+            =============  =========================  ========
+
+        .. note::
+            - does not support header or column alignment
+        """
+
+        self._findwidths()
+        colsep = self.colsep
+        self.colsep = 0
+
+        # markdown table setup
+        s = ""
+
+        # column headers
+        divider = ""
+        for c in self.columns:
+            divider += "=" * c.width + "  "
+
+        s += divider + "\n"
+
+        for c in self.columns:
+            s += c._formatcolumn(c.name, header=True, plain=True) + "  "
+        s += "\n"
+        s += divider + "\n"
+
+        # rows
+        for i in range(self.nrows):
+            for c in self.columns:
+                s += c._formatcolumn(c.formatted[i], header=False, plain=True) + "  "
+            s += "\n"
+        s += divider + "\n"
+        self.colsep = colsep
+        return s
+
     def html(self, td="", th="", trd="", trh="", table=""):
         r"""
         Output the table in HTML format
@@ -1346,6 +1401,7 @@ if __name__ == "__main__":
     print(table.markdown())
     print(table.csv())
     print(table.html())
+    print(table.rest())
 
     df = table.pandas()
     print(df)
