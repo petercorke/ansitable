@@ -869,6 +869,97 @@ class ANSITable:
 
         return s
 
+    def html(self, td="", th="", trd="", trh="", table=""):
+        r"""
+        Output the table in HTML format
+
+        :param td: CSS style for table data cells, defaults to ""
+        :type td: str, optional
+        :param th: CSSstyle for table header cells, defaults to ""
+        :type th: str, optional
+        :param trd: CSS style for table data rows, defaults to ""
+        :type trd: str, optional
+        :param trh: CSS style for table header rows, defaults to ""
+        :type trh: str, optional
+        :param table: CSS style for the table, defaults to ""
+        :type table: str, optional
+        :return: ASCII HTML text
+        :rtype: str
+
+        The CSS style strings must end with a semi-colon.
+
+        Example::
+
+            table = ANSITable("col1", "column 2 has a big header", "column 3")
+            table.row("aaaaaaaaa", 2.2, 3)
+            table.row("bbbbbbbbbbbbb", -5.5, 6)
+            table.row("ccccccc", 8.8, -9)
+            table.html()
+
+
+            <table>
+            <tr>
+                <th style='text-align:right;'>col1</th>
+                <th style='text-align:right;'>column 2 has a big header</th>
+                <th style='text-align:right;'>column 3</th>
+            </tr>
+            <tr>
+                <td style='text-align:right;'>aaaaaaaaa</td>
+                <td style='text-align:right;'>2.2</td>
+                <td style='text-align:right;'>3</td>
+            </tr>
+            <tr>
+                <td style='text-align:right;'>bbbbbbbbbbbbb</td>
+                <td style='text-align:right;'>-5.5</td>
+                <td style='text-align:right;'>6</td>
+            </tr>
+            <tr>
+                <td style='text-align:right;'>ccccccc</td>
+                <td style='text-align:right;'>8.8</td>
+                <td style='text-align:right;'>-9</td>
+            </tr>
+            </table>
+
+        .. note::
+            - supports column alignment
+            - supports header alignment
+        """
+        self._findwidths()
+
+        # HTML table setup
+        if self.bordercolor is not None:
+            style = "border-color:" + self.bordercolor + ";"
+        else:
+            style = ""
+        s = "<table style='" + style + table + "'>\n"
+
+        align = {"<": "left;", "^": "center;", ">": "right;"}
+
+        # column headers
+        s += "  <tr style='" + trh + "'>\n"
+        for c in self.columns:
+            style = "text-align:" + align[c.headalign]
+            if c.headcolor is not None:
+                style += "color:" + c.headcolor + ";"
+            if c.headbgcolor is not None:
+                style += "background-color:" + c.headbgcolor + ";"
+            s += "    <th style='" + style + "'>" + c.name + "</th>\n"
+        s += "  </tr>\n"
+
+        # rows
+        for i in range(self.nrows):
+            s += "  <tr style='" + trd + "'>\n"
+            for c in self.columns:
+                style = "text-align:" + align[c.colalign]
+                if c.colcolor is not None:
+                    style += "color:" + c.colcolor + ";"
+                if c.colbgcolor is not None:
+                    style += "background-color:" + c.colbgcolor + ";"
+                s += "    <td style='" + style + "'>" + c.formatted[i] + "</td>\n"
+            s += "  </tr>\n"
+        s += "</table>\n"
+        return s
+
     def latex(self):
         r"""
         Output the table in LaTeX format
@@ -1243,8 +1334,9 @@ if __name__ == "__main__":
     table.row("bbbbbbbbbbbbb", -5.5, 6)
     table.row("ccccccc", 8.8, -9)
     table.print()
+    print(table.html())
 
-    # markdown/latex example
+    # markdown/latex/html example
     table = ANSITable("col1", "column 2 has a big header", "column 3")
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", -5.5, 6)
@@ -1253,6 +1345,8 @@ if __name__ == "__main__":
     print(table.latex())
     print(table.markdown())
     print(table.csv())
+    print(table.html())
+
     df = table.pandas()
     print(df)
     print(df.column_2_has_a_big_header.to_string())
