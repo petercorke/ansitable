@@ -1,6 +1,6 @@
 [project]
 name = "ansitable"
-version = "0.11.1"
+version = "0.11.2"
 authors = [{ name = "Peter Corke", email = "rvc@petercorke.com" }]
 description = "Quick and easy display of tabular data and matrices with optional ANSI color and borders"
 readme = "README.md"
@@ -41,6 +41,7 @@ keywords = [
     "Markdown table",
     "HTML table",
     "LaTeX table",
+    "ReStructuredText table",
 ]
 
 dependencies = ["colored"]
