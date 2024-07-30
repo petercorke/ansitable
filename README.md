@@ -411,7 +411,7 @@ fgcolor || Text color, see [possible values](https://pypi.org/project/colored)
 bgcolor || Text background color, see [possible values](https://pypi.org/project/colored)
 style  || Text style: "bold", "underlined", "reverse", "dim", "blink"
 
-## Render table as Markdown, HTML, LaTeX, ReST, or CSV
+## Render table in common markup formats
 
 The main use for this package is to generate tables on the console that are easy to read, but
 sometimes you might want the table in a different format to include in
@@ -509,11 +509,14 @@ which renders as
 CSS styling options can be applied to the table, rows and cells.
 
 ### ReStructedText
-or ReStructedText (ReST) format
+
+The table can be rendered into ReStructedText (ReST) format by
 
 ```
 table.rest()
-
+```
+which generates
+```
 =============  =========================  ========
          col1  column 2 has a big header  column 3
 =============  =========================  ========
@@ -539,7 +542,6 @@ ccccccc & 8.8 & -9 \\
 \hline
 \end{tabular}
 ```
-
 
 
 ### CSV
