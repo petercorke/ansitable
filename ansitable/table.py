@@ -60,6 +60,42 @@ def options(unicode, color=None):
 # ------------------------------------------------------------------------- #
 
 
+class Cell:
+
+    def __init__(self, text, fgcolor=None, bgcolor=None, style=None):
+        """Override the color and style of a cell
+
+        :param text: cell text
+        :type text: str
+        :param fgcolor: foreground color, defaults to None
+        :type fgcolor: str, optional
+        :param bgcolor: background color, defaults to None
+        :type bgcolor: str, optional
+        :param style: text style, defaults to None
+        :type style: str, optional
+
+        This class is used to override the color and style of a cell in a table, for example::
+
+            table = ANSITable("col1", "column 2 has a big header", "column 3")
+            table.row("aaaaaaaaa", 2.2, 3)
+            table.row("bbbbbbbbbbbbb", -5.5, 6)
+            table.row(Cell("ccccccc", bgcolor="red"), 8.8, -9)
+            table.print()
+
+        Will print a table with the first cell in the last row having a red background.  The colors and style override those specified when the column was created
+        or specified for a row.
+        """
+        self.text = text
+        self.fgcolor = fgcolor
+        self.bgcolor = bgcolor
+        self.style = style
+        self.column = None
+        self.row = None
+
+    def __str__(self):
+        return self.text
+
+
 class Column:
     def __init__(
         self,
@@ -198,9 +234,9 @@ class Column:
         :rtype: str
         """
         if header:
-            fgcolor = self.headcolor
-            bgcolor = self.headbgcolor
-            style = self.headstyle
+            fgcolor = fgcolor or self.headcolor
+            bgcolor = bgcolor or self.headbgcolor
+            style = style or self.headstyle
             align = self.headalign
         else:
             fgcolor = fgcolor or self.colcolor
@@ -525,10 +561,24 @@ class ANSITable:
         The column data is formatted with the color and style given when the ``Column``
         was created, but it can be overridden for a specific row by specifying the
         options ``fgcolor``, ``bgcolor``, or ``style``.
+
+        ``Cell`` overrides the color and style of a cell specified for a column and a row.
         """
         assert len(values) == len(self.columns), "wrong number of data items added"
 
         for value, c in zip(values, self.columns):
+
+            if isinstance(value, Cell):
+                # cell object, use its attributes
+                _fgcolor = value.fgcolor or fgcolor
+                _bgcolor = value.bgcolor or bgcolor
+                _style = value.style or style
+                value = value.text
+            else:
+                _fgcolor = fgcolor
+                _bgcolor = bgcolor
+                _style = style
+
             if c.fmt is None:
                 s = value
             elif isinstance(c.fmt, str):
@@ -542,7 +592,7 @@ class ANSITable:
             if s.startswith("<<"):
                 # color specifier is given
                 end = s.find(">>")
-                color = s[2:end]
+                _fgcolor = s[2:end]
                 s = s[end + 2 :]
             else:
                 color = None
@@ -555,9 +605,9 @@ class ANSITable:
             c.maxwidth = max(c.maxwidth, len(s))
 
             c.formatted.append(s)
-            c.fgcolor.append(fgcolor)
-            c.bgcolor.append(bgcolor)
-            c.style.append(style)
+            c.fgcolor.append(_fgcolor)
+            c.bgcolor.append(_bgcolor)
+            c.style.append(_style)
         self.nrows += 1
 
     def __len__(self):
@@ -725,10 +775,19 @@ class ANSITable:
                 # text += ansi
                 if row is None:
                     # header
-                    text += c._formatcolumn(c.name, header=True)
+                    text += c._formatcolumn(
+                        c.name,
+                        header=True,
+                    )
                 else:
                     # table row proper
-                    text += c._formatcolumn(c.formatted[row], header=False)
+                    text += c._formatcolumn(
+                        c.formatted[row],
+                        header=False,
+                        fgcolor=c.fgcolor[row],
+                        bgcolor=c.bgcolor[row],
+                        style=c.style[row],
+                    )
 
                 # if len(ansi) > 0:
                 #     text += self.ATTR(0)
@@ -813,7 +872,7 @@ class ANSITable:
 
     def markdown(self):
         """
-        Output the table in MarkDown format
+        Output the table in MarkDown markup format
 
         :return: ASCII markdown text
         :rtype: str
@@ -871,7 +930,7 @@ class ANSITable:
 
     def rest(self):
         """
-        Output the table in ReST format
+        Output the table in ReST "simple table" markup format
 
         :return: ASCII text for a ReST "simple table"
         :rtype: str
@@ -924,6 +983,87 @@ class ANSITable:
         self.colsep = colsep
         return s
 
+    def wikitable(self):
+        """
+        Output the table in wikitable markup format
+
+        This is the markup format for tables in Wikipedia.
+
+        :return: ASCII markdown text
+        :rtype: str
+
+        Example::
+
+            table = ANSITable("col1", "column 2 has a big header", "column 3")
+            table.row("aaaaaaaaa", 2.2, 3)
+            table.row("bbbbbbbbbbbbb", -5.5, 6)
+            table.row("ccccccc", 8.8, -9)
+            table.wikitable()
+
+            {| class="wikitable" col1right col2right col3right
+            |-
+            !           col1  !!  column 2 has a big header  !!  column 3
+            |-
+            |      aaaaaaaaa  ||                        2.2  ||         3
+            |-
+            |  bbbbbbbbbbbbb  ||                       -5.5  ||         6
+            |-
+            |        ccccccc  ||                        8.8  ||        -9
+            |}
+
+        .. note::
+            - supports column alignment
+            - does not support header alignment, always centred for ``wikitable`` class
+        """
+
+        self._findwidths()
+
+        # Wikipedia table setup
+        s = '{| class="wikitable"'
+
+        for i, c in enumerate(self.columns):
+            if c.headalign == "<":
+                s += " col%dleft" % (i + 1)
+            elif c.headalign == "^":
+                s += " col%dcenter" % (i + 1)
+            elif c.headalign == ">":
+                s += " col%dright" % (i + 1)
+        s += "\n"
+
+        # column headers
+        s += "|-\n"
+        first = True
+        for c in self.columns:
+            if first:
+                s += "! " + c._formatcolumn(c.name, header=True, plain=True) + " "
+                first = False
+            else:
+                s += "!! " + c._formatcolumn(c.name, header=True, plain=True) + " "
+
+        s += "\n"
+        # rows
+        for i in range(self.nrows):
+            s += "|-\n"
+            first = True
+            for c in self.columns:
+                if first:
+                    s += (
+                        "| "
+                        + c._formatcolumn(c.formatted[i], header=False, plain=True)
+                        + " "
+                    )
+                    first = False
+                else:
+                    s += (
+                        "|| "
+                        + c._formatcolumn(c.formatted[i], header=False, plain=True)
+                        + " "
+                    )
+            s += "\n"
+        s += "|}\n"
+
+        return s
+
     def html(self, td="", th="", trd="", trh="", table=""):
         r"""
         Output the table in HTML format
@@ -940,8 +1080,6 @@ class ANSITable:
         :type table: str, optional
         :return: ASCII HTML text
         :rtype: str
-
-        The CSS style strings must end with a semi-colon.
 
         Example::
 
@@ -978,6 +1116,12 @@ class ANSITable:
         .. note::
             - supports column alignment
             - supports header alignment
+            - the table is rendered with applicable CSS settings, these
+              can be overridden by passing in the appropriate CSS strings
+
+        The CSS style strings must end with a semi-colon, and the string itself has no quotes, for example::
+
+            table.html(th = "color:red;font-weight:bold;", td = "color:blue;")
         """
         self._findwidths()
 
@@ -1274,10 +1418,16 @@ if __name__ == "__main__":
     table.row("ccccccc", 8.8, -9)
     table.print()
 
-    table = ANSITable("col1", "column 2 has a big header", "column 3", color=False)
+    table = ANSITable("col1", "column 2 has a big header", "column 3")
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("<<red>>bbbbbbbbbbbbb", 5.5, 6)
     table.row("<<blue>>ccccccc", 8.8, -9)
+    table.print()
+
+    table = ANSITable("col1", "column 2 has a big header", "column 3")
+    table.row("aaaaaaaaa", 2.2, 3, bgcolor="green")
+    table.row(Cell("bbbbbbbbbbbbb", bgcolor="red"), 5.5, 6)
+    table.row(Cell("ccccccc", fgcolor="blue"), 8.8, -9)
     table.print()
 
     table = ANSITable(
@@ -1402,6 +1552,7 @@ if __name__ == "__main__":
     print(table.csv())
     print(table.html())
     print(table.rest())
+    print(table.wikitable())
 
     df = table.pandas()
     print(df)
@@ -1411,4 +1562,45 @@ if __name__ == "__main__":
 
     df = pd.DataFrame({"calories": [420, 380, 390], "duration": [50, 40, 45]})
     table = ANSITable.Pandas(df, border="thin")
+    table.print()
+
+    table = ANSITable(
+        Column("col1", headalign="<", colcolor="red", headstyle="underlined"),  # CHANGE
+        Column("column 2 has a big header", colalign="^", colstyle="bold"),  # CHANGE
+        Column("column 3", colalign="<", colbgcolor="green"),  # CHANGE
+        border="thick",
+        bordercolor="blue",  # CHANGE
+    )
+
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row("bbbbbbbbbbbbb", -5.5, 6)
+    table.row("ccccccc", 8.8, -9)
+    table.print()
+
+    table = ANSITable(
+        Column("col1", headalign="<", colcolor="red", headstyle="underlined"),  # CHANGE
+        Column("column 2 has a big header", colalign="^", colstyle="bold"),  # CHANGE
+        Column("column 3", colalign="<", colbgcolor="green"),  # CHANGE
+        border="thick",
+        bordercolor="blue",  # CHANGE
+    )
+
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row("bbbbbbbbbbbbb", -5.5, 6, bgcolor="yellow")  # CHANGE
+    table.row("ccccccc", 8.8, -9)
+    table.print()
+
+    table = ANSITable(
+        Column("col1", headalign="<", colcolor="red", headstyle="underlined"),  # CHANGE
+        Column("column 2 has a big header", colalign="^", colstyle="bold"),  # CHANGE
+        Column("column 3", colalign="<", colbgcolor="green"),  # CHANGE
+        border="thick",
+        bordercolor="blue",  # CHANGE
+    )
+
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row(
+        "bbbbbbbbbbbbb", Cell(-5.5, bgcolor="blue"), 6, bgcolor="yellow"
+    )  # CHANGE
+    table.row("ccccccc", 8.8, -9)
     table.print()

@@ -1,0 +1,23 @@
+
+<table style='border-color:blue;'>
+  <tr style=''>
+    <th style='text-align:center;'>col1</th>
+    <th style='text-align:right;'>column 2 has a big header</th>
+    <th style='text-align:right;'>column 3</th>
+  </tr>
+  <tr style=''>
+    <td style='text-align:right;color:red;'>aaaaaaaaa</td>
+    <td style='text-align:center;'>2.2</td>
+    <td style='text-align:left;background-color:green;'> 3</td>
+  </tr>
+  <tr style=''>
+    <td style='text-align:right;color:red;'>bbbbbbbbbbbbb</td>
+    <td style='text-align:center;'>-5.5</td>
+    <td style='text-align:left;background-color:green;'> 6</td>
+  </tr>
+  <tr style=''>
+    <td style='text-align:right;color:red;'>ccccccc</td>
+    <td style='text-align:center;'>8.8</td>
+    <td style='text-align:left;background-color:green;'>-9</td>
+  </tr>
+</table>

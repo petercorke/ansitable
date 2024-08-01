@@ -13,12 +13,17 @@
 
 Painless creation of nice-looking [tables of data](#tables) or [matrices](#matrices) in Python.
 
+Integration with Pandas makes it very easy to read an Excel or CSV file, display it on the console or render it to a popular markup language such as HTML, Markdown, reStructured text, LaTeX or wikitable.
+
 What's new:
+
 
 0.11.2:
 
 - export a table in HTML format
 - export a table in ReST format
+- export a table in wikitable format
+- improved format override for a single cell, using `Cell`
 
 0.11.0:
 
@@ -319,42 +324,50 @@ background color and style (bold, reverse, underlined, dim) of the header and co
 ```python
 table = ANSITable(
     Column("col1", headalign="<", colcolor="red", headstyle="underlined"),      # CHANGE
-    Column("column 2 has a big header", colalign="^", colstyle="reverse"),      # CHANGE
+    Column("column 2 has a big header", colalign="^", colstyle="bold"),      # CHANGE
     Column("column 3", colalign="<", colbgcolor="green"),                       # CHANGE
     border="thick", bordercolor="blue"                                          # CHANGE
 )
-   table = ANSITable(
-        Column("col1", headalign="^", colcolor="red", headstyle="underlined"),  # CHANGE
-        Column("column 2 has a big header", colalign="^"),                      # CHANGE
-        Column("column 3", colalign="<", colbgcolor="green", fmt="{: d}"),      # CHANGE
-        border="thick",
-        bordercolor="blue",
-        colsep=2,
-    )
-    table.row("aaaaaaaaa", 2.2, 3)
-    table.row("bbbbbbbbbbbbb", -5.5, 6, bgcolor="yellow")                        # CHANGE
-    table.row("ccccccc", 8.8, -9)
-    table.print()
+
+table.row("aaaaaaaaa", 2.2, 3)
+table.row("bbbbbbbbbbbbb", -5.5, 6)                        # CHANGE
+table.row("ccccccc", 8.8, -9)
+table.print()
 ```
 
 which yields
 
 ![colored table](https://github.com/petercorke/ansitable/raw/master/figs/colortable.png) 
 
-It is possible the change the color of a single row of the table by
+It is possible to the change the color of a single row of the table, overriding the column
+defaults, by
 
 ```python
-table.row("aaaaaaaaa", 2.2, 3)
-table.row("bbbbbbbbbbbbb", 5.5, 6, bgcolor="red")
-table.row("ccccccc", 8.8, 9)
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row("bbbbbbbbbbbbb", 5.5, 6)
+    table.row("ccccccc", 8.8, -9)
 ```
 
 which yields
 
 ![colored table](https://github.com/petercorke/ansitable/raw/master/figs/colortable2.png) 
 
-It is also possible to change the color of individual cells in the table
-by prefixing the value with a color enclosed in double angle brackets, for example `<<red>>`.
+It is also possible to the change the color of a single cell of the table, overriding the column
+and row defaults, by passing a `Cell` instance
+
+```python
+table = ANSITable("col1", "column 2 has a big header", "column 3")
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row("bbbbbbbbbbbbb", Cell(-5.5, bgcolor="blue"), 6, bgcolor="yellow")  # CHANGE
+    table.row("ccccccc", 8.8, 9)
+    table.print()
+```
+which yields
+
+![colored table](https://github.com/petercorke/ansitable/raw/master/figs/colortable3.png) 
+
+The older method (deprecated) of doing this is by prefixing the value with a color enclosed in double angle brackets, for example `<<red>>`.  This does not allow changing the background
+color or style of the cell.
 
 ```python
 table = ANSITable("col1", "column 2 has a big header", "column 3")
@@ -411,13 +424,27 @@ fgcolor || Text color, see [possible values](https://pypi.org/project/colored)
 bgcolor || Text background color, see [possible values](https://pypi.org/project/colored)
 style  || Text style: "bold", "underlined", "reverse", "dim", "blink"
 
-## Render table in common markup formats
+Row styling overrides column styling.
 
-The main use for this package is to generate tables on the console that are easy to read, but
-sometimes you might want the table in a different format to include in
-documentation.
+### Cell
+These keyword arguments control the styling of a single cell.
 
-We create a simple table
+| Keyword  | Default | Purpose |
+|----      |----     |----    |
+fgcolor || Text color, see [possible values](https://pypi.org/project/colored)
+bgcolor || Text background color, see [possible values](https://pypi.org/project/colored)
+style  || Text style: "bold", "underlined", "reverse", "dim", "blink"
+
+Cell styling overrides row and column styling.
+
+
+## Render to markup language
+
+Now that you can visualize your data as a beautiful table on the console, you
+might want the table in a different format to include in a
+document or website.  ANSItable supports rendering a table into one of a number of common markup languages.
+
+We start by creating a simple table
 
 ```python
 table = ANSITable("col1", "column 2 has a big header", "column 3")
@@ -427,10 +454,8 @@ table.row("ccccccc", 8.8, -9)
 table.print()
 ```
 
-In all cases the render methods returns a string. Support for alignment and color options depends on the capability of the format that is being exported to.
-Column alignment is supported for the LaTeX, HTML and markdown cases.
-MarkDown doesn't allow the header to have different alignment to the data.
-HTML is the only format that supports the ANSItable header and column foreground and background color options.
+Support for alignment and color options depends on the capability of the markup language that is being exported to.
+
 
 ### Markdown
 
@@ -447,6 +472,9 @@ which generates
 | bbbbbbbbbbbbb |                      -5.5 |        6 |
 |       ccccccc |                       8.8 |       -9 |
 ```
+
+Column alignment is supported, but MarkDown doesn't allow the header to have different alignment to the data.
+
 
 ### HTML
 
@@ -507,10 +535,11 @@ which renders as
 </table>
 
 CSS styling options can be applied to the table, rows and cells.
+This format supports ANSItable header and column foreground and background color options.
 
 ### ReStructedText
 
-The table can be rendered into ReStructedText (ReST) format by
+The table can be rendered into reStructedText (ReST) "simple table" format by
 
 ```
 table.rest()
@@ -526,6 +555,9 @@ bbbbbbbbbbbbb                       -5.5         6
 =============  =========================  ========
 ```
 
+Header and column alignment options are not supported in the ReST simple
+table format.
+
 
 ### LaTex
 
@@ -533,7 +565,9 @@ The table can be rendered into LaTeX format by
 
 ```
 table.latex()
-
+```
+which generates
+```
 \begin{tabular}{ |r|r|r| }\hline
 \multicolumn{1}{|r|}{col1} & \multicolumn{1}{|r|}{column 2 has a big header} & \multicolumn{1}{|r|}{column 3}\\\hline\hline
 aaaaaaaaa & 2.2 & 3 \\
@@ -543,6 +577,30 @@ ccccccc & 8.8 & -9 \\
 \end{tabular}
 ```
 
+Header and column alignment options are supported.
+
+### Wikitable
+
+The table can be rendered into wikitable markup format, as used for tables in Wikipedia, by
+
+```
+table.wikitable()
+```
+which generates
+```
+{| class="wikitable" col1right col2right col3right
+|-
+!           col1  !!  column 2 has a big header  !!  column 3  
+|-
+|      aaaaaaaaa  ||                        2.2  ||         3  
+|-
+|  bbbbbbbbbbbbb  ||                       -5.5  ||         6  
+|-
+|        ccccccc  ||                        8.8  ||        -9  
+|}
+```
+
+Column alignment is supported, but wikitable headers are always centred.
 
 ### CSV
 
@@ -560,7 +618,8 @@ ccccccc,8.8,-9
 ```
  The delimiter character defaults to comma, but can be set.  
 
-CSV format data can be included in ReST documentation using the `csv-table` directive.
+CSV format data can be quickly visualized on the desktop using any spreadsheet program,
+or included in ReST documentation using the `csv-table` directive.
 
 ## Pandas integration
 

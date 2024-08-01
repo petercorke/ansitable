@@ -36,12 +36,13 @@ keywords = [
     "ANSI box characters",
     "color",
     "ANSI color",
-    "matrix format",
+    "matrix display",
     "CSV",
     "Markdown table",
     "HTML table",
     "LaTeX table",
     "ReStructuredText table",
+    "wikitable table",
 ]
 
 dependencies = ["colored"]
