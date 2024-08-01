@@ -13,10 +13,9 @@
 
 Painless creation of nice-looking [tables of data](#tables) or [matrices](#matrices) in Python.
 
-Integration with Pandas makes it very easy to read an Excel or CSV file, display it on the console or render it to a popular markup language such as HTML, Markdown, reStructured text, LaTeX or wikitable.
+Create a table programatically from Python, or import a table from a Pandas dataframe which is also an easy way to read an Excel or CSV file. Display your table on the console or render it to a popular markup language such as HTML, Markdown, reStructured text, LaTeX or wikitable.
 
 What's new:
-
 
 0.11.2:
 
