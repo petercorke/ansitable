@@ -1,21 +1,37 @@
 [![PyPI version fury.io](https://badge.fury.io/py/ansitable.svg)](https://pypi.python.org/pypi/ansitable/)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/ansitable)](https://pypistats.org/packages/ansitable)
 [![Anaconda version](https://anaconda.org/conda-forge/ansitable/badges/version.svg)](https://anaconda.org/conda-forge/ansitable)
 [![pyversions](https://img.shields.io/pypi/pyversions/ansitable)](https://pypi.python.org/pypi/ansitable/)
-[![PyPI status](https://img.shields.io/pypi/status/ansitable.svg)](https://pypi.python.org/pypi/ansitable/)
+[![Build Status](https://github.com/petercorke/bdsim/workflows/build/badge.svg?branch=master)](https://github.com/petercorke/bdsim/actions?query=workflow%3Abuild)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/petercorke/ansitable/graphs/commit-activity)
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/petercorke/ansitable/blob/master/LICENSE)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/ansitable)](https://pypistats.org/packages/ansitable)
 
-- GitHub repository: [https://github.com/petercorke/ansitable](https://github.com/petercorke/ansitable)
-- Dependencies: [`colored`](https://pypi.org/project/colored)
+
+<table style="border:0px">
+<tr style="border:0px">
+<td style="border:0px">
+<img src="https://github.com/petercorke/ansitable/raw/master/figs/ansi_logo.png" width="300"></td>
+<td style="border:0px">
+Pretty tables and matrices for Python</a>
+<ul>
+<li><a href="https://github.com/petercorke/ansitable">GitHub repository </a></li>
+<li><a href="https://petercorke.github.io/ansitable">Documentation</a></li>
+<li>Dependencies: <a href="https://dslackw.gitlab.io/colored">colored</a></li>
+</ul>
+</td>
+</tr>
+</table>
 
 # Synopsis
 
-Painless creation of nice-looking [tables of data](#tables) or [matrices](#matrices) in Python.
 
 Create a table programatically from Python, or import a table from a Pandas dataframe which is also an easy way to read an Excel or CSV file. Display your table on the console or render it to a popular markup language such as HTML, Markdown, reStructured text, LaTeX or wikitable.
 
-What's new:
+* [Tables of data](#tables)
+* [Matrices](#matrices)
+
+
+### What's new
 
 0.11.2:
 

@@ -146,17 +146,6 @@ class Column:
         ===========   =======================
 
 
-        ===========   ==========================================================
-        Border        Description
-        ===========   ==========================================================
-        ascii         Use ASCII +-| characters
-        thin          Use ANSI thin box-drawing characters
-        thin+round    Use ANSI thin box-drawing characters with rounded corners
-        thick         Use ANSI thick box-drawing characters
-        double        Use ANSI double-line box-drawing characters
-        ===========   ==========================================================
-
-
         ===========   =============================================
         Style         Description
         ===========   =============================================
@@ -334,9 +323,9 @@ class ANSIMatrix:
         """
         Create a matrix formatter
 
-        :param style: Bracket format, defaults to 'thin'
+        :param style: Bracket format, defaults to "thin"
         :type style: str, optional
-        :param fmt: number format string, defaults to '{:< 10.3g}'
+        :param fmt: number format string, defaults to "{:< 10.3g}"
         :type fmt: str, optional
         :param squish: elements smaller than this times eps are displayed as
                        zero, defaults to 100
@@ -349,7 +338,7 @@ class ANSIMatrix:
             from ansitable import ANSIMatrix
             import numpy as np
 
-            formatter = ANSIMatrix(style='thick')
+            formatter = ANSIMatrix(style='ascii')
             m = np.random.rand(4,4) - 0.5
             formatter.print(m)
 
@@ -388,6 +377,9 @@ class ANSIMatrix:
         :raises ValueError: [description]
         :return: ANSI string
         :rtype: str
+
+        ``suffix_super`` is where the transpose, inverse, pseudo-inverse, etc. symbol
+        is shown.  ``suffix_sub`` is where the matrix name is typically shown.
         """
 
         import numpy as np  # only import if matrix is used
@@ -458,13 +450,13 @@ class ANSITable:
         :param offset: Horizontal offset of the whole table, defaults to 0
         :type offset: int, optional
         :param border: Type of border, defaults to None
-        :type border: [type], optional
+        :type border: str, optional
         :param bordercolor: Name of color to draw border in, defaults to None
         :type bordercolor: str, optional
         :param ellipsis: truncated lines are shown with an ellipsis, defaults to True
         :type ellipsis: bool, optional
-        :param columns: [description], defaults to None
-        :type columns: [type], optional
+        :param columns: specify detailed column format options, defaults to None
+        :type columns: list of :class:`Column` objects, optional
         :param header: Show table header, defaults to True
         :type header: bool, optional
         :param color: [description], defaults to True
@@ -488,6 +480,17 @@ class ANSITable:
 
         The first option is quick and easy but does not allow any control of
         formatting or alignment.
+
+        ===========   ==========================================================
+        Border        Description
+        ===========   ==========================================================
+        ascii         Use ASCII +-| characters
+        thin          Use ANSI thin box-drawing characters
+        thin+round    Use ANSI thin box-drawing characters with rounded corners
+        thick         Use ANSI thick box-drawing characters
+        double        Use ANSI double-line box-drawing characters
+        ===========   ==========================================================
+
         """
         global _unicode
 
@@ -680,7 +683,7 @@ class ANSITable:
             b = self.borderdict
             text = _spaces(self.offset - 1)
             if self.bordercolor is not None:
-                text += self.FG(self.bordercolor)
+                text += self._FG(self.bordercolor)
             text += chr(left[b])
             for c in self.columns:
                 text += chr(_hl[b]) * (c.width + 2 * self.colsep)
@@ -688,7 +691,7 @@ class ANSITable:
                     text += chr(mid[b])
             text += chr(right[b])
             if self.bordercolor is not None:
-                text += self.ATTR(0)
+                text += self._ATTR(0)
             return text + "\n"
 
     def _vline(self):
@@ -705,7 +708,7 @@ class ANSITable:
         if self.borderdict is not None:
             # set color
             if self.bordercolor is not None:
-                text = self.FG(self.bordercolor)
+                text = self._FG(self.bordercolor)
             else:
                 text = ""
 
@@ -715,7 +718,7 @@ class ANSITable:
 
             # turn off color
             if self.bordercolor is not None:
-                text += self.ATTR(0)
+                text += self._ATTR(0)
             return text
 
     def _row(self, row=None):
@@ -1331,13 +1334,13 @@ class ANSITable:
     @staticmethod
     def Pandas(df, **kwargs):
         """
-        Convert a Pandas dataframe to an ANSITable
+        Create an ANSITable from a Pandas dataframe
 
         :param df: Pandas dataframe
-        :type df: ``DataFrame``
+        :type df: :class:`pandas.DataFrame`
         :param kwargs: additional arguments to pass to the ANSITable constructor
-        :return: ANSITable object
-        :rtype: ANSITable
+        :return: an ansitable object
+        :rtype: :class:`ANSITable`
 
         Example::
 
@@ -1370,19 +1373,19 @@ class ANSITable:
             table.row(*df.iloc[i])
         return table
 
-    def FG(self, c):
+    def _FG(self, c):
         if _unicode and self.color and c is not None:
             return fore(c)
         else:
             return ""
 
-    def BG(self, c):
+    def _BG(self, c):
         if _unicode and self.color and c is not None:
             return back(c)
         else:
             return ""
 
-    def ATTR(self, c):
+    def _ATTR(self, c):
         if _unicode and self.color and c is not None:
             return style(c)
         else:
