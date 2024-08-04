@@ -45,16 +45,6 @@ keywords = [
     "wikitable table",
 ]
 
-docs = [
-    "sphinx",
-    "sphinx-rtd-theme",
-    "sphinx-autorun",
-    "sphinxcontrib-jsmath",
-    "sphinx-markdown-tables",
-    "sphinx-autodoc-typehints",
-    "sphinx_favicon",
-]
-
 dependencies = ["colored"]
 
 [project.urls]
@@ -65,6 +55,15 @@ dependencies = ["colored"]
 
 [project.optional-dependencies]
 
+docs = [
+    "sphinx",
+    "sphinx-rtd-theme",
+    "sphinx-autorun",
+    "sphinxcontrib-jsmath",
+    "sphinx-markdown-tables",
+    "sphinx-autodoc-typehints",
+    "sphinx_favicon",
+]
 
 [build-system]
 
