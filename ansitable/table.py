@@ -547,6 +547,7 @@ class ANSITable:
         """
         Add a row of data
 
+        :param: values: data items for the row.  These can be of any type that can be converted to a string for display, eg. numbers, strings or objects with a ``__str__`` method. The :class:`Cell` encapsulates a value and allows the color or style defaults of the row or column to be overriden.
         :param fgcolor: foreground color override for all columns in the row, defaults to None
         :type fgcolor: str, optional
         :param bgcolor: background color override for all columns in the row, defaults to None
@@ -565,7 +566,7 @@ class ANSITable:
         was created, but it can be overridden for a specific row by specifying the
         options ``fgcolor``, ``bgcolor``, or ``style``.
 
-        ``Cell`` overrides the color and style of a cell specified for a column and a row.
+        :class:`Cell` overrides the color and style of a cell specified for a column and a row.
         """
         assert len(values) == len(self.columns), "wrong number of data items added"
 

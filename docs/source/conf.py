@@ -49,6 +49,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.inheritance_diagram",
     "sphinx_autodoc_typehints",
+    "sphinx_favicon",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
