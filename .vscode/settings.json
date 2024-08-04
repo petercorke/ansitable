@@ -1,7 +1,0 @@
-{
-    "python.pythonPath": "/Users/corkep/opt/miniconda3/envs/dev/bin/python",
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter"
-    },
-    "python.formatting.provider": "none"
-}
