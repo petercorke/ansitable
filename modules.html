@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
     <link rel="icon" sizes="16x16" type="image/png" href="_static/favicon-16x16.png">
     <link rel="icon" sizes="32x32" type="image/png" href="_static/favicon-32x32.png">
     <link rel="apple-touch-icon" sizes="180x180" type="image/png" href="_static/apple-touch-icon.png">
     <link rel="android-chrome" sizes="192x192" type="image/png" href="_static/android-chrome-192x192.png ">
     <link rel="android-chrome" sizes="512x512" type="image/png" href="_static/android-chrome-512x512.png ">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>bdsim &mdash; Block diagram simulation  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/plot_directive.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <title>ansitable &mdash; Pretty tables and matrices for Python  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -20,7 +21,9 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -35,11 +38,11 @@
           
           
           <a href="index.html" class="icon icon-home">
-            Block diagram simulation
-              <img src="_static/BDSimLogo_NoBackgnd@2x.png" class="logo" alt="Logo"/>
+            Pretty tables and matrices for Python
+              <img src="_static/ansi_logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.1.1
+                0.11.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -49,11 +52,10 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Code documentation:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="bdsim.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bdsim.blocks.html">Block library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="internals.html">Supporting classes</a></li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="table.html">Table classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="markup.html">Markup export</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix.html">Matrix class</a></li>
 </ul>
 
         </div>
@@ -62,7 +64,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">Block diagram simulation</a>
+          <a href="index.html">Pretty tables and matrices for Python</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -70,7 +72,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">bdsim</li>
+      <li class="breadcrumb-item active">ansitable</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -80,16 +82,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="bdsim">
-<h1>bdsim<a class="headerlink" href="#bdsim" title="Permalink to this headline"></a></h1>
+  <section id="ansitable">
+<h1>ansitable<a class="headerlink" href="#ansitable" title="Permalink to this heading"></a></h1>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="bdsim.html">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="bdsim.html#getting-started">Getting started</a></li>
-<li class="toctree-l2"><a class="reference internal" href="bdsim.html#using-operator-overloading">Using operator overloading</a></li>
-</ul>
-</li>
-</ul>
 </div>
 </section>
 
@@ -101,8 +96,8 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2020-, Peter Corke..
-      <span class="lastupdated">Last updated on 12-Nov-2023.
+    <p>&#169; Copyright 2021-, Peter Corke..
+      <span class="lastupdated">Last updated on 04-Aug-2024.
       </span></p>
   </div>
 

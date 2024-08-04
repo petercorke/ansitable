@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" sizes="16x16" type="image/png" href="_static/favicon-16x16.png">
+    <link rel="icon" sizes="32x32" type="image/png" href="_static/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" type="image/png" href="_static/apple-touch-icon.png">
+    <link rel="android-chrome" sizes="192x192" type="image/png" href="_static/android-chrome-192x192.png ">
+    <link rel="android-chrome" sizes="512x512" type="image/png" href="_static/android-chrome-512x512.png ">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Table classes &mdash; Pretty tables and matrices for Python  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Markup export" href="markup.html" />
+    <link rel="prev" title="Pretty tables and matrices for Python" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Pretty tables and matrices for Python
+              <img src="_static/ansi_logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.11.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Table classes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ansitable.table.ANSITable"><code class="docutils literal notranslate"><span class="pre">ANSITable</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ansitable.table.ANSITable.__init__"><code class="docutils literal notranslate"><span class="pre">ANSITable.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ansitable.table.ANSITable.print"><code class="docutils literal notranslate"><span class="pre">ANSITable.print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ansitable.table.ANSITable.Pandas"><code class="docutils literal notranslate"><span class="pre">ANSITable.Pandas()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ansitable.table.Column"><code class="docutils literal notranslate"><span class="pre">Column</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ansitable.table.Column.__init__"><code class="docutils literal notranslate"><span class="pre">Column.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ansitable.table.Cell"><code class="docutils literal notranslate"><span class="pre">Cell</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ansitable.table.Cell.__init__"><code class="docutils literal notranslate"><span class="pre">Cell.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="markup.html">Markup export</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix.html">Matrix class</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Pretty tables and matrices for Python</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Table classes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/table.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="index.html" class="btn btn-neutral float-left" title="Pretty tables and matrices for Python" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="markup.html" class="btn btn-neutral float-right" title="Markup export" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="table-classes">
+<h1>Table classes<a class="headerlink" href="#table-classes" title="Permalink to this heading"></a></h1>
+<p>This class creates a table that can be pretty printed in any terminal that supports ANSI escape sequences.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ansitable.table.ANSITable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansitable.table.</span></span><span class="sig-name descname"><span class="pre">ANSITable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colsep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bordercolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ellipsis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ansitable/table.html#ANSITable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansitable.table.ANSITable" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ansitable.table.ANSITable.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colsep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bordercolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ellipsis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ansitable/table.html#ANSITable.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansitable.table.ANSITable.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Create a table object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>colsep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Blank padding on each side of column separator, defaults to 1</p></li>
+<li><p><strong>offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Horizontal offset of the whole table, defaults to 0</p></li>
+<li><p><strong>border</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Type of border, defaults to None</p></li>
+<li><p><strong>bordercolor</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Name of color to draw border in, defaults to None</p></li>
+<li><p><strong>ellipsis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – truncated lines are shown with an ellipsis, defaults to True</p></li>
+<li><p><strong>columns</strong> (list of <a class="reference internal" href="#ansitable.table.Column" title="ansitable.table.Column"><code class="xref py py-class docutils literal notranslate"><span class="pre">Column</span></code></a> objects, optional) – specify detailed column format options, defaults to None</p></li>
+<li><p><strong>header</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Show table header, defaults to True</p></li>
+<li><p><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – [description], defaults to True</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.12)"><strong>TypeError</strong></a> – [description]</p>
+</dd>
+</dl>
+<p>A table can be created in several different ways:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">table</span> <span class="o">=</span> <span class="n">ANSITable</span><span class="p">(</span><span class="s2">&quot;col1&quot;</span><span class="p">,</span> <span class="s2">&quot;column 2 has a big header&quot;</span><span class="p">,</span> <span class="s2">&quot;column 3&quot;</span><span class="p">)</span>
+
+<span class="n">table</span> <span class="o">=</span> <span class="n">ANSITable</span><span class="p">(</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s2">&quot;col1&quot;</span><span class="p">),</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s2">&quot;column 2 has a big header&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{:.3g}</span><span class="s2">&quot;</span><span class="p">),</span>
+    <span class="n">Column</span><span class="p">(</span><span class="s2">&quot;column 3&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{:-10.4f}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">table</span> <span class="o">=</span> <span class="n">ANSITable</span><span class="p">()</span>
+<span class="n">table</span><span class="o">.</span><span class="n">addcolumnColumn</span><span class="p">(</span><span class="s2">&quot;col1&quot;</span><span class="p">),</span>
+<span class="n">table</span><span class="o">.</span><span class="n">addcolumnColumn</span><span class="p">(</span><span class="s2">&quot;column 2 has a big header&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{:.3g}</span><span class="s2">&quot;</span><span class="p">),</span>
+<span class="n">table</span><span class="o">.</span><span class="n">addcolumnColumn</span><span class="p">(</span><span class="s2">&quot;column 3&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{:-10.4f}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The first option is quick and easy but does not allow any control of
+formatting or alignment.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Border</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ascii</p></td>
+<td><p>Use ASCII +-| characters</p></td>
+</tr>
+<tr class="row-odd"><td><p>thin</p></td>
+<td><p>Use ANSI thin box-drawing characters</p></td>
+</tr>
+<tr class="row-even"><td><p>thin+round</p></td>
+<td><p>Use ANSI thin box-drawing characters with rounded corners</p></td>
+</tr>
+<tr class="row-odd"><td><p>thick</p></td>
+<td><p>Use ANSI thick box-drawing characters</p></td>
+</tr>
+<tr class="row-even"><td><p>double</p></td>
+<td><p>Use ANSI double-line box-drawing characters</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansitable.table.ANSITable.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ansitable/table.html#ANSITable.print"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansitable.table.ANSITable.print" title="Permalink to this definition"></a></dt>
+<dd><p>Print the table</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>writeable object</em><em>, </em><em>optional</em>) – Print the table to this file, defaults to stdout</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">table</span> <span class="o">=</span> <span class="n">ANSITable</span><span class="p">(</span><span class="s2">&quot;col1&quot;</span><span class="p">,</span> <span class="s2">&quot;column 2 has a big header&quot;</span><span class="p">,</span> <span class="s2">&quot;column 3&quot;</span><span class="p">)</span>
+<span class="n">table</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="s2">&quot;aaaaaaaaa&quot;</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">table</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="s2">&quot;bbbbbbbbbbbbb&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">table</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="s2">&quot;ccccccc&quot;</span><span class="p">,</span> <span class="mf">8.8</span><span class="p">,</span> <span class="o">-</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">table</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+
+<span class="o">+--------------+---------------------------+----------+</span>
+<span class="o">|</span>         <span class="n">col1</span> <span class="o">|</span> <span class="n">column</span> <span class="mi">2</span> <span class="n">has</span> <span class="n">a</span> <span class="n">big</span> <span class="n">header</span> <span class="o">|</span> <span class="n">column</span> <span class="mi">3</span> <span class="o">|</span>
+<span class="o">+--------------+---------------------------+----------+</span>
+<span class="o">|</span>    <span class="n">aaaaaaaaa</span> <span class="o">|</span>                       <span class="mf">2.2</span> <span class="o">|</span>        <span class="mi">3</span> <span class="o">|</span>
+<span class="o">|</span><span class="n">bbbbbbbbbbbbb</span> <span class="o">|</span>                      <span class="o">-</span><span class="mf">5.5</span> <span class="o">|</span>        <span class="mi">6</span> <span class="o">|</span>
+<span class="o">|</span>      <span class="n">ccccccc</span> <span class="o">|</span>                       <span class="mf">8.8</span> <span class="o">|</span>       <span class="o">-</span><span class="mi">9</span> <span class="o">|</span>
+<span class="o">+--------------+---------------------------+----------+</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ansitable.table.ANSITable.Pandas">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Pandas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ansitable/table.html#ANSITable.Pandas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansitable.table.ANSITable.Pandas" title="Permalink to this definition"></a></dt>
+<dd><p>Create an ANSITable from a Pandas dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<a class="reference external" href="http://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v3.0.0.dev0+1286.gd5305258bf)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – Pandas dataframe</p></li>
+<li><p><strong>kwargs</strong> – additional arguments to pass to the ANSITable constructor</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>an ansitable object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#ansitable.table.ANSITable" title="ansitable.table.ANSITable"><code class="xref py py-class docutils literal notranslate"><span class="pre">ANSITable</span></code></a></p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>import pandas as pd
+from ansitable import ANSITable
+
+df = pd.DataFrame({&quot;calories&quot;: [420, 380, 390], &quot;duration&quot;: [50, 40, 45]})
+table = ANSITable.Pandas(df, border=&quot;thin&quot;)
+table.print()
+
+┌──────────┬──────────┐
+│ calories │ duration │
+├──────────┼──────────┤
+│      420 │       50 │
+│      380 │       40 │
+│      390 │       45 │
+└──────────┴──────────┘
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>options for header and column alignment and format are not supported</p></li>
+<li></li>
+</ul>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ansitable.table.Column">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansitable.table.</span></span><span class="sig-name descname"><span class="pre">Column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'{}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colbgcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colstyle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colalign</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headbgcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headstyle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headalign</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&gt;'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ansitable/table.html#Column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansitable.table.Column" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ansitable.table.Column.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'{}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colbgcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colstyle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colalign</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headbgcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headstyle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headalign</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&gt;'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ansitable/table.html#Column.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansitable.table.Column.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Create a table column</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of column, also the column heading</p></li>
+<li><p><strong>fmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Python format string, defaults to “{}”</p></li>
+<li><p><strong>width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Column width, defaults to auto-fit</p></li>
+<li><p><strong>colcolor</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Color of column text, defaults to None</p></li>
+<li><p><strong>colbgcolor</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Color of column background, defaults to None</p></li>
+<li><p><strong>colstyle</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Column text style, see table below, defaults to None</p></li>
+<li><p><strong>colalign</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Column data alignement, see table below, defaults to “&gt;”</p></li>
+<li><p><strong>headcolor</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Color of heading text, defaults to None</p></li>
+<li><p><strong>headbgcolor</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Color of heading background, defaults to None</p></li>
+<li><p><strong>headstyle</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Heading text style, see table below, defaults to None</p></li>
+<li><p><strong>headalign</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Heading text alignement, see table below, defaults to “&gt;”</p></li>
+</ul>
+</dd>
+</dl>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Alignment</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>“&lt;”</p></td>
+<td><p>Left</p></td>
+</tr>
+<tr class="row-odd"><td><p>“^”</p></td>
+<td><p>Centre</p></td>
+</tr>
+<tr class="row-even"><td><p>“&gt;”</p></td>
+<td><p>Right (default)</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Style</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>bold</p></td>
+<td><p>bold font</p></td>
+</tr>
+<tr class="row-odd"><td><p>dim</p></td>
+<td><p>low brightness font</p></td>
+</tr>
+<tr class="row-even"><td><p>underlined</p></td>
+<td><p>text is underlined</p></td>
+</tr>
+<tr class="row-odd"><td><p>blink</p></td>
+<td><p>text is blinking</p></td>
+</tr>
+<tr class="row-even"><td><p>reverse</p></td>
+<td><p>text and background colors are reversed</p></td>
+</tr>
+</tbody>
+</table>
+<p>Implementation of these options depends heavily on the terminal emulator
+used.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ansitable.table.Cell">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansitable.table.</span></span><span class="sig-name descname"><span class="pre">Cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fgcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bgcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ansitable/table.html#Cell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansitable.table.Cell" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ansitable.table.Cell.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fgcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bgcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ansitable/table.html#Cell.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansitable.table.Cell.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Override the color and style of a cell</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – cell text</p></li>
+<li><p><strong>fgcolor</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – foreground color, defaults to None</p></li>
+<li><p><strong>bgcolor</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – background color, defaults to None</p></li>
+<li><p><strong>style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – text style, defaults to None</p></li>
+</ul>
+</dd>
+</dl>
+<p>This class is used to override the color and style of a cell in a table, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">table</span> <span class="o">=</span> <span class="n">ANSITable</span><span class="p">(</span><span class="s2">&quot;col1&quot;</span><span class="p">,</span> <span class="s2">&quot;column 2 has a big header&quot;</span><span class="p">,</span> <span class="s2">&quot;column 3&quot;</span><span class="p">)</span>
+<span class="n">table</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="s2">&quot;aaaaaaaaa&quot;</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">table</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="s2">&quot;bbbbbbbbbbbbb&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">table</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="n">Cell</span><span class="p">(</span><span class="s2">&quot;ccccccc&quot;</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">),</span> <span class="mf">8.8</span><span class="p">,</span> <span class="o">-</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">table</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Will print a table with the first cell in the last row having a red background.  The colors and style override those specified when the column was created
+or specified for a row.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Pretty tables and matrices for Python" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="markup.html" class="btn btn-neutral float-right" title="Markup export" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021-, Peter Corke..
+      <span class="lastupdated">Last updated on 04-Aug-2024.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+    <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-11Q6WJM565"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-11Q6WJM565', {
+          'anonymize_ip': false,
+      });
+    </script> 
+
+</body>
+</html>

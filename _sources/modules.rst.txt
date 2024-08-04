@@ -1,7 +1,7 @@
-bdsim
-=====
+ansitable
+=========
 
 .. toctree::
    :maxdepth: 4
 
-   bdsim
+   ansitable

@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; Block diagram simulation  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/plot_directive.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <title>Index &mdash; Pretty tables and matrices for Python  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -15,7 +16,9 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -30,11 +33,11 @@
           
           
           <a href="index.html" class="icon icon-home">
-            Block diagram simulation
-              <img src="_static/BDSimLogo_NoBackgnd@2x.png" class="logo" alt="Logo"/>
+            Pretty tables and matrices for Python
+              <img src="_static/ansi_logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.1.1
+                0.11.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -44,11 +47,10 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Code documentation:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="bdsim.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bdsim.blocks.html">Block library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="internals.html">Supporting classes</a></li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="table.html">Table classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="markup.html">Markup export</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matrix.html">Matrix class</a></li>
 </ul>
 
         </div>
@@ -57,7 +59,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">Block diagram simulation</a>
+          <a href="index.html">Pretty tables and matrices for Python</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -80,257 +82,26 @@
 <div class="genindex-jumpbox">
  <a href="#_"><strong>_</strong></a>
  | <a href="#A"><strong>A</strong></a>
- | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
- | <a href="#D"><strong>D</strong></a>
- | <a href="#F"><strong>F</strong></a>
- | <a href="#G"><strong>G</strong></a>
- | <a href="#I"><strong>I</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
- | <a href="#N"><strong>N</strong></a>
- | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
- | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
- | <a href="#T"><strong>T</strong></a>
- | <a href="#U"><strong>U</strong></a>
- | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
- | <a href="#Z"><strong>Z</strong></a>
  
 </div>
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.Block.__add__">__add__() (bdsim.Block method)</a>
+      <li><a href="matrix.html#ansitable.table.ANSIMatrix.__init__">__init__() (ansitable.table.ANSIMatrix method)</a>
 
       <ul>
-        <li><a href="internals.html#bdsim.Plug.__add__">(bdsim.Plug method)</a>
+        <li><a href="table.html#ansitable.table.ANSITable.__init__">(ansitable.table.ANSITable method)</a>
 </li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.Block.__getitem__">__getitem__() (bdsim.Block method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Plug.__getitem__">(bdsim.Plug method)</a>
+        <li><a href="table.html#ansitable.table.Cell.__init__">(ansitable.table.Cell method)</a>
 </li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.BDSim.__init__">__init__() (bdsim.BDSim method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.BDSimState.__init__">(bdsim.BDSimState method)</a>
-</li>
-        <li><a href="internals.html#bdsim.Block.__init__">(bdsim.Block method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.connections.DeMux.__init__">(bdsim.blocks.connections.DeMux method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.connections.Dict.__init__">(bdsim.blocks.connections.Dict method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.connections.Index.__init__">(bdsim.blocks.connections.Index method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.connections.InPort.__init__">(bdsim.blocks.connections.InPort method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.connections.Item.__init__">(bdsim.blocks.connections.Item method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.connections.Mux.__init__">(bdsim.blocks.connections.Mux method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.connections.OutPort.__init__">(bdsim.blocks.connections.OutPort method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.connections.SubSystem.__init__">(bdsim.blocks.connections.SubSystem method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.discrete.DIntegrator.__init__">(bdsim.blocks.discrete.DIntegrator method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.discrete.DPoseIntegrator.__init__">(bdsim.blocks.discrete.DPoseIntegrator method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.discrete.ZOH.__init__">(bdsim.blocks.discrete.ZOH method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.displays.Scope.__init__">(bdsim.blocks.displays.Scope method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.displays.ScopeXY.__init__">(bdsim.blocks.displays.ScopeXY method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.displays.ScopeXY1.__init__">(bdsim.blocks.displays.ScopeXY1 method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.functions.Clip.__init__">(bdsim.blocks.functions.Clip method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.functions.Function.__init__">(bdsim.blocks.functions.Function method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.functions.Gain.__init__">(bdsim.blocks.functions.Gain method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.functions.Interpolate.__init__">(bdsim.blocks.functions.Interpolate method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.functions.Pow.__init__">(bdsim.blocks.functions.Pow method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.functions.Prod.__init__">(bdsim.blocks.functions.Prod method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.functions.Sum.__init__">(bdsim.blocks.functions.Sum method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.linalg.Cond.__init__">(bdsim.blocks.linalg.Cond method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.linalg.Det.__init__">(bdsim.blocks.linalg.Det method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.linalg.Flatten.__init__">(bdsim.blocks.linalg.Flatten method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.linalg.Inverse.__init__">(bdsim.blocks.linalg.Inverse method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.linalg.Norm.__init__">(bdsim.blocks.linalg.Norm method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.linalg.Slice1.__init__">(bdsim.blocks.linalg.Slice1 method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.linalg.Slice2.__init__">(bdsim.blocks.linalg.Slice2 method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.linalg.Transpose.__init__">(bdsim.blocks.linalg.Transpose method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.sinks.Null.__init__">(bdsim.blocks.sinks.Null method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.sinks.Print.__init__">(bdsim.blocks.sinks.Print method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.sinks.Stop.__init__">(bdsim.blocks.sinks.Stop method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.sinks.Watch.__init__">(bdsim.blocks.sinks.Watch method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.sources.Constant.__init__">(bdsim.blocks.sources.Constant method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.sources.Piecewise.__init__">(bdsim.blocks.sources.Piecewise method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.sources.Ramp.__init__">(bdsim.blocks.sources.Ramp method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.sources.Step.__init__">(bdsim.blocks.sources.Step method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.sources.Time.__init__">(bdsim.blocks.sources.Time method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.sources.WaveForm.__init__">(bdsim.blocks.sources.WaveForm method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.spatial.Pose_inverse.__init__">(bdsim.blocks.spatial.Pose_inverse method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.spatial.Pose_postmul.__init__">(bdsim.blocks.spatial.Pose_postmul method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.spatial.Pose_premul.__init__">(bdsim.blocks.spatial.Pose_premul method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.spatial.Transform_vector.__init__">(bdsim.blocks.spatial.Transform_vector method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.transfers.Deriv.__init__">(bdsim.blocks.transfers.Deriv method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.transfers.Integrator.__init__">(bdsim.blocks.transfers.Integrator method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.transfers.LTI_SISO.__init__">(bdsim.blocks.transfers.LTI_SISO method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.transfers.LTI_SS.__init__">(bdsim.blocks.transfers.LTI_SS method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.transfers.PID.__init__">(bdsim.blocks.transfers.PID method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.transfers.PoseIntegrator.__init__">(bdsim.blocks.transfers.PoseIntegrator method)</a>
-</li>
-        <li><a href="internals.html#bdsim.Clock.__init__">(bdsim.Clock method)</a>
-</li>
-        <li><a href="internals.html#bdsim.ClockedBlock.__init__">(bdsim.ClockedBlock method)</a>
-</li>
-        <li><a href="internals.html#bdsim.FunctionBlock.__init__">(bdsim.FunctionBlock method)</a>
-</li>
-        <li><a href="internals.html#bdsim.GraphicsBlock.__init__">(bdsim.GraphicsBlock method)</a>
-</li>
-        <li><a href="internals.html#bdsim.Plug.__init__">(bdsim.Plug method)</a>
-</li>
-        <li><a href="internals.html#bdsim.SinkBlock.__init__">(bdsim.SinkBlock method)</a>
-</li>
-        <li><a href="internals.html#bdsim.SourceBlock.__init__">(bdsim.SourceBlock method)</a>
-</li>
-        <li><a href="internals.html#bdsim.SubsystemBlock.__init__">(bdsim.SubsystemBlock method)</a>
-</li>
-        <li><a href="internals.html#bdsim.TransferBlock.__init__">(bdsim.TransferBlock method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.FunctionBlock.__module__">__module__ (bdsim.FunctionBlock attribute)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.GraphicsBlock.__module__">(bdsim.GraphicsBlock attribute)</a>
-</li>
-        <li><a href="internals.html#bdsim.SinkBlock.__module__">(bdsim.SinkBlock attribute)</a>
-</li>
-        <li><a href="internals.html#bdsim.SourceBlock.__module__">(bdsim.SourceBlock attribute)</a>
-</li>
-        <li><a href="internals.html#bdsim.SubsystemBlock.__module__">(bdsim.SubsystemBlock attribute)</a>
-</li>
-        <li><a href="internals.html#bdsim.TransferBlock.__module__">(bdsim.TransferBlock attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.Block.__mul__">__mul__() (bdsim.Block method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Plug.__mul__">(bdsim.Plug method)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.Block.__neg__">__neg__() (bdsim.Block method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Plug.__neg__">(bdsim.Plug method)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.Block.__new__">__new__() (bdsim.Block static method)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block.__pow__">__pow__() (bdsim.Block method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Plug.__pow__">(bdsim.Plug method)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.Block.__radd__">__radd__() (bdsim.Block method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Plug.__radd__">(bdsim.Plug method)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.Block.__repr__">__repr__() (bdsim.Block method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Plug.__repr__">(bdsim.Plug method)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.Block.__rmul__">__rmul__() (bdsim.Block method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Plug.__rmul__">(bdsim.Plug method)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.Block.__rshift__">__rshift__() (bdsim.Block method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Plug.__rshift__">(bdsim.Plug method)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.Block.__rsub__">__rsub__() (bdsim.Block method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Plug.__rsub__">(bdsim.Plug method)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.Block.__rtruediv__">__rtruediv__() (bdsim.Block method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Plug.__rtruediv__">(bdsim.Plug method)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.Block.__setattr__">__setattr__() (bdsim.Block method)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block.__setitem__">__setitem__() (bdsim.Block method)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block.__str__">__str__() (bdsim.Block method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Plug.__str__">(bdsim.Plug method)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.Block.__sub__">__sub__() (bdsim.Block method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Plug.__sub__">(bdsim.Plug method)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.Block.__truediv__">__truediv__() (bdsim.Block method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Plug.__truediv__">(bdsim.Plug method)</a>
+        <li><a href="table.html#ansitable.table.Column.__init__">(ansitable.table.Column method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -339,124 +110,11 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.BlockDiagram.add_block">add_block() (bdsim.BlockDiagram method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Clock.add_block">(bdsim.Clock method)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.Block.add_input_wire">add_input_wire() (bdsim.Block method)</a>
+      <li><a href="matrix.html#ansitable.table.ANSIMatrix">ANSIMatrix (class in ansitable.table)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.Block.add_output_wire">add_output_wire() (bdsim.Block method)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block.add_param">add_param() (bdsim.Block method)</a>
-</li>
-      <li><a href="internals.html#bdsim.BlockDiagram.add_wire">add_wire() (bdsim.BlockDiagram method)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="B">B</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.BDSim">BDSim (class in bdsim)</a>
-</li>
-      <li>
-    bdsim.blocks.connections
-
-      <ul>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.connections">module</a>
-</li>
-      </ul></li>
-      <li>
-    bdsim.blocks.discrete
-
-      <ul>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.discrete">module</a>
-</li>
-      </ul></li>
-      <li>
-    bdsim.blocks.displays
-
-      <ul>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.displays">module</a>
-</li>
-      </ul></li>
-      <li>
-    bdsim.blocks.functions
-
-      <ul>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.functions">module</a>
-</li>
-      </ul></li>
-      <li>
-    bdsim.blocks.linalg
-
-      <ul>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.linalg">module</a>
-</li>
-      </ul></li>
-      <li>
-    bdsim.blocks.sinks
-
-      <ul>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.sinks">module</a>
-</li>
-      </ul></li>
-      <li>
-    bdsim.blocks.sources
-
-      <ul>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.sources">module</a>
-</li>
-      </ul></li>
-      <li>
-    bdsim.blocks.spatial
-
-      <ul>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.spatial">module</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    bdsim.blocks.transfers
-
-      <ul>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.transfers">module</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.BDSimState">BDSimState (class in bdsim)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block">Block (class in bdsim)</a>
-</li>
-      <li><a href="internals.html#bdsim.ClockedBlock.blockclass">blockclass (bdsim.ClockedBlock attribute)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.FunctionBlock.blockclass">(bdsim.FunctionBlock attribute)</a>
-</li>
-        <li><a href="internals.html#bdsim.GraphicsBlock.blockclass">(bdsim.GraphicsBlock attribute)</a>
-</li>
-        <li><a href="internals.html#bdsim.SinkBlock.blockclass">(bdsim.SinkBlock attribute)</a>
-</li>
-        <li><a href="internals.html#bdsim.SourceBlock.blockclass">(bdsim.SourceBlock attribute)</a>
-</li>
-        <li><a href="internals.html#bdsim.SubsystemBlock.blockclass">(bdsim.SubsystemBlock attribute)</a>
-</li>
-        <li><a href="internals.html#bdsim.TransferBlock.blockclass">(bdsim.TransferBlock attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.BlockDiagram">BlockDiagram (class in bdsim)</a>
-</li>
-      <li><a href="internals.html#bdsim.BDSim.blockdiagram">blockdiagram() (bdsim.BDSim method)</a>
-</li>
-      <li><a href="internals.html#bdsim.BDSim.blockinfo">blockinfo() (bdsim.BDSim method)</a>
-</li>
-      <li><a href="internals.html#bdsim.BDSim.blocks">blocks() (bdsim.BDSim method)</a>
-</li>
-      <li><a href="internals.html#bdsim.BlockDiagram.blockvalues">blockvalues() (bdsim.BlockDiagram method)</a>
+      <li><a href="markup.html#ansitable.table.ANSITable">ANSITable (class in ansitable.table)</a>, <a href="table.html#ansitable.table.ANSITable">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -464,155 +122,21 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.Block.check">check() (bdsim.Block method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.ClockedBlock.check">(bdsim.ClockedBlock method)</a>
-</li>
-        <li><a href="internals.html#bdsim.TransferBlock.check">(bdsim.TransferBlock method)</a>
-</li>
-      </ul></li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.functions.Clip">Clip (class in bdsim.blocks.functions)</a>
-</li>
-      <li><a href="internals.html#bdsim.Clock">Clock (class in bdsim)</a>
-</li>
-      <li><a href="internals.html#bdsim.BlockDiagram.clock">clock() (bdsim.BlockDiagram method)</a>
+      <li><a href="table.html#ansitable.table.Cell">Cell (class in ansitable.table)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.ClockedBlock">ClockedBlock (class in bdsim)</a>
+      <li><a href="table.html#ansitable.table.Column">Column (class in ansitable.table)</a>
 </li>
-      <li><a href="internals.html#bdsim.BDSim.closefigs">closefigs() (bdsim.BDSim method)</a>
-</li>
-      <li><a href="internals.html#bdsim.BlockDiagram.compile">compile() (bdsim.BlockDiagram method)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.linalg.Cond">Cond (class in bdsim.blocks.linalg)</a>
-</li>
-      <li><a href="internals.html#bdsim.BlockDiagram.connect">connect() (bdsim.BlockDiagram method)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.sources.Constant">Constant (class in bdsim.blocks.sources)</a>
-</li>
-      <li><a href="internals.html#bdsim.GraphicsBlock.create_figure">create_figure() (bdsim.GraphicsBlock method)</a>
+      <li><a href="markup.html#ansitable.table.ANSITable.csv">csv() (ansitable.table.ANSITable method)</a>
 </li>
   </ul></td>
 </tr></table>
 
-<h2 id="D">D</h2>
+<h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.BDSim.DEBUG">DEBUG() (bdsim.BDSim method)</a>
-</li>
-      <li><a href="internals.html#bdsim.BDSimState.declare_event">declare_event() (bdsim.BDSimState method)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.connections.DeMux">DeMux (class in bdsim.blocks.connections)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.transfers.Deriv">Deriv (class in bdsim.blocks.transfers)</a>
-</li>
-      <li><a href="internals.html#bdsim.BlockDiagram.deriv">deriv() (bdsim.BlockDiagram method)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.linalg.Det">Det (class in bdsim.blocks.linalg)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.connections.Dict">Dict (class in bdsim.blocks.connections)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.discrete.DIntegrator">DIntegrator (class in bdsim.blocks.discrete)</a>
-</li>
-      <li><a href="internals.html#bdsim.BDSim.done">done() (bdsim.BDSim method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Block.done">(bdsim.Block method)</a>
-</li>
-        <li><a href="internals.html#bdsim.BlockDiagram.done">(bdsim.BlockDiagram method)</a>
-</li>
-        <li><a href="internals.html#bdsim.GraphicsBlock.done">(bdsim.GraphicsBlock method)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.BlockDiagram.dotfile">dotfile() (bdsim.BlockDiagram method)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.discrete.DPoseIntegrator">DPoseIntegrator (class in bdsim.blocks.discrete)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="F">F</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.BDSim.fatal">fatal() (bdsim.BDSim method)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.linalg.Flatten">Flatten (class in bdsim.blocks.linalg)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.Wire.fullname">fullname (bdsim.Wire property)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.functions.Function">Function (class in bdsim.blocks.functions)</a>
-</li>
-      <li><a href="internals.html#bdsim.FunctionBlock">FunctionBlock (class in bdsim)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="G">G</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.functions.Gain">Gain (class in bdsim.blocks.functions)</a>
-</li>
-      <li><a href="internals.html#bdsim.Clock.getstate">getstate() (bdsim.Clock method)</a>
-</li>
-      <li><a href="internals.html#bdsim.BlockDiagram.getstate0">getstate0() (bdsim.BlockDiagram method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Clock.getstate0">(bdsim.Clock method)</a>
-</li>
-        <li><a href="internals.html#bdsim.ClockedBlock.getstate0">(bdsim.ClockedBlock method)</a>
-</li>
-        <li><a href="internals.html#bdsim.TransferBlock.getstate0">(bdsim.TransferBlock method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.GraphicsBlock">GraphicsBlock (class in bdsim)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="I">I</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.connections.Index">Index (class in bdsim.blocks.connections)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block.info">info (bdsim.Block property)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Wire.info">(bdsim.Wire property)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.BlockDiagram.initialstate">initialstate() (bdsim.BlockDiagram method)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.connections.InPort">InPort (class in bdsim.blocks.connections)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block.inport_names">inport_names() (bdsim.Block method)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block.inputs">inputs (bdsim.Block property)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.transfers.Integrator">Integrator (class in bdsim.blocks.transfers)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.functions.Interpolate">Interpolate (class in bdsim.blocks.functions)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.linalg.Inverse">Inverse (class in bdsim.blocks.linalg)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block.isclocked">isclocked (bdsim.Block property)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block.isgraphics">isgraphics (bdsim.Block property)</a>
-</li>
-      <li><a href="internals.html#bdsim.Plug.isslice">isslice (bdsim.Plug property)</a>
-</li>
-      <li><a href="internals.html#bdsim.BlockDiagram.issubsystem">issubsystem (bdsim.BlockDiagram property)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.connections.Item">Item (class in bdsim.blocks.connections)</a>
+      <li><a href="markup.html#ansitable.table.ANSITable.html">html() (ansitable.table.ANSITable method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -620,15 +144,7 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.BDSim.load_blocks">load_blocks() (bdsim.BDSim method)</a>
-</li>
-      <li><a href="internals.html#bdsim.BlockDiagram.ls">ls() (bdsim.BlockDiagram method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.transfers.LTI_SISO">LTI_SISO (class in bdsim.blocks.transfers)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.transfers.LTI_SS">LTI_SS (class in bdsim.blocks.transfers)</a>
+      <li><a href="markup.html#ansitable.table.ANSITable.latex">latex() (ansitable.table.ANSITable method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -636,68 +152,7 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    module
-
-      <ul>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.connections">bdsim.blocks.connections</a>
-</li>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.discrete">bdsim.blocks.discrete</a>
-</li>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.displays">bdsim.blocks.displays</a>
-</li>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.functions">bdsim.blocks.functions</a>
-</li>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.linalg">bdsim.blocks.linalg</a>
-</li>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.sinks">bdsim.blocks.sinks</a>
-</li>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.sources">bdsim.blocks.sources</a>
-</li>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.spatial">bdsim.blocks.spatial</a>
-</li>
-        <li><a href="bdsim.blocks.html#module-bdsim.blocks.transfers">bdsim.blocks.transfers</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.connections.Mux">Mux (class in bdsim.blocks.connections)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="N">N</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.discrete.DIntegrator.next">next() (bdsim.blocks.discrete.DIntegrator method)</a>
-
-      <ul>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.discrete.DPoseIntegrator.next">(bdsim.blocks.discrete.DPoseIntegrator method)</a>
-</li>
-        <li><a href="bdsim.blocks.html#bdsim.blocks.discrete.ZOH.next">(bdsim.blocks.discrete.ZOH method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.Clock.next_event">next_event() (bdsim.Clock method)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.linalg.Norm">Norm (class in bdsim.blocks.linalg)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.sinks.Null">Null (class in bdsim.blocks.sinks)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="O">O</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.linalg.Inverse.onames">onames (bdsim.blocks.linalg.Inverse attribute)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.connections.OutPort">OutPort (class in bdsim.blocks.connections)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block.outport_names">outport_names() (bdsim.Block method)</a>
+      <li><a href="markup.html#ansitable.table.ANSITable.markdown">markdown() (ansitable.table.ANSITable method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -705,205 +160,23 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.transfers.PID">PID (class in bdsim.blocks.transfers)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.sources.Piecewise">Piecewise (class in bdsim.blocks.sources)</a>
-</li>
-      <li><a href="internals.html#bdsim.Plug">Plug (class in bdsim)</a>
-</li>
-      <li><a href="internals.html#bdsim.Plug.portlist">portlist (bdsim.Plug property)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.spatial.Pose_inverse">Pose_inverse (class in bdsim.blocks.spatial)</a>
+      <li><a href="table.html#ansitable.table.ANSITable.Pandas">Pandas() (ansitable.table.ANSITable static method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.spatial.Pose_postmul">Pose_postmul (class in bdsim.blocks.spatial)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.spatial.Pose_premul">Pose_premul (class in bdsim.blocks.spatial)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.transfers.PoseIntegrator">PoseIntegrator (class in bdsim.blocks.transfers)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.functions.Pow">Pow (class in bdsim.blocks.functions)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.sinks.Print">Print (class in bdsim.blocks.sinks)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.functions.Prod">Prod (class in bdsim.blocks.functions)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="R">R</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.sources.Ramp">Ramp (class in bdsim.blocks.sources)</a>
-</li>
-      <li><a href="internals.html#bdsim.BDSim.report">report() (bdsim.BDSim method)</a>
+      <li><a href="matrix.html#ansitable.table.ANSIMatrix.print">print() (ansitable.table.ANSIMatrix method)</a>
 
       <ul>
-        <li><a href="internals.html#bdsim.BlockDiagram.report">(bdsim.BlockDiagram method)</a>
+        <li><a href="table.html#ansitable.table.ANSITable.print">(ansitable.table.ANSITable method)</a>
 </li>
       </ul></li>
-      <li><a href="internals.html#bdsim.BlockDiagram.report_lists">report_lists() (bdsim.BlockDiagram method)</a>
-</li>
-      <li><a href="internals.html#bdsim.BlockDiagram.report_schedule">report_schedule() (bdsim.BlockDiagram method)</a>
-</li>
-      <li><a href="internals.html#bdsim.BlockDiagram.report_summary">report_summary() (bdsim.BlockDiagram method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.Block.reset">reset() (bdsim.Block method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.BlockDiagram.reset">(bdsim.BlockDiagram method)</a>
-</li>
-        <li><a href="internals.html#bdsim.ClockedBlock.reset">(bdsim.ClockedBlock method)</a>
-</li>
-        <li><a href="internals.html#bdsim.TransferBlock.reset">(bdsim.TransferBlock method)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.BDSim.run">run() (bdsim.BDSim method)</a>
-</li>
-      <li><a href="internals.html#bdsim.BDSim.run_interval">run_interval() (bdsim.BDSim method)</a>
-</li>
   </ul></td>
 </tr></table>
 
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.BDSim.savefig">savefig() (bdsim.BDSim method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.Block.savefig">(bdsim.Block method)</a>
-</li>
-        <li><a href="internals.html#bdsim.GraphicsBlock.savefig">(bdsim.GraphicsBlock method)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.BDSim.savefigs">savefigs() (bdsim.BDSim method)</a>
-</li>
-      <li><a href="internals.html#bdsim.Clock.savestate">savestate() (bdsim.Clock method)</a>
-</li>
-      <li><a href="internals.html#bdsim.BlockDiagram.schedule_dotfile">schedule_dotfile() (bdsim.BlockDiagram method)</a>
-</li>
-      <li><a href="internals.html#bdsim.BlockDiagram.schedule_evaluate">schedule_evaluate() (bdsim.BlockDiagram method)</a>
-</li>
-      <li><a href="internals.html#bdsim.BlockDiagram.schedule_generate">schedule_generate() (bdsim.BlockDiagram method)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.displays.Scope">Scope (class in bdsim.blocks.displays)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.displays.ScopeXY">ScopeXY (class in bdsim.blocks.displays)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.displays.ScopeXY1">ScopeXY1 (class in bdsim.blocks.displays)</a>
-</li>
-      <li><a href="internals.html#bdsim.BDSim.set_globals">set_globals() (bdsim.BDSim method)</a>
-</li>
-      <li><a href="internals.html#bdsim.BDSim.set_options">set_options() (bdsim.BDSim method)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block.set_param">set_param() (bdsim.Block method)</a>
-</li>
-      <li><a href="internals.html#bdsim.Clock.setstate">setstate() (bdsim.Clock method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.ClockedBlock.setstate">(bdsim.ClockedBlock method)</a>
-</li>
-        <li><a href="internals.html#bdsim.TransferBlock.setstate">(bdsim.TransferBlock method)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.BDSim.showgraph">showgraph() (bdsim.BDSim method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.BlockDiagram.showgraph">(bdsim.BlockDiagram method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.SinkBlock">SinkBlock (class in bdsim)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.linalg.Slice1">Slice1 (class in bdsim.blocks.linalg)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.linalg.Slice2">Slice2 (class in bdsim.blocks.linalg)</a>
-</li>
-      <li><a href="internals.html#bdsim.SourceBlock">SourceBlock (class in bdsim)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block.sourcename">sourcename() (bdsim.Block method)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block.start">start() (bdsim.Block method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.BlockDiagram.start">(bdsim.BlockDiagram method)</a>
-</li>
-        <li><a href="internals.html#bdsim.Clock.start">(bdsim.Clock method)</a>
-</li>
-        <li><a href="internals.html#bdsim.GraphicsBlock.start">(bdsim.GraphicsBlock method)</a>
-</li>
-      </ul></li>
-      <li><a href="internals.html#bdsim.Block.state_names">state_names() (bdsim.Block method)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.sources.Step">Step (class in bdsim.blocks.sources)</a>
-</li>
-      <li><a href="internals.html#bdsim.BlockDiagram.step">step() (bdsim.BlockDiagram method)</a>
-
-      <ul>
-        <li><a href="internals.html#bdsim.GraphicsBlock.step">(bdsim.GraphicsBlock method)</a>
-</li>
-        <li><a href="internals.html#bdsim.SinkBlock.step">(bdsim.SinkBlock method)</a>
-</li>
-      </ul></li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.sinks.Stop">Stop (class in bdsim.blocks.sinks)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.connections.SubSystem">SubSystem (class in bdsim.blocks.connections)</a>
-</li>
-      <li><a href="internals.html#bdsim.SubsystemBlock">SubsystemBlock (class in bdsim)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.functions.Sum">Sum (class in bdsim.blocks.functions)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="T">T</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.Block.T_deriv">T_deriv() (bdsim.Block method)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block.T_next">T_next() (bdsim.Block method)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block.T_output">T_output() (bdsim.Block method)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block.T_start">T_start() (bdsim.Block method)</a>
-</li>
-      <li><a href="internals.html#bdsim.Block.T_step">T_step() (bdsim.Block method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.sources.Time">Time (class in bdsim.blocks.sources)</a>
-</li>
-      <li><a href="internals.html#bdsim.Clock.time">time() (bdsim.Clock method)</a>
-</li>
-      <li><a href="internals.html#bdsim.TransferBlock">TransferBlock (class in bdsim)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.spatial.Transform_vector">Transform_vector (class in bdsim.blocks.spatial)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.linalg.Transpose">Transpose (class in bdsim.blocks.linalg)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="U">U</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.BDSim.update_parameters">update_parameters() (bdsim.BDSim method)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="V">V</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.Block.varinputs">varinputs (bdsim.Block attribute)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.Block.varoutputs">varoutputs (bdsim.Block attribute)</a>
+      <li><a href="matrix.html#ansitable.table.ANSIMatrix.str">str() (ansitable.table.ANSIMatrix method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -911,23 +184,7 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.sinks.Watch">Watch (class in bdsim.blocks.sinks)</a>
-</li>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.sources.WaveForm">WaveForm (class in bdsim.blocks.sources)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="internals.html#bdsim.Plug.width">width (bdsim.Plug property)</a>
-</li>
-      <li><a href="internals.html#bdsim.Wire">Wire (class in bdsim)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="Z">Z</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bdsim.blocks.html#bdsim.blocks.discrete.ZOH">ZOH (class in bdsim.blocks.discrete)</a>
+      <li><a href="markup.html#ansitable.table.ANSITable.wikitable">wikitable() (ansitable.table.ANSITable method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -941,8 +198,8 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2020-, Peter Corke..
-      <span class="lastupdated">Last updated on 12-Nov-2023.
+    <p>&#169; Copyright 2021-, Peter Corke..
+      <span class="lastupdated">Last updated on 04-Aug-2024.
       </span></p>
   </div>
 
