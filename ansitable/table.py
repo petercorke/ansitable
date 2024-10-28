@@ -196,11 +196,11 @@ class Column:
 
         text = ""
         if color is not None:
-            text += self.table.FG(color)
+            text += self.table._FG(color)
         if bgcolor is not None:
-            text += self.table.BG(bgcolor)
+            text += self.table._BG(bgcolor)
         if style is not None:
-            text += self.table.ATTR(styledict[style])
+            text += self.table._ATTR(styledict[style])
         return text
 
     def _formatcolumn(
@@ -255,18 +255,18 @@ class Column:
             gap2 = _spaces(g2 + self.table.colsep)
 
         if fgcolor:
-            text = self.table.FG(fgcolor) + text + self.table.FG(0)
+            text = self.table._FG(fgcolor) + text + self.table._ATTR(0)
 
         if style == "underlined":
-            text = self.table.ATTR(styledict[style]) + text + self.table.ATTR(0)
+            text = self.table._ATTR(styledict[style]) + text + self.table._ATTR(0)
 
         text = gap1 + text + gap2
 
         if bgcolor:
-            text = self.table.BG(bgcolor) + text + self.table.BG(0)
+            text = self.table._BG(bgcolor) + text + self.table._ATTR(0)
 
         if style and style != "underlined":
-            text = self.table.ATTR(styledict[style]) + text + self.table.ATTR(0)
+            text = self.table._ATTR(styledict[style]) + text + self.table._ATTR(0)
         return text
 
 
@@ -794,7 +794,7 @@ class ANSITable:
                     )
 
                 # if len(ansi) > 0:
-                #     text += self.ATTR(0)
+                #     text += self._ATTR(0)
                 text += _spaces(self.colsep)
 
         return text + "\n"
@@ -1605,6 +1605,23 @@ if __name__ == "__main__":
     table.row("aaaaaaaaa", 2.2, 3)
     table.row(
         "bbbbbbbbbbbbb", Cell(-5.5, bgcolor="blue"), 6, bgcolor="yellow"
+    )  # CHANGE
+    table.row("ccccccc", 8.8, -9)
+    table.print()
+
+    ##
+    table = ANSITable(
+        Column("col1", headalign="<", headstyle="underlined"),  # CHANGE
+        Column("column 2 has a big header", colalign="^", colstyle="bold"),  # CHANGE
+        Column("column 3", colalign="<"),  # CHANGE
+        border="thin",
+    )
+
+    table.row("aaaaaaaaa", "<<blue>>aaa", "")
+    table.row(
+        "bbbbbbbbbbbbb",
+        "<<blue>>blue",
+        6,
     )  # CHANGE
     table.row("ccccccc", 8.8, -9)
     table.print()
