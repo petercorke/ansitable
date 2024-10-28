@@ -22,7 +22,7 @@ import sys
 # -- Project information -----------------------------------------------------
 
 project = "Pretty tables and matrices for Python"
-copyright = "2021-, Peter Corke."
+copyright = "2021-, Peter Corke"
 author = "Peter Corke"
 
 try:
@@ -49,7 +49,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.inheritance_diagram",
     "sphinx_autodoc_typehints",
-    "sphinx_favicon",
+    "sphinx-favicon",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
