@@ -1,25 +1,29 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="_static/favicon-16x16.png" sizes="16x16" type="image/png">
-    <link rel="icon" href="_static/favicon-32x32.png" sizes="32x32" type="image/png">
-    <link rel="apple-touch-icon" href="_static/apple-touch-icon.png" sizes="180x180" type="image/png">
-    <link rel="android-chrome" href="_static/android-chrome-192x192.png " sizes="192x192" type="image/png">
-    <link rel="android-chrome" href="_static/android-chrome-512x512.png " sizes="512x512" type="image/png">
-
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" sizes="16x16" type="image/png" href="_static/favicon-16x16.png">
+    <link rel="icon" sizes="32x32" type="image/png" href="_static/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" type="image/png" href="_static/apple-touch-icon.png">
+    <link rel="android-chrome" sizes="192x192" type="image/png" href="_static/android-chrome-192x192.png ">
+    <link rel="android-chrome" sizes="512x512" type="image/png" href="_static/android-chrome-512x512.png ">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Matrix class &mdash; Pretty tables and matrices for Python  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -31,14 +35,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Pretty tables and matrices for Python
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Pretty tables and matrices for Python
+              <img src="_static/ansi_logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 0.11.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -71,8 +80,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Matrix class</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Matrix class</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/matrix.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -85,22 +94,22 @@
            <div itemprop="articleBody">
              
   <section id="matrix-class">
-<h1>Matrix class<a class="headerlink" href="#matrix-class" title="Link to this heading"></a></h1>
+<h1>Matrix class<a class="headerlink" href="#matrix-class" title="Permalink to this heading"></a></h1>
 <p>This class describes a block diagram, a collection of blocks and wires that
 can be “executed”.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="ansitable.table.ANSIMatrix">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansitable.table.</span></span><span class="sig-name descname"><span class="pre">ANSIMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'thin'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'{:&lt;</span> <span class="pre">10.3g}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squish</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ansitable/table.html#ANSIMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansitable.table.ANSIMatrix" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansitable.table.</span></span><span class="sig-name descname"><span class="pre">ANSIMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'thin'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'{:&lt;</span> <span class="pre">10.3g}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squish</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ansitable/table.html#ANSIMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansitable.table.ANSIMatrix" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="ansitable.table.ANSIMatrix.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'thin'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'{:&lt;</span> <span class="pre">10.3g}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squish</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ansitable/table.html#ANSIMatrix.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansitable.table.ANSIMatrix.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'thin'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'{:&lt;</span> <span class="pre">10.3g}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squish</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ansitable/table.html#ANSIMatrix.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansitable.table.ANSIMatrix.__init__" title="Permalink to this definition"></a></dt>
 <dd><p>Create a matrix formatter</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Bracket format, defaults to ‘thin’</p></li>
-<li><p><strong>fmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – number format string, defaults to ‘{:&lt; 10.3g}’</p></li>
+<li><p><strong>style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Bracket format, defaults to “thin”</p></li>
+<li><p><strong>fmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – number format string, defaults to “{:&lt; 10.3g}”</p></li>
 <li><p><strong>squish</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – elements smaller than this times eps are displayed as
 zero, defaults to 100</p></li>
 </ul>
@@ -110,7 +119,7 @@ zero, defaults to 100</p></li>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansitable</span> <span class="kn">import</span> <span class="n">ANSIMatrix</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="n">formatter</span> <span class="o">=</span> <span class="n">ANSIMatrix</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">&#39;thick&#39;</span><span class="p">)</span>
+<span class="n">formatter</span> <span class="o">=</span> <span class="n">ANSIMatrix</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
 <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span>
 <span class="n">formatter</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 
@@ -126,7 +135,7 @@ zero, defaults to 100</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ansitable.table.ANSIMatrix.str">
-<span class="sig-name descname"><span class="pre">str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix_super</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix_sub</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ansitable/table.html#ANSIMatrix.str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansitable.table.ANSIMatrix.str" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix_super</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix_sub</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ansitable/table.html#ANSIMatrix.str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansitable.table.ANSIMatrix.str" title="Permalink to this definition"></a></dt>
 <dd><p>Output the table as a string</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -146,11 +155,13 @@ zero, defaults to 100</p></li>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
 </dd>
 </dl>
+<p><code class="docutils literal notranslate"><span class="pre">suffix_super</span></code> is where the transpose, inverse, pseudo-inverse, etc. symbol
+is shown.  <code class="docutils literal notranslate"><span class="pre">suffix_sub</span></code> is where the matrix name is typically shown.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ansitable.table.ANSIMatrix.print">
-<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ansitable/table.html#ANSIMatrix.print"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansitable.table.ANSIMatrix.print" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='UTF-8'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ansitable/table.html#ANSIMatrix.print"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansitable.table.ANSIMatrix.print" title="Permalink to this definition"></a></dt>
 <dd><p>Print the matrix</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
