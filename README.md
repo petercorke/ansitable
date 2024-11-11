@@ -77,12 +77,13 @@ Painless creation of nice-looking tables of data for Python.
 
 ```python
  1 | from ansitable import ANSITable, Column
- 2 |
- 3 | table = ANSITable("col1", "column 2 has a big header", "column 3")
- 4 | table.row("aaaaaaaaa", 2.2, 3)
- 5 | table.row("bbbbbbbbbbbbb", 5.5, 6)
- 6 | table.row("ccccccc", 8.8, 9)
- 7 | table.print()
+ 2 | from ansitable.table import Cell
+ 3 |
+ 4 | table = ANSITable("col1", "column 2 has a big header", "column 3")
+ 5 | table.row("aaaaaaaaa", 2.2, 3)
+ 6 | table.row("bbbbbbbbbbbbb", 5.5, 6)
+ 7 | table.row("ccccccc", 8.8, 9)
+ 8 | table.print()
 
 ```
 Line 3 constructs an `ANSITable` object and the arguments are a sequence of 
