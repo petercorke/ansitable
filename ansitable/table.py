@@ -1082,8 +1082,11 @@ class ANSITable:
         :type trh: str, optional
         :param table: CSS style for the table, defaults to ""
         :type table: str, optional
-        :return: ASCII HTML text
+        :return: table rendered in HTML
         :rtype: str
+
+        The table is rendered as a table between `<table>` and `</table>` tags.
+        Table color and style options are supported.
 
         Example::
 
@@ -1092,7 +1095,6 @@ class ANSITable:
             table.row("bbbbbbbbbbbbb", -5.5, 6)
             table.row("ccccccc", 8.8, -9)
             table.html()
-
 
             <table>
             <tr>
@@ -1117,15 +1119,23 @@ class ANSITable:
             </tr>
             </table>
 
+        CSS options defined in the document will apply.  These can be overridden for
+        various table elements by passed arguments strings. For example, to create a
+        simple gridded table::
+
+            table.html(
+                td="border: 1px solid;",
+                th="border: 1px solid;",
+                table="border-collapse: collapse;",
+            )
+
+        The CSS style strings must end with a semi-colon.
+
         .. note::
             - supports column alignment
             - supports header alignment
-            - the table is rendered with applicable CSS settings, these
-              can be overridden by passing in the appropriate CSS strings
+            - support color and style options in the table
 
-        The CSS style strings must end with a semi-colon, and the string itself has no quotes, for example::
-
-            table.html(th = "color:red;font-weight:bold;", td = "color:blue;")
         """
         self._findwidths()
 
@@ -1146,7 +1156,7 @@ class ANSITable:
                 style += "color:" + c.headcolor + ";"
             if c.headbgcolor is not None:
                 style += "background-color:" + c.headbgcolor + ";"
-            s += "    <th style='" + style + "'>" + c.name + "</th>\n"
+            s += "    <th style='" + style + th + "'>" + c.name + "</th>\n"
         s += "  </tr>\n"
 
         # rows
@@ -1154,11 +1164,20 @@ class ANSITable:
             s += "  <tr style='" + trd + "'>\n"
             for c in self.columns:
                 style = "text-align:" + align[c.colalign]
-                if c.colcolor is not None:
-                    style += "color:" + c.colcolor + ";"
-                if c.colbgcolor is not None:
-                    style += "background-color:" + c.colbgcolor + ";"
-                s += "    <td style='" + style + "'>" + c.formatted[i] + "</td>\n"
+                if c.fgcolor[i] is not None:
+                    style += "color:" + c.fgcolor[i] + ";"
+                if c.bgcolor[i] is not None:
+                    style += "background-color:" + c.bgcolor[i] + ";"
+                s += (
+                    "    <td style='"
+                    + style
+                    + td
+                    + "'>"
+                    + c.formatted[i].replace(
+                        "\u2026", "&hellip;"
+                    )  # replace unicode ellipsis with HTML entity
+                    + "</td>\n"
+                )
             s += "  </tr>\n"
         s += "</table>\n"
         return s
