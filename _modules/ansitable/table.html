@@ -37,7 +37,7 @@
               <img src="../../_static/ansi_logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.11.2
+                0.11.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -1162,8 +1162,11 @@
 <span class="sd">        :type trh: str, optional</span>
 <span class="sd">        :param table: CSS style for the table, defaults to &quot;&quot;</span>
 <span class="sd">        :type table: str, optional</span>
-<span class="sd">        :return: ASCII HTML text</span>
+<span class="sd">        :return: table rendered in HTML</span>
 <span class="sd">        :rtype: str</span>
+
+<span class="sd">        The table is rendered as a table between `&lt;table&gt;` and `&lt;/table&gt;` tags.</span>
+<span class="sd">        Table color and style options are supported.</span>
 
 <span class="sd">        Example::</span>
 
@@ -1172,7 +1175,6 @@
 <span class="sd">            table.row(&quot;bbbbbbbbbbbbb&quot;, -5.5, 6)</span>
 <span class="sd">            table.row(&quot;ccccccc&quot;, 8.8, -9)</span>
 <span class="sd">            table.html()</span>
-
 
 <span class="sd">            &lt;table&gt;</span>
 <span class="sd">            &lt;tr&gt;</span>
@@ -1197,15 +1199,23 @@
 <span class="sd">            &lt;/tr&gt;</span>
 <span class="sd">            &lt;/table&gt;</span>
 
+<span class="sd">        CSS options defined in the document will apply.  These can be overridden for</span>
+<span class="sd">        various table elements by passed arguments strings. For example, to create a</span>
+<span class="sd">        simple gridded table::</span>
+
+<span class="sd">            table.html(</span>
+<span class="sd">                td=&quot;border: 1px solid;&quot;,</span>
+<span class="sd">                th=&quot;border: 1px solid;&quot;,</span>
+<span class="sd">                table=&quot;border-collapse: collapse;&quot;,</span>
+<span class="sd">            )</span>
+
+<span class="sd">        The CSS style strings must end with a semi-colon.</span>
+
 <span class="sd">        .. note::</span>
 <span class="sd">            - supports column alignment</span>
 <span class="sd">            - supports header alignment</span>
-<span class="sd">            - the table is rendered with applicable CSS settings, these</span>
-<span class="sd">              can be overridden by passing in the appropriate CSS strings</span>
+<span class="sd">            - support color and style options in the table</span>
 
-<span class="sd">        The CSS style strings must end with a semi-colon, and the string itself has no quotes, for example::</span>
-
-<span class="sd">            table.html(th = &quot;color:red;font-weight:bold;&quot;, td = &quot;color:blue;&quot;)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_findwidths</span><span class="p">()</span>
 
@@ -1226,7 +1236,7 @@
                 <span class="n">style</span> <span class="o">+=</span> <span class="s2">&quot;color:&quot;</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">headcolor</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span>
             <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">headbgcolor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">style</span> <span class="o">+=</span> <span class="s2">&quot;background-color:&quot;</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">headbgcolor</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span>
-            <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;    &lt;th style=&#39;&quot;</span> <span class="o">+</span> <span class="n">style</span> <span class="o">+</span> <span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;&lt;/th&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;    &lt;th style=&#39;&quot;</span> <span class="o">+</span> <span class="n">style</span> <span class="o">+</span> <span class="n">th</span> <span class="o">+</span> <span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;&lt;/th&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;  &lt;/tr&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
 
         <span class="c1"># rows</span>
@@ -1234,11 +1244,20 @@
             <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;  &lt;tr style=&#39;&quot;</span> <span class="o">+</span> <span class="n">trd</span> <span class="o">+</span> <span class="s2">&quot;&#39;&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
                 <span class="n">style</span> <span class="o">=</span> <span class="s2">&quot;text-align:&quot;</span> <span class="o">+</span> <span class="n">align</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">colalign</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">colcolor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">style</span> <span class="o">+=</span> <span class="s2">&quot;color:&quot;</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">colcolor</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span>
-                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">colbgcolor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">style</span> <span class="o">+=</span> <span class="s2">&quot;background-color:&quot;</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">colbgcolor</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span>
-                <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;    &lt;td style=&#39;&quot;</span> <span class="o">+</span> <span class="n">style</span> <span class="o">+</span> <span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">formatted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;&lt;/td&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">fgcolor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">style</span> <span class="o">+=</span> <span class="s2">&quot;color:&quot;</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">fgcolor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span>
+                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">bgcolor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">style</span> <span class="o">+=</span> <span class="s2">&quot;background-color:&quot;</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">bgcolor</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="s2">&quot;    &lt;td style=&#39;&quot;</span>
+                    <span class="o">+</span> <span class="n">style</span>
+                    <span class="o">+</span> <span class="n">td</span>
+                    <span class="o">+</span> <span class="s2">&quot;&#39;&gt;&quot;</span>
+                    <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="n">formatted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\u2026</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&amp;hellip;&quot;</span>
+                    <span class="p">)</span>  <span class="c1"># replace unicode ellipsis with HTML entity</span>
+                    <span class="o">+</span> <span class="s2">&quot;&lt;/td&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
             <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;  &lt;/tr&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/table&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">s</span></div>
@@ -1715,7 +1734,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-, Peter Corke.
-      <span class="lastupdated">Last updated on 28-Oct-2024.
+      <span class="lastupdated">Last updated on 08-Dec-2024.
       </span></p>
   </div>
 

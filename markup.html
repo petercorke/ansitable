@@ -44,7 +44,7 @@
               <img src="_static/ansi_logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                0.11.2
+                0.11.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -195,19 +195,20 @@ table.wikitable()
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>ASCII HTML text</p>
+<dd class="field-even"><p>table rendered in HTML</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
 </dd>
 </dl>
+<p>The table is rendered as a table between <cite>&lt;table&gt;</cite> and <cite>&lt;/table&gt;</cite> tags.
+Table color and style options are supported.</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">table</span> <span class="o">=</span> <span class="n">ANSITable</span><span class="p">(</span><span class="s2">&quot;col1&quot;</span><span class="p">,</span> <span class="s2">&quot;column 2 has a big header&quot;</span><span class="p">,</span> <span class="s2">&quot;column 3&quot;</span><span class="p">)</span>
 <span class="n">table</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="s2">&quot;aaaaaaaaa&quot;</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 <span class="n">table</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="s2">&quot;bbbbbbbbbbbbb&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
 <span class="n">table</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="s2">&quot;ccccccc&quot;</span><span class="p">,</span> <span class="mf">8.8</span><span class="p">,</span> <span class="o">-</span><span class="mi">9</span><span class="p">)</span>
 <span class="n">table</span><span class="o">.</span><span class="n">html</span><span class="p">()</span>
-
 
 <span class="o">&lt;</span><span class="n">table</span><span class="o">&gt;</span>
 <span class="o">&lt;</span><span class="n">tr</span><span class="o">&gt;</span>
@@ -233,18 +234,24 @@ table.wikitable()
 <span class="o">&lt;/</span><span class="n">table</span><span class="o">&gt;</span>
 </pre></div>
 </div>
+<p>CSS options defined in the document will apply.  These can be overridden for
+various table elements by passed arguments strings. For example, to create a
+simple gridded table:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">table</span><span class="o">.</span><span class="n">html</span><span class="p">(</span>
+    <span class="n">td</span><span class="o">=</span><span class="s2">&quot;border: 1px solid;&quot;</span><span class="p">,</span>
+    <span class="n">th</span><span class="o">=</span><span class="s2">&quot;border: 1px solid;&quot;</span><span class="p">,</span>
+    <span class="n">table</span><span class="o">=</span><span class="s2">&quot;border-collapse: collapse;&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The CSS style strings must end with a semi-colon.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
 <li><p>supports column alignment</p></li>
 <li><p>supports header alignment</p></li>
-<li><p>the table is rendered with applicable CSS settings, these
-can be overridden by passing in the appropriate CSS strings</p></li>
+<li><p>support color and style options in the table</p></li>
 </ul>
-</div>
-<p>The CSS style strings must end with a semi-colon, and the string itself has no quotes, for example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">table</span><span class="o">.</span><span class="n">html</span><span class="p">(</span><span class="n">th</span> <span class="o">=</span> <span class="s2">&quot;color:red;font-weight:bold;&quot;</span><span class="p">,</span> <span class="n">td</span> <span class="o">=</span> <span class="s2">&quot;color:blue;&quot;</span><span class="p">)</span>
-</pre></div>
 </div>
 </dd></dl>
 
@@ -337,7 +344,7 @@ can be overridden by passing in the appropriate CSS strings</p></li>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-, Peter Corke.
-      <span class="lastupdated">Last updated on 28-Oct-2024.
+      <span class="lastupdated">Last updated on 08-Dec-2024.
       </span></p>
   </div>
 
