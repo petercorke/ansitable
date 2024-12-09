@@ -19,6 +19,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -50,7 +51,7 @@ dependencies = ["colored"]
 [project.urls]
 "Homepage" = "https://github.com/petercorke/ansitable"
 "Bug Tracker" = "https://github.com/petercorke/ansitable/issues"
-"Documentation" = "https://github.io/petercorke/ansitable"
+"Documentation" = "https://petercorke.github.io/ansitable"
 "Source" = "https://github.com/petercorke/ansitable"
 
 [project.optional-dependencies]
