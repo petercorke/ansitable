@@ -139,7 +139,7 @@ class Column:
         :type headalign: str, optional
 
         The :class:`Column` object can passed to the :class:`ANSITable` constructor
-        or to :method:`ANSITable.addcolumn` to specify the format of a column in a table.
+        or to :meth:`~ANSITable.addcolumn` to specify the format of a column in a table.
 
         For header or data cell alignment:
 
