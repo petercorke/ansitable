@@ -3,9 +3,11 @@ Table classes
 
 This class creates a table that can be pretty printed in any terminal that supports ANSI escape sequences.
 
+Creating a table
+----------------
 
 .. autoclass:: ansitable.table.ANSITable
-   :members: Pandas, addrow, str, print
+   :members: Pandas, addcolumn
    :undoc-members:
    :show-inheritance:
    :special-members: __init__
@@ -14,10 +16,34 @@ This class creates a table that can be pretty printed in any terminal that suppo
    :members:
    :undoc-members:
    :show-inheritance:
-   :special-members: __init__
 
 .. autoclass:: ansitable.table.Cell
    :members:
    :undoc-members:
    :show-inheritance:
-   :special-members: __init__
+
+Adding a row
+------------
+
+.. autoclass:: ansitable.table.ANSITable
+   :members: row, rule
+   :undoc-members:
+   :show-inheritance:
+
+Display a table
+---------------
+
+.. autoclass:: ansitable.table.ANSITable
+   :members: print, str
+   :undoc-members:
+   :show-inheritance:
+
+Render in markup formats
+------------------------
+
+These methods are used to export an ANSI table to different markup languages.
+
+.. autoclass:: ansitable.table.ANSITable
+   :members: latex, markdown, html, wikitable, csv, pandas, rest
+   :undoc-members:
+   :show-inheritance:
