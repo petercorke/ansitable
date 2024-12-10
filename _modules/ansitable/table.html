@@ -1,24 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ansitable.table &mdash; Pretty tables and matrices for Python  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
-      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -36,9 +33,6 @@
             Pretty tables and matrices for Python
               <img src="../../_static/ansi_logo.png" class="logo" alt="Logo"/>
           </a>
-              <div class="version">
-                0.11.4
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -49,7 +43,6 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../table.html">Table classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../markup.html">Markup export</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../matrix.html">Matrix class</a></li>
 </ul>
 
@@ -140,9 +133,13 @@
 <span class="c1"># ------------------------------------------------------------------------- #</span>
 
 
-<div class="viewcode-block" id="Cell"><a class="viewcode-back" href="../../table.html#ansitable.table.Cell">[docs]</a><span class="k">class</span> <span class="nc">Cell</span><span class="p">:</span>
+<div class="viewcode-block" id="Cell">
+<a class="viewcode-back" href="../../table.html#ansitable.table.Cell">[docs]</a>
+<span class="k">class</span> <span class="nc">Cell</span><span class="p">:</span>
 
-<div class="viewcode-block" id="Cell.__init__"><a class="viewcode-back" href="../../table.html#ansitable.table.Cell.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">fgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Cell.__init__">
+<a class="viewcode-back" href="../../table.html#ansitable.table.Cell.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">fgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Override the color and style of a cell</span>
 
 <span class="sd">        :param text: cell text</span>
@@ -172,12 +169,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">column</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">row</span> <span class="o">=</span> <span class="kc">None</span></div>
 
+
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span></div>
 
 
-<div class="viewcode-block" id="Column"><a class="viewcode-back" href="../../table.html#ansitable.table.Column">[docs]</a><span class="k">class</span> <span class="nc">Column</span><span class="p">:</span>
-<div class="viewcode-block" id="Column.__init__"><a class="viewcode-back" href="../../table.html#ansitable.table.Column.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+
+<div class="viewcode-block" id="Column">
+<a class="viewcode-back" href="../../table.html#ansitable.table.Column">[docs]</a>
+<span class="k">class</span> <span class="nc">Column</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Column.__init__">
+<a class="viewcode-back" href="../../table.html#ansitable.table.Column.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">,</span>
         <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -217,6 +221,11 @@
 <span class="sd">        :param headalign: Heading text alignement, see table below, defaults to &quot;&gt;&quot;</span>
 <span class="sd">        :type headalign: str, optional</span>
 
+<span class="sd">        The :class:`Column` object can passed to the :class:`ANSITable` constructor</span>
+<span class="sd">        or to :method:`ANSITable.addcolumn` to specify the format of a column in a table.</span>
+
+<span class="sd">        For header or data cell alignment:</span>
+
 <span class="sd">        ===========   =======================</span>
 <span class="sd">        Alignment     Description</span>
 <span class="sd">        ===========   =======================</span>
@@ -225,6 +234,7 @@
 <span class="sd">        &quot;&gt;&quot;           Right (default)</span>
 <span class="sd">        ===========   =======================</span>
 
+<span class="sd">        For header or data cell alignment text style:</span>
 
 <span class="sd">        ===========   =============================================</span>
 <span class="sd">        Style         Description</span>
@@ -236,7 +246,7 @@
 <span class="sd">        reverse       text and background colors are reversed</span>
 <span class="sd">        ===========   =============================================</span>
 
-<span class="sd">        Implementation of these options depends heavily on the terminal emulator</span>
+<span class="sd">        The implementation of these options depends heavily on the terminal emulator</span>
 <span class="sd">        used.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -263,6 +273,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">maxwidth</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+
 
     <span class="k">def</span> <span class="nf">_setstyle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">header</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">header</span><span class="p">:</span>
@@ -350,6 +361,7 @@
         <span class="k">return</span> <span class="n">text</span></div>
 
 
+
 <span class="k">def</span> <span class="nf">_spaces</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    return n spaces</span>
@@ -397,9 +409,13 @@
 <span class="c1"># ------------------------------------------------------------------------- #</span>
 
 
-<div class="viewcode-block" id="ANSIMatrix"><a class="viewcode-back" href="../../matrix.html#ansitable.table.ANSIMatrix">[docs]</a><span class="k">class</span> <span class="nc">ANSIMatrix</span><span class="p">:</span>
+<div class="viewcode-block" id="ANSIMatrix">
+<a class="viewcode-back" href="../../matrix.html#ansitable.table.ANSIMatrix">[docs]</a>
+<span class="k">class</span> <span class="nc">ANSIMatrix</span><span class="p">:</span>
 
-<div class="viewcode-block" id="ANSIMatrix.__init__"><a class="viewcode-back" href="../../matrix.html#ansitable.table.ANSIMatrix.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;thin&quot;</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{:&lt; 10.3g}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">squish</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<div class="viewcode-block" id="ANSIMatrix.__init__">
+<a class="viewcode-back" href="../../matrix.html#ansitable.table.ANSIMatrix.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;thin&quot;</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{:&lt; 10.3g}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">squish</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a matrix formatter</span>
 
@@ -444,7 +460,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">squish</span> <span class="o">=</span> <span class="n">squish</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span></div>
 
-<div class="viewcode-block" id="ANSIMatrix.str"><a class="viewcode-back" href="../../matrix.html#ansitable.table.ANSIMatrix.str">[docs]</a>    <span class="k">def</span> <span class="nf">str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">suffix_super</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">suffix_sub</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ANSIMatrix.str">
+<a class="viewcode-back" href="../../matrix.html#ansitable.table.ANSIMatrix.str">[docs]</a>
+    <span class="k">def</span> <span class="nf">str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">suffix_super</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">suffix_sub</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Output the table as a string</span>
 
@@ -490,7 +509,10 @@
         <span class="n">s</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">_bl</span><span class="p">[</span><span class="n">b</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="n">mwidth</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="n">_br</span><span class="p">[</span><span class="n">b</span><span class="p">])</span> <span class="o">+</span> <span class="n">suffix_sub</span>
         <span class="k">return</span> <span class="n">s</span></div>
 
-<div class="viewcode-block" id="ANSIMatrix.print"><a class="viewcode-back" href="../../matrix.html#ansitable.table.ANSIMatrix.print">[docs]</a>    <span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="o">*</span><span class="n">pos</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ANSIMatrix.print">
+<a class="viewcode-back" href="../../matrix.html#ansitable.table.ANSIMatrix.print">[docs]</a>
+    <span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="o">*</span><span class="n">pos</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Print the matrix</span>
 
@@ -501,16 +523,22 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">str</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="o">*</span><span class="n">pos</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">)</span></div></div>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">str</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="o">*</span><span class="n">pos</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">)</span></div>
+</div>
+
 
 
 <span class="c1"># ------------------------------------------------------------------------- #</span>
 
 
-<div class="viewcode-block" id="ANSITable"><a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable">[docs]</a><span class="k">class</span> <span class="nc">ANSITable</span><span class="p">:</span>
+<div class="viewcode-block" id="ANSITable">
+<a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable">[docs]</a>
+<span class="k">class</span> <span class="nc">ANSITable</span><span class="p">:</span>
     <span class="n">_color</span> <span class="o">=</span> <span class="n">_colored</span>
 
-<div class="viewcode-block" id="ANSITable.__init__"><a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="ANSITable.__init__">
+<a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="n">pos</span><span class="p">,</span>
         <span class="n">colsep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -602,6 +630,9 @@
             <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">columns</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="ANSITable.addcolumn">
+<a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable.addcolumn">[docs]</a>
     <span class="k">def</span> <span class="nf">addcolumn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a column to the table</span>
@@ -621,8 +652,11 @@
 <span class="sd">        .. note:: Additional arguments are passed directly to ``Column``.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span></div>
 
+
+<div class="viewcode-block" id="ANSITable.row">
+<a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable.row">[docs]</a>
     <span class="k">def</span> <span class="nf">row</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">values</span><span class="p">,</span> <span class="n">fgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a row of data</span>
@@ -692,7 +726,8 @@
             <span class="n">c</span><span class="o">.</span><span class="n">fgcolor</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_fgcolor</span><span class="p">)</span>
             <span class="n">c</span><span class="o">.</span><span class="n">bgcolor</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_bgcolor</span><span class="p">)</span>
             <span class="n">c</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_style</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nrows</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nrows</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
 
     <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Length of table</span>
@@ -702,6 +737,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nrows</span>
 
+<div class="viewcode-block" id="ANSITable.rule">
+<a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable.rule">[docs]</a>
     <span class="k">def</span> <span class="nf">rule</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a horizontal rule to the table</span>
@@ -714,7 +751,8 @@
             <span class="n">c</span><span class="o">.</span><span class="n">fgcolor</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
             <span class="n">c</span><span class="o">.</span><span class="n">bgcolor</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
             <span class="n">c</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nrows</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nrows</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
 
     <span class="k">def</span> <span class="nf">_topline</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -879,7 +917,9 @@
 
         <span class="k">return</span> <span class="n">text</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
 
-<div class="viewcode-block" id="ANSITable.print"><a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable.print">[docs]</a>    <span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ANSITable.print">
+<a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable.print">[docs]</a>
+    <span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Print the table</span>
 
@@ -909,6 +949,7 @@
         <span class="k">except</span> <span class="ne">UnicodeEncodeError</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">border</span> <span class="o">=</span> <span class="s2">&quot;ascii&quot;</span>
             <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">)</span></div>
+
 
     <span class="k">def</span> <span class="nf">_findwidths</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># find the width of each column and flag if it is</span>
@@ -954,7 +995,9 @@
 
         <span class="k">return</span> <span class="n">text</span>
 
-<div class="viewcode-block" id="ANSITable.markdown"><a class="viewcode-back" href="../../markup.html#ansitable.table.ANSITable.markdown">[docs]</a>    <span class="k">def</span> <span class="nf">markdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ANSITable.markdown">
+<a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable.markdown">[docs]</a>
+    <span class="k">def</span> <span class="nf">markdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Output the table in MarkDown markup format</span>
 
@@ -1012,6 +1055,9 @@
 
         <span class="k">return</span> <span class="n">s</span></div>
 
+
+<div class="viewcode-block" id="ANSITable.rest">
+<a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable.rest">[docs]</a>
     <span class="k">def</span> <span class="nf">rest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Output the table in ReST &quot;simple table&quot; markup format</span>
@@ -1065,9 +1111,12 @@
             <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">s</span> <span class="o">+=</span> <span class="n">divider</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">colsep</span> <span class="o">=</span> <span class="n">colsep</span>
-        <span class="k">return</span> <span class="n">s</span>
+        <span class="k">return</span> <span class="n">s</span></div>
 
-<div class="viewcode-block" id="ANSITable.wikitable"><a class="viewcode-back" href="../../markup.html#ansitable.table.ANSITable.wikitable">[docs]</a>    <span class="k">def</span> <span class="nf">wikitable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ANSITable.wikitable">
+<a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable.wikitable">[docs]</a>
+    <span class="k">def</span> <span class="nf">wikitable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Output the table in wikitable markup format</span>
 
@@ -1148,7 +1197,10 @@
 
         <span class="k">return</span> <span class="n">s</span></div>
 
-<div class="viewcode-block" id="ANSITable.html"><a class="viewcode-back" href="../../markup.html#ansitable.table.ANSITable.html">[docs]</a>    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">td</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">th</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">trd</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">trh</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">table</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ANSITable.html">
+<a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable.html">[docs]</a>
+    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">td</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">th</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">trd</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">trh</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">table</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Output the table in HTML format</span>
 
@@ -1262,7 +1314,10 @@
         <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/table&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">s</span></div>
 
-<div class="viewcode-block" id="ANSITable.latex"><a class="viewcode-back" href="../../markup.html#ansitable.table.ANSITable.latex">[docs]</a>    <span class="k">def</span> <span class="nf">latex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ANSITable.latex">
+<a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable.latex">[docs]</a>
+    <span class="k">def</span> <span class="nf">latex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Output the table in LaTeX format</span>
 
@@ -1334,7 +1389,10 @@
         <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">end</span><span class="si">{tabular}</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">s</span></div>
 
-<div class="viewcode-block" id="ANSITable.csv"><a class="viewcode-back" href="../../markup.html#ansitable.table.ANSITable.csv">[docs]</a>    <span class="k">def</span> <span class="nf">csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ANSITable.csv">
+<a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable.csv">[docs]</a>
+    <span class="k">def</span> <span class="nf">csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Output the table in comma separated column (CSV) format</span>
 
@@ -1387,6 +1445,9 @@
 
         <span class="k">return</span> <span class="n">s</span></div>
 
+
+<div class="viewcode-block" id="ANSITable.pandas">
+<a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable.pandas">[docs]</a>
     <span class="k">def</span> <span class="nf">pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">underscores</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert the table to a Pandas dataframe</span>
@@ -1429,9 +1490,12 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">colname</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">name</span>
             <span class="n">data</span><span class="p">[</span><span class="n">colname</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">formatted</span>
-        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ANSITable.Pandas"><a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable.Pandas">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="ANSITable.Pandas">
+<a class="viewcode-back" href="../../table.html#ansitable.table.ANSITable.Pandas">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">Pandas</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an ANSITable from a Pandas dataframe</span>
@@ -1473,6 +1537,7 @@
             <span class="n">table</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="o">*</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">table</span></div>
 
+
     <span class="k">def</span> <span class="nf">_FG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">_unicode</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="ow">and</span> <span class="n">c</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">fore</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
@@ -1490,6 +1555,7 @@
             <span class="k">return</span> <span class="n">style</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
@@ -1734,7 +1800,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2021-, Peter Corke.
-      <span class="lastupdated">Last updated on 08-Dec-2024.
+      <span class="lastupdated">Last updated on 10-Dec-2024.
       </span></p>
   </div>
 
