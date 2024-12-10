@@ -97,6 +97,7 @@ class Cell:
 
 
 class Column:
+
     def __init__(
         self,
         name,
@@ -137,6 +138,11 @@ class Column:
         :param headalign: Heading text alignement, see table below, defaults to ">"
         :type headalign: str, optional
 
+        The :class:`Column` object can passed to the :class:`ANSITable` constructor
+        or to :method:`ANSITable.addcolumn` to specify the format of a column in a table.
+
+        For header or data cell alignment:
+
         ===========   =======================
         Alignment     Description
         ===========   =======================
@@ -145,6 +151,7 @@ class Column:
         ">"           Right (default)
         ===========   =======================
 
+        For header or data cell alignment text style:
 
         ===========   =============================================
         Style         Description
@@ -156,7 +163,7 @@ class Column:
         reverse       text and background colors are reversed
         ===========   =============================================
 
-        Implementation of these options depends heavily on the terminal emulator
+        The implementation of these options depends heavily on the terminal emulator
         used.
 
         """
