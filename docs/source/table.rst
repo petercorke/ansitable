@@ -6,37 +6,41 @@ This class creates a table that can be pretty printed in any terminal that suppo
 Creating a table
 ----------------
 
-.. autoclass:: ansitable.table.ANSITable
+.. autoclass:: ansitable.ANSITable
    :members: Pandas, addcolumn
    :undoc-members:
    :show-inheritance:
    :special-members: __init__
 
-.. autoclass:: ansitable.table.Column
+.. autoclass:: ansitable.Column
    :members:
    :undoc-members:
    :show-inheritance:
+   :special-members: __init__
 
-.. autoclass:: ansitable.table.Cell
+.. autoclass:: ansitable.Cell
    :members:
    :undoc-members:
    :show-inheritance:
+   :special-members: __init__
 
 Adding a row
 ------------
 
-.. autoclass:: ansitable.table.ANSITable
+.. autoclass:: ansitable.ANSITable
    :members: row, rule
    :undoc-members:
    :show-inheritance:
+   :no-index:
 
 Display a table
 ---------------
 
-.. autoclass:: ansitable.table.ANSITable
+.. autoclass:: ansitable.ANSITable
    :members: print, str
    :undoc-members:
    :show-inheritance:
+   :no-index:
 
 Render in markup formats
 ------------------------
