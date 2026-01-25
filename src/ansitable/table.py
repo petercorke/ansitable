@@ -1,35 +1,32 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Mon May 18 21:43:18 2020
 
-@author: corkep
+Original author: Peter Corke
 """
 import sys
+from typing import Any, Callable, List, Optional, Union
 
 try:
     from colored import fore, back, style
 
     _colored = True
-    # print('using colored output')
 except ImportError:
-    # print('colored not found')
     _colored = False
 
-# _colored use color ANSI escape sequences via colored package
 # _unicode use box characters for table edges and separators
-#   from ansitable.table import _unicode
-#    _unicode = False
-
 _unicode = True
 
 
-def options(unicode, color=None):
+def options(use_unicode, color=None):
     """
     Control ANSI/Unicode generation
 
-    :param unicode: enable generation of Unicode characters
-    :type unicode: bool
+    :param use_unicode: enable generation of Unicode characters
+    :type use_unicode: bool
     :param color: enable generation of ANSI color control sequences, defaults to None
     :type color: bool, optional
 
@@ -50,7 +47,7 @@ def options(unicode, color=None):
     """
     global _colored, _unicode
 
-    _unicode = unicode
+    _unicode = use_unicode
     if color is None:
         color = False
 
@@ -61,8 +58,20 @@ def options(unicode, color=None):
 
 
 class Cell:
+    text: str
+    fgcolor: Optional[str]
+    bgcolor: Optional[str]
+    style: Optional[str]
+    column: Optional["Column"]
+    row: Optional[int]
 
-    def __init__(self, text, fgcolor=None, bgcolor=None, style=None):
+    def __init__(
+        self,
+        text: Any,
+        fgcolor: Optional[str] = None,
+        bgcolor: Optional[str] = None,
+        style: Optional[str] = None,
+    ):
         """Override the color and style of a cell
 
         :param text: cell text
@@ -85,7 +94,7 @@ class Cell:
         Will print a table with the first cell in the last row having a red background.  The colors and style override those specified when the column was created
         or specified for a row.
         """
-        self.text = text
+        self.text = str(text)
         self.fgcolor = fgcolor
         self.bgcolor = bgcolor
         self.style = style
@@ -97,20 +106,37 @@ class Cell:
 
 
 class Column:
+    name: str
+    fmt: Optional[Union[str, Callable[[Any], str]]]
+    formatted: List[str]
+    fgcolor: List[Optional[str]]
+    bgcolor: List[Optional[str]]
+    style: List[Optional[str]]
+    table: Optional["ANSITable"]
+    colcolor: Optional[str]
+    colbgcolor: Optional[str]
+    colstyle: Optional[str]
+    colalign: str
+    headcolor: Optional[str]
+    headbgcolor: Optional[str]
+    headstyle: Optional[str]
+    headalign: Optional[str]
+    width: Optional[int]
+    maxwidth: int
 
     def __init__(
         self,
-        name,
-        fmt="{}",
-        width=None,
-        colcolor=None,
-        colbgcolor=None,
-        colstyle=None,
-        colalign=">",
-        headcolor=None,
-        headbgcolor=None,
-        headstyle=None,
-        headalign=">",
+        name: str,
+        fmt: Optional[Union[str, Callable[[Any], str]]] = "{}",
+        width: Optional[int] = None,
+        colcolor: Optional[str] = None,
+        colbgcolor: Optional[str] = None,
+        colstyle: Optional[str] = None,
+        colalign: str = ">",
+        headcolor: Optional[str] = None,
+        headbgcolor: Optional[str] = None,
+        headstyle: Optional[str] = None,
+        headalign: Optional[str] = ">",
     ):
         """
         Create a table column
@@ -191,7 +217,7 @@ class Column:
         self.width = width
         self.maxwidth = len(name)
 
-    def _setstyle(self, header):
+    def _setstyle(self, header: bool) -> str:
         if header:
             color = self.headcolor
             bgcolor = self.headbgcolor
@@ -202,27 +228,32 @@ class Column:
             style = self.colstyle
 
         text = ""
+        table = self.table
+        if table is None:
+            return text
         if color is not None:
-            text += self.table._FG(color)
+            text += table._FG(color)
         if bgcolor is not None:
-            text += self.table._BG(bgcolor)
+            text += table._BG(bgcolor)
         if style is not None:
-            text += self.table._ATTR(styledict[style])
+            text += table._ATTR(styledict[style])
         return text
 
     def __repr__(self):
-        s = "Column[{}({})], fmt={}({}), width={}".format(self.name, self.headalign, self.fmt, self.colalign, self.width)
+        s = "Column[{}({})], fmt={}({}), width={}".format(
+            self.name, self.headalign, self.fmt, self.colalign, self.width
+        )
         return s
 
     def _formatcolumn(
         self,
-        text,
-        header,
-        plain=False,
-        fgcolor=None,
-        bgcolor=None,
-        style=None,
-    ):
+        text: Any,
+        header: bool,
+        plain: bool = False,
+        fgcolor: Optional[str] = None,
+        bgcolor: Optional[str] = None,
+        style: Optional[str] = None,
+    ) -> str:
         """
         Format text in a column
 
@@ -245,39 +276,49 @@ class Column:
             align = self.colalign
 
         if plain:
-            # used for LaTeX and markdown tables
             fgcolor = None
             bgcolor = None
 
-        gap = self.width - len(text)  # amount of padding required
+        # normalise text to string
+        if text is None:
+            text = ""
+        else:
+            text = str(text)
+
+        gap = (self.width or 0) - len(text)  # amount of padding required
+        table = self.table
+        colsep_val = table.colsep if table is not None else 0
         if align == "<":
             # left justified, spaces after text
-            gap1 = _spaces(self.table.colsep)
-            gap2 = _spaces(gap + self.table.colsep)
+            gap1 = _spaces(colsep_val)
+            gap2 = _spaces(gap + colsep_val)
         elif align == ">":
             # right justified, spaces before text
-            gap1 = _spaces(gap + self.table.colsep)
-            gap2 = _spaces(self.table.colsep)
+            gap1 = _spaces(gap + colsep_val)
+            gap2 = _spaces(colsep_val)
         elif align == "^":
             # centred, split the gap
             g1 = gap // 2  # left side gap
             g2 = gap - g1  # right side gap
-            gap1 = _spaces(g1 + self.table.colsep)
-            gap2 = _spaces(g2 + self.table.colsep)
+            gap1 = _spaces(g1 + colsep_val)
+            gap2 = _spaces(g2 + colsep_val)
 
+        table = self.table
+        assert table is not None
+        
         if fgcolor:
-            text = self.table._FG(fgcolor) + text + self.table._ATTR(0)
+            text = table._FG(fgcolor) + text + table._ATTR(0)
 
         if style == "underlined":
-            text = self.table._ATTR(styledict[style]) + text + self.table._ATTR(0)
+            text = table._ATTR(styledict[style]) + text + table._ATTR(0)
 
         text = gap1 + text + gap2
 
         if bgcolor:
-            text = self.table._BG(bgcolor) + text + self.table._ATTR(0)
+            text = table._BG(bgcolor) + text + table._ATTR(0)
 
         if style and style != "underlined":
-            text = self.table._ATTR(styledict[style]) + text + self.table._ATTR(0)
+            text = table._ATTR(styledict[style]) + text + table._ATTR(0)
         return text
 
 
@@ -440,6 +481,7 @@ class ANSIMatrix:
 
 class ANSITable:
     _color = _colored
+    _unicode = _unicode
 
     def __init__(
         self,
@@ -531,7 +573,10 @@ class ANSITable:
                 raise TypeError("expecting a lists of Column objects")
         if len(self.columns) == 0 and columns is not None:
             for _ in range(columns):
-                self.columns.append("")
+                # create empty Column placeholders rather than raw strings
+                c = Column("")
+                c.table = self
+                self.columns.append(c)
 
     def __repr__(self) -> str:
         s = "ANSITable: " + str(len(self)) + " x " + str(len(self.columns)) + ": "
@@ -608,7 +653,12 @@ class ANSITable:
             else:
                 raise ValueError("fmt must be valid format string or callable")
 
-            # handle a FG color specifier
+            # ensure s is a string then handle a FG color specifier
+            if s is None:
+                s = ""
+            else:
+                s = str(s)
+
             if s.startswith("<<"):
                 # color specifier is given
                 end = s.find(">>")
@@ -737,6 +787,8 @@ class ANSITable:
             if self.bordercolor is not None:
                 text += self._ATTR(0)
             return text
+        # ensure a string is always returned
+        return ""
 
     def _row(self, row=None):
         """
