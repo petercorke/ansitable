@@ -33,6 +33,13 @@ Create a table programatically from Python, or import a table from a Pandas data
 
 ### What's new
 
+0.11.3:
+
+- add repr methods for ANSITable and Column objects
+- clarified imports in the README.md examples
+- changed to src layout and hatch project manager
+
+
 0.11.2:
 
 - export a table in HTML format
@@ -76,7 +83,7 @@ Painless creation of nice-looking tables of data for Python.
 ## Starting simple
 
 ```python
- 1 | from ansitable import ANSITable, Column
+ 1 | from ansitable import ANSITable
  2 |
  3 | table = ANSITable("col1", "column 2 has a big header", "column 3")
  4 | table.row("aaaaaaaaa", 2.2, 3)
@@ -112,6 +119,7 @@ allows many column specific options to be given, as we shall see later.
 For now though, we could rewrite the example above as:
 
 ```python
+from ansitable import ANSITable, Column
 table = ANSITable(
         Column("col1"),
         Column("column 2 has a big header"),
@@ -122,6 +130,7 @@ table = ANSITable(
 or as
 
 ```python
+from ansitable import ANSITable
 table = ANSITable()
 table.addcolumn("col1")
 table.addcolumn("column 2 has a big header")
@@ -136,6 +145,7 @@ is the general formatting option `"{}"`.
 You may choose to left or right justify values via the format string, `ansitable` provides control over how those resulting strings are justified within the column.
 
 ```python
+from ansitable import ANSITable, Column
 table = ANSITable(
         Column("col1"),
         Column("column 2 has a big header", "{:.3g}"),  # CHANGE
@@ -164,6 +174,7 @@ The data in column 1 is quite long, we might wish to set a maximum column width 
 we can do using the `width` argument
 
 ```python
+from ansitable import ANSITable, Column
 table = ANSITable(
         Column("col1", width=10),                      # CHANGE
         Column("column 2 has a big header", "{:.3g}"),
@@ -194,6 +205,7 @@ character u+2026 is used.
 We can add a table border made up of regular ASCII characters
 
 ```python
+from ansitable import ANSITable, Column
 table = ANSITable(
         Column("col1"),
         Column("column 2 has a big header"),
@@ -221,6 +233,7 @@ Or we can construct a border using the [ANSI box-drawing characters](https://en.
 emulators
 
 ```python
+from ansitable import ANSITable, Column
 table = ANSITable(
         Column("col1"),
         Column("column 2 has a big header"),
@@ -252,6 +265,7 @@ We can change the alignment of data and heading for any column with the alignmen
 `">"` (right) and `"^"` (centered).
 
 ```python
+from ansitable import ANSITable, Column
 table = ANSITable(
         Column("col1"),
         Column("column 2 has a big header", colalign="^"),  # CHANGE
@@ -280,6 +294,7 @@ where the data for column 2 has been centered.
 Heading and data alignment for any column can be set independently
 
 ```python
+from ansitable import ANSITable, Column
 table = ANSITable(
         Column("col1", headalign="<"),                      # CHANGE
         Column("column 2 has a big header", colalign="^"),
@@ -306,6 +321,7 @@ where we have left-justified the heading for column 1 and the data for column 3.
 
 We can easily add a dividing line
 ```python
+from ansitable import ANSITable, Column
 table = ANSITable(
         Column("col1", headalign="<"),
         Column("column 2 has a big header", colalign="^"),
@@ -337,9 +353,10 @@ If you have the `colored` package installed then you can set the foreground and
 background color and style (bold, reverse, underlined, dim) of the header and column data, as well as the border color.
 
 ```python
+from ansitable import ANSITable, Column
 table = ANSITable(
     Column("col1", headalign="<", colcolor="red", headstyle="underlined"),      # CHANGE
-    Column("column 2 has a big header", colalign="^", colstyle="bold"),      # CHANGE
+    Column("column 2 has a big header", colalign="^", colstyle="bold"),         # CHANGE
     Column("column 3", colalign="<", colbgcolor="green"),                       # CHANGE
     border="thick", bordercolor="blue"                                          # CHANGE
 )
@@ -371,6 +388,7 @@ It is also possible to the change the color of a single cell of the table, overr
 and row defaults, by passing a `Cell` instance
 
 ```python
+from ansitable import ANSITable, Column, Cell
 table = ANSITable("col1", "column 2 has a big header", "column 3")
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", Cell(-5.5, bgcolor="blue"), 6, bgcolor="yellow")  # CHANGE
@@ -385,6 +403,7 @@ The older method (deprecated) of doing this is by prefixing the value with a col
 color or style of the cell.
 
 ```python
+from ansitable import ANSITable
 table = ANSITable("col1", "column 2 has a big header", "column 3")
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("<<red>>bbbbbbbbbbbbb", 5.5, 6)
