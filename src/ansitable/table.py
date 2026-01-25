@@ -210,6 +210,10 @@ class Column:
             text += self.table._ATTR(styledict[style])
         return text
 
+    def __repr__(self):
+        s = "Column[{}({})], fmt={}({}), width={}".format(self.name, self.headalign, self.fmt, self.colalign, self.width)
+        return s
+
     def _formatcolumn(
         self,
         text,
@@ -528,6 +532,11 @@ class ANSITable:
         if len(self.columns) == 0 and columns is not None:
             for _ in range(columns):
                 self.columns.append("")
+
+    def __repr__(self) -> str:
+        s = "ANSITable: " + str(len(self)) + " x " + str(len(self.columns)) + ": "
+        s += " " + "; ".join(column.name for column in self.columns)
+        return s
 
     def addcolumn(self, name, **kwargs):
         """
@@ -1205,7 +1214,7 @@ class ANSITable:
             table.latex()
 
             \begin{tabular}{ |r|r|r| }\hline
-            \multicolumn{1}{|r|}{col1} & \multicolumn{1}{|r|}{column 2 has a big header} & \multicolumn{1}{|r|}{column 3}\\\hline\hline
+            \multicolumn{1}{|r|}{col1} & \multicolumn{1}{|r|}{column 2 has a big header} & \multicolumn{1}{|r|}{column 3}\\\hline\\\hline
             aaaaaaaaa & 2.2 & 3 \\
             bbbbbbbbbbbbb & -5.5 & 6 \\
             ccccccc & 8.8 & -9 \\
@@ -1595,7 +1604,7 @@ if __name__ == "__main__":
     table.print()
 
     table = ANSITable(
-        Column("col1", headalign="<", colcolor="red", headstyle="underlined"),  # CHANGE
+        Column("col1", headalign="<", headstyle="underlined"),  # CHANGE
         Column("column 2 has a big header", colalign="^", colstyle="bold"),  # CHANGE
         Column("column 3", colalign="<", colbgcolor="green"),  # CHANGE
         border="thick",
@@ -1608,7 +1617,7 @@ if __name__ == "__main__":
     table.print()
 
     table = ANSITable(
-        Column("col1", headalign="<", colcolor="red", headstyle="underlined"),  # CHANGE
+        Column("col1", headalign="<", headstyle="underlined"),  # CHANGE
         Column("column 2 has a big header", colalign="^", colstyle="bold"),  # CHANGE
         Column("column 3", colalign="<", colbgcolor="green"),  # CHANGE
         border="thick",
@@ -1621,7 +1630,7 @@ if __name__ == "__main__":
     table.print()
 
     table = ANSITable(
-        Column("col1", headalign="<", colcolor="red", headstyle="underlined"),  # CHANGE
+        Column("col1", headalign="<", headstyle="underlined"),  # CHANGE
         Column("column 2 has a big header", colalign="^", colstyle="bold"),  # CHANGE
         Column("column 3", colalign="<", colbgcolor="green"),  # CHANGE
         border="thick",
