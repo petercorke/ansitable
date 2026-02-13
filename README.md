@@ -476,7 +476,7 @@ Cell styling overrides row and column styling.
 
 Now that you can visualize your data as a beautiful table on the console, you
 might want the table in a different format to include in a
-document or website.  ANSItable supports rendering a table into one of a number of common markup languages.
+document or website.  `ANSItable` supports rendering a table into one of a number of common markup languages.
 
 We start by creating a simple table
 
@@ -512,7 +512,7 @@ Column alignment is supported, but MarkDown doesn't allow the header to have dif
 
 ### HTML
 
-The table can be rendered into Markdown format by
+The table can be rendered into HTML format by
 
 ```
 table.html()
