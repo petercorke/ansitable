@@ -19,7 +19,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "Pretty tables and matrices for Python"
-copyright = "2021-, Peter Corke"  # noqa: A001  (Sphinx config variable)
+copyright = "2021-, Peter Corke"  # pylint: disable=redefined-builtin
 author = "Peter Corke"
 
 try:
