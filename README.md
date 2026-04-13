@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/370a9f69a03d4cdfb8f9679431194e46)](https://app.codacy.com/gh/petercorke/ansitable?utm_source=github.com&utm_medium=referral&utm_content=petercorke/ansitable&utm_campaign=Badge_Grade)
 [![PyPI version fury.io](https://badge.fury.io/py/ansitable.svg)](https://pypi.python.org/pypi/ansitable/)
 [![Anaconda version](https://anaconda.org/conda-forge/ansitable/badges/version.svg)](https://anaconda.org/conda-forge/ansitable)
 [![pyversions](https://img.shields.io/pypi/pyversions/ansitable)](https://pypi.python.org/pypi/ansitable/)
