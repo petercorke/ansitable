@@ -11,9 +11,6 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
-import sys
-
 # sys.path.insert(0, os.path.abspath('.'))
 # defined relative to configuration directory which is where this file conf.py lives
 # sys.path.append(os.path.abspath("exts"))
@@ -22,7 +19,7 @@ import sys
 # -- Project information -----------------------------------------------------
 
 project = "Pretty tables and matrices for Python"
-copyright = "2021-, Peter Corke"
+copyright = "2021-, Peter Corke"  # noqa: A001  (Sphinx config variable)
 author = "Peter Corke"
 
 try:

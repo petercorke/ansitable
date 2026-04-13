@@ -1,11 +1,45 @@
+import importlib
 import unittest
 import numpy as np
-from ansitable import ANSITable, Column, ANSIMatrix
+from ansitable import ANSITable, Column, ANSIMatrix, options
+
+pandas_available = importlib.util.find_spec("pandas") is not None
+skip_no_pandas = unittest.skipUnless(pandas_available, "pandas not installed")
 
 unittest.TestCase.maxDiff = None
 
 
 class TestANSItable(unittest.TestCase):
+
+    def test_column_headalign_none_falls_back_to_colalign(self):
+        c = Column("col", colalign="<", headalign=None)
+        self.assertEqual(c.headalign, "<")
+
+    def test_addcolumn_sets_column_table(self):
+        table = ANSITable(color=False)
+        table.addcolumn("col1")
+        self.assertIs(table.columns[0].table, table)
+
+    def test_options_updates_existing_and_future_tables(self):
+        try:
+            # start from a known global state
+            options(True, color=False)
+
+            existing = ANSITable(Column("c1"), border="thin", color=False)
+            existing.row("x")
+            self.assertIn("┌", str(existing))
+
+            # Existing tables should follow updated globals.
+            options(False)
+            self.assertIn("+", str(existing))
+
+            # Future tables should also follow updated globals.
+            future = ANSITable(Column("c1"), border="thin", color=False)
+            future.row("x")
+            self.assertIn("+", str(future))
+        finally:
+            # reset global defaults for any subsequent tests
+            options(True, color=False)
 
     def test_table_1(self):
 
@@ -290,6 +324,7 @@ ccccccc,8.8,-9
         # df = table.pandas()
         # print(df)
 
+    @skip_no_pandas
     def test_table_pandas(self):
 
         import pandas as pd

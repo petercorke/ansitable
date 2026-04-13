@@ -3,7 +3,8 @@ from __future__ import annotations
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon May 18 21:43:18 2020
+ANSI-capable table and matrix formatter with Unicode borders, color, and
+multiple output formats (Markdown, HTML, LaTeX, CSV, RST, wikitable, Pandas).
 
 Original author: Peter Corke
 """
@@ -13,9 +14,11 @@ from typing import Any, Callable, List, Optional, Union
 try:
     from colored import fore, back, style
 
-    _colored = True
+    _color_available = True
 except ImportError:
-    _colored = False
+    _color_available = False
+
+_color_enabled = _color_available
 
 # _unicode use box characters for table edges and separators
 _unicode = True
@@ -27,7 +30,8 @@ def options(use_unicode, color=None):
 
     :param use_unicode: enable generation of Unicode characters
     :type use_unicode: bool
-    :param color: enable generation of ANSI color control sequences, defaults to None
+    :param color: enable generation of ANSI color control sequences. If ``None``,
+        follow ``use_unicode`` and package availability, defaults to None.
     :type color: bool, optional
 
     ANSItable by default uses Unicode characters to create nice table outlines
@@ -35,23 +39,26 @@ def options(use_unicode, color=None):
     applications it is useful to turn this off globally, rather than on a
     table by table basis.
 
-    Unicode and ANSI color can be controlled individually.  If only one parameter
-    is given then:
+    Unicode and ANSI color can be controlled individually.  Calling this function
+    updates module-level settings used by both current and future table/matrix
+    objects.
+
+    If only one parameter is given then:
 
     * ``ansitable.options(True)`` enable Unicode, and ANSI characters if colored
       package is installed.
     * ``ansitable.options(False)`` disable Unicode, and ANSI characters
 
-    If ``unicode=False`` and a border is specified it is set to ``"ascii"``.
+    If ``use_unicode=False`` and a border is specified it is set to ``"ascii"``.
 
     """
-    global _colored, _unicode
+    global _color_enabled, _unicode
 
     _unicode = use_unicode
     if color is None:
-        color = False
-
-    _colored = color
+        _color_enabled = use_unicode and _color_available
+    else:
+        _color_enabled = bool(color) and _color_available
 
 
 # ------------------------------------------------------------------------- #
@@ -153,7 +160,7 @@ class Column:
         :type colbgcolor: str, optional
         :param colstyle: Column text style, see table below, defaults to None
         :type colstyle: str, optional
-        :param colalign: Column data alignement, see table below, defaults to ">"
+        :param colalign: Column data alignment, see table below, defaults to ">"
         :type colalign: str, optional
         :param headcolor: Color of heading text, defaults to None
         :type headcolor: str, optional
@@ -161,7 +168,7 @@ class Column:
         :type headbgcolor: str, optional
         :param headstyle: Heading text style, see table below, defaults to None
         :type headstyle: str, optional
-        :param headalign: Heading text alignement, see table below, defaults to ">"
+        :param headalign: Heading text alignment, see table below, defaults to ">"
         :type headalign: str, optional
 
         The :class:`Column` object can passed to the :class:`ANSITable` constructor
@@ -202,8 +209,6 @@ class Column:
         self.style = []
         self.table = None
 
-        if headalign is None:
-            self.headalign = colalign
         self.colcolor = colcolor
         self.colbgcolor = colbgcolor
         self.colstyle = colstyle
@@ -212,7 +217,7 @@ class Column:
         self.headcolor = headcolor
         self.headbgcolor = headbgcolor
         self.headstyle = headstyle
-        self.headalign = headalign
+        self.headalign = colalign if headalign is None else headalign
 
         self.width = width
         self.maxwidth = len(name)
@@ -257,11 +262,20 @@ class Column:
         """
         Format text in a column
 
-        :param text: text to be aligned
-        :type text: str
-        :param header: header row of column
+        :param text: text to be formatted
+        :type text: Any
+        :param header: format as header row if True
         :type header: bool
-        :return: aligned string
+        :param plain: suppress color and style (for plain-text output formats), defaults to False
+        :type plain: bool, optional
+        :param fgcolor: override foreground color, defaults to None
+        :type fgcolor: str, optional
+        :param bgcolor: override background color, defaults to None
+        :type bgcolor: str, optional
+        :param style: override text style, defaults to None
+        :type style: str, optional
+        :raises ValueError: if the column has not been added to a table
+        :return: aligned and ANSI-formatted string
         :rtype: str
         """
         if header:
@@ -304,8 +318,9 @@ class Column:
             gap2 = _spaces(g2 + colsep_val)
 
         table = self.table
-        assert table is not None
-        
+        if table is None:
+            raise ValueError("Column is not part of a table")
+
         if fgcolor:
             text = table._FG(fgcolor) + text + table._ATTR(0)
 
@@ -326,7 +341,7 @@ def _spaces(n):
     """
     return n spaces
 
-    :param n: number of spaes
+    :param n: number of spaces
     :type n: int
     :return: string containing spaces
     :rtype: str
@@ -426,7 +441,7 @@ class ANSIMatrix:
         :type suffix_super: str, optional
         :param suffix_sub: Right subscript, defaults to ''
         :type suffix_sub: str, optional
-        :raises ValueError: [description]
+        :raises ValueError: if the array has more than 2 dimensions
         :return: ANSI string
         :rtype: str
 
@@ -480,9 +495,6 @@ class ANSIMatrix:
 
 
 class ANSITable:
-    _color = _colored
-    _unicode = _unicode
-
     def __init__(
         self,
         *pos,
@@ -512,9 +524,10 @@ class ANSITable:
         :type columns: list of :class:`Column` objects, optional
         :param header: Show table header, defaults to True
         :type header: bool, optional
-        :param color: [description], defaults to True
+        :param color: enable color output for this table instance (also gated by
+            global ``options()`` settings), defaults to True
         :type color: bool, optional
-        :raises TypeError: [description]
+        :raises TypeError: if a positional argument is not a ``str`` or :class:`Column`
 
         A table can be created in several different ways::
 
@@ -527,9 +540,9 @@ class ANSITable:
             )
 
             table = ANSITable()
-            table.addcolumnColumn("col1"),
-            table.addcolumnColumn("column 2 has a big header", "{:.3g}"),
-            table.addcolumnColumn("column 3", "{:-10.4f}")
+            table.addcolumn("col1")
+            table.addcolumn("column 2 has a big header", fmt="{:.3g}")
+            table.addcolumn("column 3", fmt="{:-10.4f}")
 
         The first option is quick and easy but does not allow any control of
         formatting or alignment.
@@ -539,21 +552,19 @@ class ANSITable:
         ===========   ==========================================================
         ascii         Use ASCII +-| characters
         thin          Use ANSI thin box-drawing characters
-        thin+round    Use ANSI thin box-drawing characters with rounded corners
+        round         Use ANSI thin box-drawing characters with rounded corners
         thick         Use ANSI thick box-drawing characters
         double        Use ANSI double-line box-drawing characters
         ===========   ==========================================================
 
         """
-        global _unicode
-
         self.colsep = colsep
         self.offset = offset
         self.ellipsis = ellipsis
         self.rows = []
         self.bordercolor = bordercolor
         self.header = header
-        self.color = color and self._color
+        self.color = bool(color)
 
         if border is not None and not _unicode:
             border = "ascii"
@@ -595,20 +606,22 @@ class ANSITable:
         Example::
 
             table = ANSITable()
-            table.addcolumnColumn("col1"),
-            table.addcolumnColumn("column 2 has a big header", "{:.3g}"),
-            table.addcolumnColumn("column 3", "{:-10.4f}")
+            table.addcolumn("col1")
+            table.addcolumn("column 2 has a big header", fmt="{:.3g}")
+            table.addcolumn("column 3", fmt="{:-10.4f}")
 
         .. note:: Additional arguments are passed directly to ``Column``.
 
         """
-        self.columns.append(Column(name, **kwargs))
+        c = Column(name, **kwargs)
+        c.table = self
+        self.columns.append(c)
 
     def row(self, *values, fgcolor=None, bgcolor=None, style=None):
         """
         Add a row of data
 
-        :param: values: data items for the row.  These can be of any type that can be converted to a string for display, eg. numbers, strings or objects with a ``__str__`` method. The :class:`Cell` encapsulates a value and allows the color or style defaults of the row or column to be overriden.
+        :param values: data items for the row.  These can be of any type that can be converted to a string for display, eg. numbers, strings or objects with a ``__str__`` method. The :class:`Cell` encapsulates a value and allows the color or style defaults of the row or column to be overriden.
         :param fgcolor: foreground color override for all columns in the row, defaults to None
         :type fgcolor: str, optional
         :param bgcolor: background color override for all columns in the row, defaults to None
@@ -629,7 +642,8 @@ class ANSITable:
 
         :class:`Cell` overrides the color and style of a cell specified for a column and a row.
         """
-        assert len(values) == len(self.columns), "wrong number of data items added"
+        if len(values) != len(self.columns):
+            raise ValueError("wrong number of data items added")
 
         for value, c in zip(values, self.columns):
 
@@ -664,8 +678,6 @@ class ANSITable:
                 end = s.find(">>")
                 _fgcolor = s[2:end]
                 s = s[end + 2 :]
-            else:
-                color = None
 
             if c.width is not None and len(s) > c.width:
                 if self.ellipsis:
@@ -733,12 +745,12 @@ class ANSITable:
         """
         Create a general horizontal line in the table
 
-        :param left: left hand side character
-        :type left: list of str
-        :param mid: column join characters
-        :type mid: list of str
-        :param right: right hand side character
-        :type right: list of str
+        :param left: left hand side character (list of Unicode code points)
+        :type left: list of int
+        :param mid: column join characters (list of Unicode code points)
+        :type mid: list of int
+        :param right: right hand side character (list of Unicode code points)
+        :type right: list of int
         :return: ansi code for line
         :rtype: str
 
@@ -799,7 +811,7 @@ class ANSITable:
         :return: unicode string for the row
         :rtype: str
 
-        The row can be the header row (```row=None```) or a data row
+        The row can be the header row (``row=None``) or a data row
         """
 
         if row is not None and self.columns[0].formatted[row] is None:
@@ -919,7 +931,8 @@ class ANSITable:
                 self.offset = 1
             # self.colsep |= 1  # make it odd
 
-            self.borderdict = borderdict[self.border]
+            border_style = "ascii" if not _unicode else self.border
+            self.borderdict = borderdict[border_style]
         else:
             self.borderdict = None
 
@@ -1061,7 +1074,7 @@ class ANSITable:
 
         This is the markup format for tables in Wikipedia.
 
-        :return: ASCII markdown text
+        :return: wikitable markup text
         :rtype: str
 
         Example::
@@ -1142,7 +1155,7 @@ class ANSITable:
 
         :param td: CSS style for table data cells, defaults to ""
         :type td: str, optional
-        :param th: CSSstyle for table header cells, defaults to ""
+        :param th: CSS style for table header cells, defaults to ""
         :type th: str, optional
         :param trd: CSS style for table data rows, defaults to ""
         :type trd: str, optional
@@ -1254,7 +1267,7 @@ class ANSITable:
         r"""
         Output the table in LaTeX format
 
-        :return: ASCII markdown text
+        :return: LaTeX tabular markup
         :rtype: str
 
         Example::
@@ -1449,32 +1462,26 @@ class ANSITable:
 
         .. note::
             - options for header and column alignment and format are not supported
-            -
         """
-        try:
-            import pandas as pd
-        except ImportError:
-            raise ImportError("pandas is not installed: pip install pandas")
-
         table = ANSITable(*list(df.columns), **kwargs)
         for i in range(len(df)):
             table.row(*df.iloc[i])
         return table
 
     def _FG(self, c):
-        if _unicode and self.color and c is not None:
+        if _unicode and _color_enabled and self.color and c is not None:
             return fore(c)
         else:
             return ""
 
     def _BG(self, c):
-        if _unicode and self.color and c is not None:
+        if _unicode and _color_enabled and self.color and c is not None:
             return back(c)
         else:
             return ""
 
     def _ATTR(self, c):
-        if _unicode and self.color and c is not None:
+        if _unicode and _color_enabled and self.color and c is not None:
             return style(c)
         else:
             return ""
@@ -1484,7 +1491,7 @@ if __name__ == "__main__":
 
     import numpy as np
 
-    ANSITable._unicode = False
+    _unicode = False
 
     # -------------------------------- test ANSIMatrix
     m = np.arange(16).reshape((4, 4)) / 10 - 0.8
