@@ -38,9 +38,16 @@ jobs:
 
   sphinx:
     # If the above worked:
-    # Build docs and upload to GH Pages
+    # Build docs and deploy to GH Pages
     needs: unittest
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python 3.9
@@ -56,23 +63,13 @@ jobs:
       run: |
         cd docs
         make html
-        # Tell GitHub not to use jekyll to compile the docs
         touch build/html/.nojekyll
-        cd ../
-    - name: Commit documentation changes
-      run: |
-        git clone https://github.com/petercorke/ansitable.git --branch gh-pages --single-branch gh-pages
-        cp -r docs/build/html/* gh-pages/
-        cd gh-pages
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add .
-        git commit -m "Update documentation" -a || true
-        # The above command will fail if no changes were present, so we ignore
-        # that.
-    - name: Push changes
-      uses: ad-m/github-push-action@master
+    - name: Setup Pages
+      uses: actions/configure-pages@v5
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
       with:
-        branch: gh-pages
-        directory: gh-pages
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        path: docs/build/html
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
