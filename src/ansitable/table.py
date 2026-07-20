@@ -714,6 +714,62 @@ class ANSITable:
             c.style.append(None)
         self.nrows += 1
 
+    def sort(self, column: str | int, key=None, reverse: bool = False) -> "ANSITable":
+        """
+        Sort the table rows by a column, in place
+
+        :param column: column to sort by, either the column name or its zero-based index
+        :type column: str or int
+        :param key: callable applied to each formatted cell value before comparison,
+            defaults to None (lexicographic order on the formatted string)
+        :type key: callable, optional
+        :param reverse: sort in descending order, defaults to False
+        :type reverse: bool, optional
+        :raises ValueError: if ``column`` is a string that does not match any column name
+        :raises IndexError: if ``column`` is an integer index out of range
+        :return: the table, to allow chaining
+        :rtype: :class:`ANSITable`
+
+        Rows inserted with :meth:`rule` (horizontal rules) are silently dropped
+        from the sorted output, as they have no meaningful position after reordering.
+
+        Example::
+
+            table = ANSITable("name", "score")
+            table.row("alice", 3)
+            table.row("bob", 1)
+            table.row("carol", 2)
+            table.sort("score", key=int)
+            table.print()
+
+        """
+        if isinstance(column, int):
+            col = self.columns[column]
+        else:
+            matches = [c for c in self.columns if c.name == column]
+            if not matches:
+                raise ValueError(f"no column named {column!r}")
+            col = matches[0]
+
+        # collect indices of data rows only (rule rows have None in formatted)
+        data_indices = [i for i in range(self.nrows) if self.columns[0].formatted[i] is not None]
+
+        if key is not None:
+            sort_key = lambda i: key(col.formatted[i])  # noqa: E731
+        else:
+            sort_key = lambda i: col.formatted[i]  # noqa: E731
+
+        sorted_indices = sorted(data_indices, key=sort_key, reverse=reverse)
+
+        for c in self.columns:
+            c.formatted = [c.formatted[i] for i in sorted_indices]
+            c.fgcolor = [c.fgcolor[i] for i in sorted_indices]
+            c.bgcolor = [c.bgcolor[i] for i in sorted_indices]
+            c.style = [c.style[i] for i in sorted_indices]
+
+        self.nrows = len(sorted_indices)
+        return self
+
     def _topline(self):
         """
         Create the top line of the table

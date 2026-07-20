@@ -370,6 +370,91 @@ ccccccc,8.8,-9
 
 
 # ----------------------------------------------------------------------- #
+
+class TestANSITableSort(unittest.TestCase):
+
+    def _make_table(self):
+        """Three-row table with string and numeric columns."""
+        table = ANSITable("name", "score", color=False)
+        table.row("charlie", 3)
+        table.row("alice", 1)
+        table.row("bob", 2)
+        return table
+
+    def test_sort_by_column_name_lexicographic(self):
+        table = self._make_table()
+        table.sort("name")
+        self.assertEqual(table.columns[0].formatted, ["alice", "bob", "charlie"])
+
+    def test_sort_by_column_index(self):
+        table = self._make_table()
+        table.sort(0)
+        self.assertEqual(table.columns[0].formatted, ["alice", "bob", "charlie"])
+
+    def test_sort_with_key(self):
+        table = self._make_table()
+        table.sort("score", key=int)
+        self.assertEqual(table.columns[1].formatted, ["1", "2", "3"])
+        # companion column should follow
+        self.assertEqual(table.columns[0].formatted, ["alice", "bob", "charlie"])
+
+    def test_sort_reverse(self):
+        table = self._make_table()
+        table.sort("name", reverse=True)
+        self.assertEqual(table.columns[0].formatted, ["charlie", "bob", "alice"])
+
+    def test_sort_reverse_with_key(self):
+        table = self._make_table()
+        table.sort("score", key=int, reverse=True)
+        self.assertEqual(table.columns[1].formatted, ["3", "2", "1"])
+
+    def test_sort_drops_rule_rows_silently(self):
+        table = ANSITable("name", "score", color=False)
+        table.row("charlie", 3)
+        table.rule()
+        table.row("alice", 1)
+        table.rule()
+        table.row("bob", 2)
+        table.sort("name")
+        self.assertEqual(table.nrows, 3)
+        self.assertEqual(table.columns[0].formatted, ["alice", "bob", "charlie"])
+
+    def test_sort_preserves_row_attributes(self):
+        table = ANSITable("name", "score", color=False)
+        table.row("charlie", 3, fgcolor="red")
+        table.row("alice", 1, fgcolor="blue")
+        table.row("bob", 2, fgcolor="green")
+        table.sort("name")
+        self.assertEqual(table.columns[0].fgcolor, ["blue", "green", "red"])
+        self.assertEqual(table.columns[1].fgcolor, ["blue", "green", "red"])
+
+    def test_sort_returns_self_for_chaining(self):
+        table = self._make_table()
+        result = table.sort("name")
+        self.assertIs(result, table)
+
+    def test_sort_invalid_column_name_raises(self):
+        table = self._make_table()
+        with self.assertRaises(ValueError):
+            table.sort("nonexistent")
+
+    def test_sort_invalid_column_index_raises(self):
+        table = self._make_table()
+        with self.assertRaises(IndexError):
+            table.sort(99)
+
+    def test_sort_stable(self):
+        # equal keys should preserve original relative order (Python sort is stable)
+        table = ANSITable("group", "val", color=False)
+        table.row("b", 10)
+        table.row("a", 20)
+        table.row("a", 30)
+        table.sort("group")
+        self.assertEqual(table.columns[0].formatted, ["a", "a", "b"])
+        self.assertEqual(table.columns[1].formatted, ["20", "30", "10"])
+
+
+# ----------------------------------------------------------------------- #
 if __name__ == "__main__":
 
     unittest.main()
