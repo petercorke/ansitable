@@ -42,6 +42,15 @@ Display a table
    :show-inheritance:
    :no-index:
 
+Sorting tables
+--------------
+
+.. autoclass:: ansitable.ANSITable
+   :members: sort
+   :undoc-members:
+   :show-inheritance:
+   :no-index:
+
 Render in markup formats
 ------------------------
 
