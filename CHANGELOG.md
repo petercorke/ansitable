@@ -1,5 +1,15 @@
 CHANGELOG
 
+1.0.0:
+
+- **First stable release.** Backward compatible with 0.11.7.
+- Modernized type hints: modern union syntax (X | Y), modern collections (list[], dict[])
+- Added return type hints to all export methods and internal methods
+- Added comprehensive Getting Started documentation (intro.rst)
+- Improved README (now GitHub-optimized with detailed tutorial moved to docs)
+- Full support for sorting tables by column (see `ANSITable.sort()`)
+- All 28 unit tests passing. Code quality verified.
+- Comprehensive Sphinx documentation with autodoc, multiple rendering formats
 
 0.11.6:
 

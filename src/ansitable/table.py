@@ -9,7 +9,7 @@ multiple output formats (Markdown, HTML, LaTeX, CSV, RST, wikitable, Pandas).
 Original author: Peter Corke
 """
 import sys
-from typing import Any, Callable, List, Optional, Union
+from typing import Any, Callable
 
 try:
     from colored import fore, back, style
@@ -66,18 +66,18 @@ def options(use_unicode, color=None):
 
 class Cell:
     text: str
-    fgcolor: Optional[str]
-    bgcolor: Optional[str]
-    style: Optional[str]
-    column: Optional["Column"]
-    row: Optional[int]
+    fgcolor: str | None
+    bgcolor: str | None
+    style: str | None
+    column: "Column" | None
+    row: int | None
 
     def __init__(
         self,
         text: Any,
-        fgcolor: Optional[str] = None,
-        bgcolor: Optional[str] = None,
-        style: Optional[str] = None,
+        fgcolor: str | None = None,
+        bgcolor: str | None = None,
+        style: str | None = None,
     ):
         """Override the color and style of a cell
 
@@ -114,36 +114,36 @@ class Cell:
 
 class Column:
     name: str
-    fmt: Optional[Union[str, Callable[[Any], str]]]
-    formatted: List[str]
-    fgcolor: List[Optional[str]]
-    bgcolor: List[Optional[str]]
-    style: List[Optional[str]]
-    table: Optional["ANSITable"]
-    colcolor: Optional[str]
-    colbgcolor: Optional[str]
-    colstyle: Optional[str]
+    fmt: str | Callable[[Any], str] | None
+    formatted: list[str]
+    fgcolor: list[str | None]
+    bgcolor: list[str | None]
+    style: list[str | None]
+    table: "ANSITable" | None
+    colcolor: str | None
+    colbgcolor: str | None
+    colstyle: str | None
     colalign: str
-    headcolor: Optional[str]
-    headbgcolor: Optional[str]
-    headstyle: Optional[str]
-    headalign: Optional[str]
-    width: Optional[int]
+    headcolor: str | None
+    headbgcolor: str | None
+    headstyle: str | None
+    headalign: str | None
+    width: int | None
     maxwidth: int
 
     def __init__(
         self,
         name: str,
-        fmt: Optional[Union[str, Callable[[Any], str]]] = "{}",
-        width: Optional[int] = None,
-        colcolor: Optional[str] = None,
-        colbgcolor: Optional[str] = None,
-        colstyle: Optional[str] = None,
+        fmt: str | Callable[[Any], str] | None = "{}",
+        width: int | None = None,
+        colcolor: str | None = None,
+        colbgcolor: str | None = None,
+        colstyle: str | None = None,
         colalign: str = ">",
-        headcolor: Optional[str] = None,
-        headbgcolor: Optional[str] = None,
-        headstyle: Optional[str] = None,
-        headalign: Optional[str] = ">",
+        headcolor: str | None = None,
+        headbgcolor: str | None = None,
+        headstyle: str | None = None,
+        headalign: str | None = ">",
     ):
         """
         Create a table column
@@ -255,9 +255,9 @@ class Column:
         text: Any,
         header: bool,
         plain: bool = False,
-        fgcolor: Optional[str] = None,
-        bgcolor: Optional[str] = None,
-        style: Optional[str] = None,
+        fgcolor: str | None = None,
+        bgcolor: str | None = None,
+        style: str | None = None,
     ) -> str:
         """
         Format text in a column
@@ -1015,7 +1015,7 @@ class ANSITable:
 
         return text
 
-    def markdown(self):
+    def markdown(self) -> str:
         """
         Output the table in MarkDown markup format
 
@@ -1035,6 +1035,11 @@ class ANSITable:
             |     aaaaaaaaa |                       2.2 |        3 |
             | bbbbbbbbbbbbb |                      -5.5 |        6 |
             |       ccccccc |                       8.8 |       -9 |
+
+        This can be used inside a Jupyter notebook cell to display a table::
+
+            from IPython.display import Markdown
+            Markdown(table.markdown())
 
         .. note::
             - supports column alignment
@@ -1073,7 +1078,7 @@ class ANSITable:
 
         return s
 
-    def rest(self):
+    def rest(self) -> str:
         """
         Output the table in ReST "simple table" markup format
 
@@ -1128,7 +1133,7 @@ class ANSITable:
         self.colsep = colsep
         return s
 
-    def wikitable(self):
+    def wikitable(self) -> str:
         """
         Output the table in wikitable markup format
 
@@ -1209,7 +1214,7 @@ class ANSITable:
 
         return s
 
-    def html(self, td="", th="", trd="", trh="", table=""):
+    def html(self, td="", th="", trd="", trh="", table="") -> str:
         r"""
         Output the table in HTML format
 
@@ -1323,7 +1328,7 @@ class ANSITable:
         s += "</table>\n"
         return s
 
-    def latex(self):
+    def latex(self) -> str:
         r"""
         Output the table in LaTeX format
 
@@ -1395,7 +1400,7 @@ class ANSITable:
         s += "\\end{tabular}\n"
         return s
 
-    def csv(self, delimiter=","):
+    def csv(self, delimiter=",") -> str:
         r"""
         Output the table in comma separated column (CSV) format
 
