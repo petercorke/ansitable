@@ -643,7 +643,11 @@ class ANSITable:
         :class:`Cell` overrides the color and style of a cell specified for a column and a row.
         """
         if len(values) != len(self.columns):
-            raise ValueError("wrong number of data items added")
+            raise ValueError(
+                "wrong number of data items added: expected {}, got {}".format(
+                    len(self.columns), len(values)
+                )
+            )
 
         for value, c in zip(values, self.columns):
 
