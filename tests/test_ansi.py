@@ -1,7 +1,7 @@
 import importlib
 import unittest
 import numpy as np
-from ansitable import ANSITable, Column, ANSIMatrix, options
+from ansitable import ANSITable, Column, Cell, ANSIMatrix, options
 
 pandas_available = importlib.util.find_spec("pandas") is not None
 skip_no_pandas = unittest.skipUnless(pandas_available, "pandas not installed")
@@ -570,6 +570,33 @@ class TestHTMLGeneration(unittest.TestCase):
         )
         self.assertIn('border: 1px solid; padding: 5px;', html)
         self.assertIn('background: #f0f0f0;', html)
+
+    def test_html_column_default_colors(self):
+        """Test that Column-level colcolor/colbgcolor are applied to HTML cells"""
+        table = ANSITable(Column("col1", colcolor="red", colbgcolor="green"))
+        table.row("x")
+        html = table.html()
+        self.assertIn("color:red;", html)
+        self.assertIn("background-color:green;", html)
+
+    def test_html_row_and_cell_override_column_defaults(self):
+        """Test that row/Cell colors override Column-level defaults in HTML"""
+        table = ANSITable(Column("col1", colcolor="red", colbgcolor="green"))
+        table.row(Cell("x", fgcolor="blue", bgcolor="yellow"))
+        html = table.html()
+        self.assertIn("color:blue;", html)
+        self.assertIn("background-color:yellow;", html)
+        self.assertNotIn("color:red;", html)
+        self.assertNotIn("background-color:green;", html)
+
+    def test_html_header_colors(self):
+        """Test that Column-level headcolor/headbgcolor are applied to HTML header cells"""
+        table = ANSITable(Column("col1", headcolor="red", headbgcolor="green"))
+        table.row("x")
+        html = table.html()
+        th_line = [line for line in html.splitlines() if "<th" in line][0]
+        self.assertIn("color:red;", th_line)
+        self.assertIn("background-color:green;", th_line)
 
     def test_html_escape_ellipsis(self):
         """Test that ellipsis character is escaped in HTML"""

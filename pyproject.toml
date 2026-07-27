@@ -60,6 +60,8 @@ docs = [
     "sphinx-markdown-tables",
     "sphinx-autodoc-typehints",
     "sphinx_favicon",
+    "numpy",
+    "pandas",
 ]
 
 [build-system]
