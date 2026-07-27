@@ -59,6 +59,7 @@ autorun_languages = {
     "pycon": "python3",
     "pycon_prefix_chars": 4,
     "pycon_show_source": False,
+    "pycon_runfirst": "",
     "plain_python": "python3",
     "plain_python_prefix_chars": 0,
     "plain_python_show_source": False,
