@@ -23,9 +23,9 @@ table1.row("bbbbbbbbbbbbb", -5.5, 6)
 table1.row("ccccccc", 8.8, -9)
 
 html1 = table1.html(
-    table='style="border-collapse: collapse; margin: 10px 0; border: 3px solid blue;"',
-    th='style="background: #f0f0f0; padding: 8px; border: 1px solid #ddd; font-weight: bold;"',
-    td='style="padding: 8px; border: 1px solid #ddd;"'
+    table="border-collapse: collapse; margin: 10px 0; border: 3px solid blue;",
+    th="background: #f0f0f0; padding: 8px; border: 1px solid #ddd; font-weight: bold;",
+    td="padding: 8px; border: 1px solid #ddd;",
 )
 (output_dir / "color_example_1.html").write_text(html1)
 print("✓ Generated color_example_1.html")
@@ -42,9 +42,9 @@ table2.row("bbbbbbbbbbbbb", Cell(-5.5, bgcolor="blue"), 6, bgcolor="yellow")
 table2.row("ccccccc", 8.8, 9)
 
 html2 = table2.html(
-    table='style="border-collapse: collapse; margin: 10px 0; border: 3px solid #333;"',
-    th='style="background: #f0f0f0; padding: 8px; border: 1px solid #ddd; font-weight: bold;"',
-    td='style="padding: 8px; border: 1px solid #ddd;"'
+    table="border-collapse: collapse; margin: 10px 0; border: 3px solid #333;",
+    th="background: #f0f0f0; padding: 8px; border: 1px solid #ddd; font-weight: bold;",
+    td="padding: 8px; border: 1px solid #ddd;",
 )
 (output_dir / "color_example_2.html").write_text(html2)
 print("✓ Generated color_example_2.html")

@@ -71,6 +71,9 @@ instance/
 # Sphinx documentation
 docs/_build/
 
+# Generated at docs-build time by docs/generate_color_examples.py
+docs/_html_examples/
+
 # PyBuilder
 target/
 

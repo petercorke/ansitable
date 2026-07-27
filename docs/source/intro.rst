@@ -160,8 +160,8 @@ you can set foreground/background colors and text styles (bold, reverse, underli
 
 Rendered output with colors:
 
-.. include:: ../_html_examples/color_example_1.html
-   :literal:
+.. raw:: html
+   :file: ../_html_examples/color_example_1.html
 
 Override styles per-row or per-cell:
 
@@ -181,8 +181,8 @@ Override styles per-row or per-cell:
 
 Rendered output with per-cell colors:
 
-.. include:: ../_html_examples/color_example_2.html
-   :literal:
+.. raw:: html
+   :file: ../_html_examples/color_example_2.html
 
 Sorting
 ~~~~~~~

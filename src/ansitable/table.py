@@ -1325,10 +1325,12 @@ class ANSITable:
             s += "  <tr style='" + trd + "'>\n"
             for c in self.columns:
                 style = "text-align:" + align[c.colalign]
-                if c.fgcolor[i] is not None:
-                    style += "color:" + c.fgcolor[i] + ";"
-                if c.bgcolor[i] is not None:
-                    style += "background-color:" + c.bgcolor[i] + ";"
+                fgcolor = c.fgcolor[i] or c.colcolor
+                bgcolor = c.bgcolor[i] or c.colbgcolor
+                if fgcolor is not None:
+                    style += "color:" + fgcolor + ";"
+                if bgcolor is not None:
+                    style += "background-color:" + bgcolor + ";"
                 s += (
                     "    <td style='"
                     + style
