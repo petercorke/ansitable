@@ -1285,12 +1285,30 @@ class ANSITable:
         """
         self._findwidths()
 
-        # HTML table setup
+        # HTML table setup with border attributes
+        table_attrs = ""
+        
+        # Add border attribute based on border type
+        if self.border is not None:
+            border_width_map = {
+                "thick": "3",
+                "double": "2",
+                "thin": "1",
+                "round": "1",
+                "ascii": "1",
+            }
+            border_width = border_width_map.get(self.border, "1")
+            table_attrs += f' border="{border_width}"'
+        
+        # Add bordercolor attribute if set
         if self.bordercolor is not None:
-            style = "border-color:" + self.bordercolor + ";"
-        else:
-            style = ""
-        s = "<table style='" + style + table + "'>\n"
+            table_attrs += f' bordercolor="{self.bordercolor}"'
+        
+        # Add any additional table CSS styling
+        if table:
+            table_attrs += f' style="{table}"'
+        
+        s = f"<table{table_attrs}>\n"
 
         align = {"<": "left;", "^": "center;", ">": "right;"}
 
