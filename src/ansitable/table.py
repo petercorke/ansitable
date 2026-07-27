@@ -1053,6 +1053,7 @@ class ANSITable:
         .. note::
             - supports column alignment
             - does not support header alignment, same as column
+            - rows added with :meth:`rule` are omitted from the output
         """
 
         self._findwidths()
@@ -1077,6 +1078,9 @@ class ANSITable:
 
         # rows
         for i in range(self.nrows):
+            if self.columns[0].formatted[i] is None:
+                # rule row, not supported in markdown
+                continue
             for c in self.columns:
                 s += (
                     "| "
@@ -1106,6 +1110,7 @@ class ANSITable:
 
         .. note::
             - does not support header or column alignment
+            - rows added with :meth:`rule` are omitted from the output
         """
 
         self._findwidths()
@@ -1129,6 +1134,9 @@ class ANSITable:
 
         # rows
         for i in range(self.nrows):
+            if self.columns[0].formatted[i] is None:
+                # rule row, not supported in ReST simple tables
+                continue
             for c in self.columns:
                 s += c._formatcolumn(c.formatted[i], header=False, plain=True) + "  "
             s += "\n"
@@ -1158,6 +1166,7 @@ class ANSITable:
         .. note::
             - supports column alignment
             - does not support header alignment, always centred for ``wikitable`` class
+            - rows added with :meth:`rule` are omitted from the output
         """
 
         self._findwidths()
@@ -1187,6 +1196,9 @@ class ANSITable:
         s += "\n"
         # rows
         for i in range(self.nrows):
+            if self.columns[0].formatted[i] is None:
+                # rule row, not supported in wikitable markup
+                continue
             s += "|-\n"
             first = True
             for c in self.columns:
@@ -1256,6 +1268,8 @@ class ANSITable:
             - supports column alignment
             - supports header alignment
             - support color and style options in the table
+            - rows added with :meth:`rule` are rendered as a ``<hr>`` spanning
+              all columns
 
         """
         self._findwidths()
@@ -1300,6 +1314,12 @@ class ANSITable:
 
         # rows
         for i in range(self.nrows):
+            if self.columns[0].formatted[i] is None:
+                # rule row, rendered as a horizontal divider spanning all columns
+                s += (
+                    f"  <tr><td colspan=\"{len(self.columns)}\"><hr></td></tr>\n"
+                )
+                continue
             s += "  <tr style='" + trd + "'>\n"
             for c in self.columns:
                 style = "text-align:" + align[c.colalign]
@@ -1343,6 +1363,7 @@ class ANSITable:
         .. note::
             - supports column alignment
             - supports header alignment
+            - rows added with :meth:`rule` are rendered as ``\\hline``
         """
         self._findwidths()
 
@@ -1377,6 +1398,10 @@ class ANSITable:
         s += "\\\\\\hline\\hline\n"
         # rows
         for i in range(self.nrows):
+            if self.columns[0].formatted[i] is None:
+                # rule row, rendered as a horizontal line
+                s += "\\hline\n"
+                continue
             first = True
             for c in self.columns:
                 if first:
@@ -1409,6 +1434,7 @@ class ANSITable:
 
         .. note::
             - does not support header or column alignment
+            - rows added with :meth:`rule` are omitted from the output
         """
 
         self._findwidths()
@@ -1427,6 +1453,9 @@ class ANSITable:
 
         # rows
         for i in range(self.nrows):
+            if self.columns[0].formatted[i] is None:
+                # rule row, not supported in CSV export
+                continue
             first = True
             for c in self.columns:
                 if first:
@@ -1462,6 +1491,7 @@ class ANSITable:
             - ANSItable column headings can contain spaces, but Pandas column names
               with spaces cannot be used as attributes. By default spaces are replaced
               with underscores, but this can be disabled by passing ``underscores=False``.
+            - rows added with :meth:`rule` are omitted from the output
         """
 
         try:
@@ -1469,13 +1499,17 @@ class ANSITable:
         except ImportError:
             raise ImportError("pandas is not installed: pip install pandas")
 
+        data_indices = [
+            i for i in range(self.nrows) if self.columns[0].formatted[i] is not None
+        ]
+
         data = {}
         for c in self.columns:
             if underscores:
                 colname = c.name.replace(" ", "_")
             else:
                 colname = c.name
-            data[colname] = c.formatted
+            data[colname] = [c.formatted[i] for i in data_indices]
         return pd.DataFrame(data)
 
     @staticmethod
