@@ -607,6 +607,17 @@ class TestHTMLGeneration(unittest.TestCase):
         self.assertIn("&hellip;", html)
         self.assertNotIn("…", html)
 
+    def test_html_renders_rule_rows_as_hr(self):
+        """Test that rule() rows are rendered as a colspan <hr>, not crashing"""
+        table = ANSITable("a", "b")
+        table.row("1", "2")
+        table.rule()
+        table.row("3", "4")
+        html = table.html()
+        self.assertIn('<td colspan="2"><hr></td>', html)
+        self.assertIn(">1</td>", html)
+        self.assertIn(">3</td>", html)
+
 
 class TestMarkdownExport(unittest.TestCase):
     """Test Markdown table export format"""
@@ -672,6 +683,17 @@ class TestMarkdownExport(unittest.TestCase):
         md = table.markdown()
         self.assertIn("3.14159", md)
 
+    def test_markdown_skips_rule_rows(self):
+        """Test that rule() rows are omitted, not rendered as garbage"""
+        table = ANSITable("a", "b")
+        table.row("1", "2")
+        table.rule()
+        table.row("3", "4")
+        md = table.markdown()
+        lines = [line for line in md.strip().split("\n") if line.strip()]
+        # header + alignment + 2 data rows, no line for the rule
+        self.assertEqual(len(lines), 4)
+
 
 class TestReSTPExport(unittest.TestCase):
     """Test ReST (reStructuredText) table export format"""
@@ -732,6 +754,19 @@ class TestReSTPExport(unittest.TestCase):
         # ReST simple tables don't support alignment in the output
         # (per the docstring)
         self.assertNotIn('class=', rest)
+
+    def test_rest_skips_rule_rows(self):
+        """Test that rule() rows are omitted, not rendered as garbage"""
+        table = ANSITable("a", "b")
+        table.row("1", "2")
+        table.rule()
+        table.row("3", "4")
+        rest = table.rest()
+        self.assertIn("1", rest)
+        self.assertIn("3", rest)
+        # 3 dividers + header + 2 data rows, no line for the rule
+        lines = [line for line in rest.strip().split("\n") if line.strip()]
+        self.assertEqual(len(lines), 6)
 
 
 class TestWikitableExport(unittest.TestCase):
@@ -796,6 +831,16 @@ class TestWikitableExport(unittest.TestCase):
         wiki = table.wikitable()
         # Multiple header columns should use !! separator
         self.assertIn('!!', wiki)
+
+    def test_wikitable_skips_rule_rows(self):
+        """Test that rule() rows are omitted, not rendered as garbage"""
+        table = ANSITable("a", "b")
+        table.row("1", "2")
+        table.rule()
+        table.row("3", "4")
+        wiki = table.wikitable()
+        # header row-separator + 2 data row-separators, no extra for the rule
+        self.assertEqual(wiki.count("|-"), 3)
 
 
 class TestLaTeXExport(unittest.TestCase):
@@ -866,6 +911,19 @@ class TestLaTeXExport(unittest.TestCase):
         latex = table.latex()
         # Should have ampersand escaped or handled
         self.assertIn('col_1', latex)
+
+    def test_latex_renders_rule_rows_as_hline(self):
+        """Test that rule() rows are rendered as \\hline, not crashing"""
+        table = ANSITable("a", "b")
+        table.row("1", "2")
+        table.rule()
+        table.row("3", "4")
+        latex = table.latex()
+        self.assertIn("1 & 2", latex)
+        self.assertIn("3 & 4", latex)
+        # header hline + rule-row hline + closing hline = 3, plus the
+        # \hline\hline right after the header (counts as 2 more)
+        self.assertEqual(latex.count(r'\hline'), 5)
 
 
 class TestCSVExport(unittest.TestCase):
@@ -945,6 +1003,31 @@ class TestCSVExport(unittest.TestCase):
         csv = table.csv()
         # Should contain the value (possibly escaped or quoted)
         self.assertIn('value', csv)
+
+    def test_csv_skips_rule_rows(self):
+        """Test that rule() rows are omitted, not crashing CSV export"""
+        table = ANSITable("a", "b")
+        table.row("1", "2")
+        table.rule()
+        table.row("3", "4")
+        csv = table.csv()
+        lines = [line for line in csv.strip().split("\n") if line.strip()]
+        # header + 2 data rows, no line for the rule
+        self.assertEqual(len(lines), 3)
+
+
+class TestPandasExport(unittest.TestCase):
+    """Test conversion to a Pandas dataframe"""
+
+    def test_pandas_skips_rule_rows(self):
+        """Test that rule() rows are omitted, not turned into a garbage row"""
+        table = ANSITable("a", "b")
+        table.row("1", "2")
+        table.rule()
+        table.row("3", "4")
+        df = table.pandas()
+        self.assertEqual(len(df), 2)
+        self.assertEqual(list(df["a"]), ["1", "3"])
 
 
 # ----------------------------------------------------------------------- #
