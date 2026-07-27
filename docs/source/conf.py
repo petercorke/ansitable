@@ -47,10 +47,26 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx_autodoc_typehints",
     "sphinx_favicon",
+    "sphinx_autorun",
+    "sphinx_copybutton",
 ]
 
 autosummary_generate = True
 autodoc_member_order = "bysource"
+
+# sphinx-autorun configuration
+autorun_languages = {
+    "pycon": "python3",
+    "pycon_prefix_chars": 4,
+    "pycon_show_source": False,
+    "plain_python": "python3",
+    "plain_python_prefix_chars": 0,
+    "plain_python_show_source": False,
+    "plain_python_runfirst": "from ansitable import set_options\nset_options(color=True, unicode=True)",
+}
+
+# copybutton configuration: strip >>> and ... prompts when copying
+copybutton_prompt_text = r">>> |\.\.\. "
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -133,3 +149,71 @@ intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable", None),
     "pandas": ("https://pandas.pydata.org/docs", None),
 }
+
+
+# -------- Post-build processing: Render HTML table output -------------------#
+
+def render_html_output(app, exception):
+    """Render HTML table output from runblock directives."""
+    if exception or app.builder.name != "html":
+        return
+
+    import re
+    import html as html_module
+    from pathlib import Path
+
+    # Process all HTML files in the build output
+    outdir = Path(app.outdir)
+    for html_file in outdir.rglob("*.html"):
+        content = html_file.read_text(encoding="utf-8")
+        modified = False
+
+        # Find code blocks that contain HTML table output (from print(table.html()))
+        # Look for pattern: >>&gt;&gt;&gt; print(table.html(...))
+        # followed by the HTML table output (starting with &lt;table)
+        def replace_html_output(match):
+            nonlocal modified
+            full_block = match.group(0)
+
+            # Extract the content between <pre><span></span> and </pre>
+            match_inner = re.search(r"<span></span>(.*?)</pre>", full_block, re.DOTALL)
+            if not match_inner:
+                return full_block
+
+            inner = match_inner.group(1)
+
+            # Unescape HTML entities
+            unescaped = html_module.unescape(inner)
+
+            # Check if there's an HTML table in the output
+            if "<table" not in unescaped:
+                return full_block
+
+            # Extract the HTML table from the output
+            # Pattern: >>> print(table.html(...)) followed by <table>...</table>
+            table_match = re.search(r"(<table.*?</table>)", unescaped, re.DOTALL)
+            if not table_match:
+                return full_block
+
+            html_table = table_match.group(1)
+            modified = True
+
+            # Replace the entire code block with the rendered HTML table
+            wrapper = f'<div style="margin: 20px 0;">{html_table}</div>'
+            return wrapper
+
+        # Replace code blocks with rendered HTML tables
+        content = re.sub(
+            r'<div class="highlight-plain_python[^>]*>.*?<pre>.*?</pre></div>',
+            replace_html_output,
+            content,
+            flags=re.DOTALL,
+        )
+
+        if modified:
+            html_file.write_text(content, encoding="utf-8")
+
+
+def setup(app):
+    """Register the post-build event handler."""
+    app.connect("build-finished", render_html_output)

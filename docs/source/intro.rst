@@ -9,7 +9,7 @@ Painless creation of nice-looking tables of data for Python.
 Starting simple
 ~~~~~~~~~~~~~~~
 
-.. autorun::
+.. runblock:: plain_python
 
     from ansitable import ANSITable
 
@@ -32,7 +32,7 @@ Borders
 
 You can add borders made up of regular ASCII characters:
 
-.. autorun::
+.. runblock:: plain_python
 
     from ansitable import ANSITable, Column
     table = ANSITable(
@@ -48,7 +48,7 @@ You can add borders made up of regular ASCII characters:
 
 Or use ANSI box-drawing characters (supported by most terminal emulators):
 
-.. autorun::
+.. runblock:: plain_python
 
     from ansitable import ANSITable, Column
     table = ANSITable(
@@ -69,7 +69,7 @@ Formatting and alignment
 
 Specify Python format strings for columns:
 
-.. autorun::
+.. runblock:: plain_python
 
     from ansitable import ANSITable, Column
     table = ANSITable(
@@ -87,7 +87,7 @@ Control alignment with ``colalign`` (data) and ``headalign`` (heading):
 - ``">"`` — right (default)
 - ``"^"`` — center
 
-.. autorun::
+.. runblock:: plain_python
 
     from ansitable import ANSITable, Column
     table = ANSITable(
@@ -103,7 +103,7 @@ Control alignment with ``colalign`` (data) and ``headalign`` (heading):
 
 Add dividing lines with ``.rule()``:
 
-.. autorun::
+.. runblock:: plain_python
 
     from ansitable import ANSITable, Column
     table = ANSITable(
@@ -123,7 +123,7 @@ Width constraints
 
 Limit column width with the ``width`` argument:
 
-.. autorun::
+.. runblock:: plain_python
 
     from ansitable import ANSITable, Column
     table = ANSITable(
@@ -144,7 +144,7 @@ Color and styling
 If you have the `colored <https://pypi.org/project/colored>`_ package installed,
 you can set foreground/background colors and text styles (bold, reverse, underlined, dim):
 
-.. autorun::
+.. code-block:: python
 
     from ansitable import ANSITable, Column, Cell
     table = ANSITable(
@@ -156,11 +156,16 @@ you can set foreground/background colors and text styles (bold, reverse, underli
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", -5.5, 6)
     table.row("ccccccc", 8.8, -9)
-    table.print()
+    print(table)
+
+Rendered output with colors:
+
+.. include:: ../_html_examples/color_example_1.html
+   :literal:
 
 Override styles per-row or per-cell:
 
-.. autorun::
+.. code-block:: python
 
     from ansitable import ANSITable, Column, Cell
     table = ANSITable(
@@ -172,14 +177,19 @@ Override styles per-row or per-cell:
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", Cell(-5.5, bgcolor="blue"), 6, bgcolor="yellow")
     table.row("ccccccc", 8.8, 9)
-    table.print()
+    print(table)
+
+Rendered output with per-cell colors:
+
+.. include:: ../_html_examples/color_example_2.html
+   :literal:
 
 Sorting
 ~~~~~~~
 
 Sort table rows by a column:
 
-.. autorun::
+.. runblock:: plain_python
 
     from ansitable import ANSITable
     table = ANSITable("name", "score")
@@ -204,7 +214,7 @@ Export tables to markup languages for use in documents:
 
 **Markdown:**
 
-.. autorun::
+.. runblock:: plain_python
     :hide-code:
 
     from ansitable import ANSITable
@@ -218,7 +228,7 @@ Export tables to markup languages for use in documents:
 
 Supports CSS styling of cells and colors.
 
-.. autorun::
+.. runblock:: plain_python
     :hide-code:
 
     from ansitable import ANSITable
@@ -230,7 +240,7 @@ Supports CSS styling of cells and colors.
 
 **reStructuredText (ReST) "simple table":**
 
-.. autorun::
+.. runblock:: plain_python
     :hide-code:
 
     from ansitable import ANSITable
@@ -244,7 +254,7 @@ Supports CSS styling of cells and colors.
 
 Alignment options supported.
 
-.. autorun::
+.. runblock:: plain_python
     :hide-code:
 
     from ansitable import ANSITable
@@ -256,7 +266,7 @@ Alignment options supported.
 
 **Wikitable (Wikipedia):**
 
-.. autorun::
+.. runblock:: plain_python
     :hide-code:
 
     from ansitable import ANSITable
@@ -268,7 +278,7 @@ Alignment options supported.
 
 **CSV:**
 
-.. autorun::
+.. runblock:: plain_python
     :hide-code:
 
     from ansitable import ANSITable
@@ -283,7 +293,7 @@ Matrices
 
 Display NumPy arrays as formatted matrices:
 
-.. autorun::
+.. runblock:: plain_python
 
     from ansitable import ANSIMatrix
     import numpy as np
@@ -295,7 +305,7 @@ Display NumPy arrays as formatted matrices:
 
 Add superscript and subscript suffixes:
 
-.. autorun::
+.. runblock:: plain_python
 
     from ansitable import ANSIMatrix
     import numpy as np
@@ -310,7 +320,7 @@ Pandas integration
 
 Convert Pandas DataFrames to ANSITable:
 
-.. autorun::
+.. runblock:: plain_python
 
     import pandas as pd
     from ansitable import ANSITable
@@ -321,7 +331,7 @@ Convert Pandas DataFrames to ANSITable:
 
 Convert ANSITable back to DataFrame:
 
-.. autorun::
+.. runblock:: plain_python
 
     from ansitable import ANSITable
     import pandas as pd
