@@ -37,7 +37,8 @@ Display a table
 ---------------
 
 .. autoclass:: ansitable.ANSITable
-   :members: print, str
+   :members: print
+   :special-members: __str__
    :undoc-members:
    :show-inheritance:
    :no-index:

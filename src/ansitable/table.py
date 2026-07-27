@@ -8,7 +8,12 @@ multiple output formats (Markdown, HTML, LaTeX, CSV, RST, wikitable, Pandas).
 
 Original author: Peter Corke
 """
-from typing import Any, Callable
+import builtins
+from typing import Any, Callable, Literal, TextIO, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
+    import pandas as pd
 
 try:
     from colored import fore, back, style
@@ -22,16 +27,18 @@ _color_enabled = _color_available
 # _unicode use box characters for table edges and separators
 _unicode = True
 
+Align = Literal["<", "^", ">"]
+Style = Literal["bold", "dim", "underlined", "blink", "reverse"]
+Border = Literal["ascii", "thin", "round", "thick", "double"]
 
-def options(use_unicode, color=None):
+
+def options(use_unicode: bool, color: bool | None = None) -> None:
     """
     Control ANSI/Unicode generation
 
     :param use_unicode: enable generation of Unicode characters
-    :type use_unicode: bool
     :param color: enable generation of ANSI color control sequences. If ``None``,
         follow ``use_unicode`` and package availability, defaults to None.
-    :type color: bool, optional
 
     ANSItable by default uses Unicode characters to create nice table outlines
     and the colored package to allow colored text and fields.  For some
@@ -67,8 +74,8 @@ class Cell:
     text: str
     fgcolor: str | None
     bgcolor: str | None
-    style: str | None
-    column: "Column" | None
+    style: Style | None
+    column: Column | None
     row: int | None
 
     def __init__(
@@ -76,26 +83,26 @@ class Cell:
         text: Any,
         fgcolor: str | None = None,
         bgcolor: str | None = None,
-        style: str | None = None,
-    ):
+        style: Style | None = None,
+    ) -> None:
         """Override the color and style of a cell
 
-        :param text: cell text
-        :type text: str
+        :param text: cell text, converted to ``str`` if not already
         :param fgcolor: foreground color, defaults to None
-        :type fgcolor: str, optional
         :param bgcolor: background color, defaults to None
-        :type bgcolor: str, optional
-        :param style: text style, defaults to None
-        :type style: str, optional
+        :param style: text style, one of ``"bold"``, ``"dim"``, ``"underlined"``,
+            ``"blink"``, ``"reverse"``, defaults to None
 
-        This class is used to override the color and style of a cell in a table, for example::
+        Example:
 
-            table = ANSITable("col1", "column 2 has a big header", "column 3")
-            table.row("aaaaaaaaa", 2.2, 3)
-            table.row("bbbbbbbbbbbbb", -5.5, 6)
-            table.row(Cell("ccccccc", bgcolor="red"), 8.8, -9)
-            table.print()
+        .. runblock:: pycon
+
+            >>> from ansitable import ANSITable, Cell
+            >>> table = ANSITable("col1", "column 2 has a big header", "column 3")
+            >>> table.row("aaaaaaaaa", 2.2, 3)
+            >>> table.row("bbbbbbbbbbbbb", -5.5, 6)
+            >>> table.row(Cell("ccccccc", bgcolor="red"), 8.8, -9)
+            >>> table.print()
 
         Will print a table with the first cell in the last row having a red background.  The colors and style override those specified when the column was created
         or specified for a row.
@@ -107,26 +114,26 @@ class Cell:
         self.column = None
         self.row = None
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.text
 
 
 class Column:
     name: str
     fmt: str | Callable[[Any], str] | None
-    formatted: list[str]
+    formatted: list[str | None]
     fgcolor: list[str | None]
     bgcolor: list[str | None]
-    style: list[str | None]
-    table: "ANSITable" | None
+    style: list[Style | None]
+    table: ANSITable | None
     colcolor: str | None
     colbgcolor: str | None
-    colstyle: str | None
-    colalign: str
+    colstyle: Style | None
+    colalign: Align
     headcolor: str | None
     headbgcolor: str | None
-    headstyle: str | None
-    headalign: str | None
+    headstyle: Style | None
+    headalign: Align
     width: int | None
     maxwidth: int
 
@@ -137,38 +144,27 @@ class Column:
         width: int | None = None,
         colcolor: str | None = None,
         colbgcolor: str | None = None,
-        colstyle: str | None = None,
-        colalign: str = ">",
+        colstyle: Style | None = None,
+        colalign: Align = ">",
         headcolor: str | None = None,
         headbgcolor: str | None = None,
-        headstyle: str | None = None,
-        headalign: str | None = ">",
-    ):
+        headstyle: Style | None = None,
+        headalign: Align | None = ">",
+    ) -> None:
         """
         Create a table column
 
         :param name: Name of column, also the column heading
-        :type name: str
         :param fmt: Python format string, defaults to "{}"
-        :type fmt: str, optional
         :param width: Column width, defaults to auto-fit
-        :type width: int, optional
         :param colcolor: Color of column text, defaults to None
-        :type colcolor: str, optional
         :param colbgcolor: Color of column background, defaults to None
-        :type colbgcolor: str, optional
         :param colstyle: Column text style, see table below, defaults to None
-        :type colstyle: str, optional
         :param colalign: Column data alignment, see table below, defaults to ">"
-        :type colalign: str, optional
         :param headcolor: Color of heading text, defaults to None
-        :type headcolor: str, optional
         :param headbgcolor: Color of heading background, defaults to None
-        :type headbgcolor: str, optional
         :param headstyle: Heading text style, see table below, defaults to None
-        :type headstyle: str, optional
         :param headalign: Heading text alignment, see table below, defaults to ">"
-        :type headalign: str, optional
 
         The :class:`Column` object can passed to the :class:`ANSITable` constructor
         or to :meth:`~ANSITable.addcolumn` to specify the format of a column in a table.
@@ -243,7 +239,7 @@ class Column:
             text += table._ATTR(styledict[style])
         return text
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         s = "Column[{}({})], fmt={}({}), width={}".format(
             self.name, self.headalign, self.fmt, self.colalign, self.width
         )
@@ -383,35 +379,39 @@ styledict = {"bold": 1, "dim": 2, "underlined": 4, "blink": 5, "reverse": 7}
 
 class ANSIMatrix:
 
-    def __init__(self, style="thin", fmt="{:< 10.3g}", squish=100):
+    def __init__(
+        self, style: Border = "thin", fmt: builtins.str = "{:< 10.3g}", squish: int = 100
+    ) -> None:
         """
         Create a matrix formatter
 
         :param style: Bracket format, defaults to "thin"
-        :type style: str, optional
         :param fmt: number format string, defaults to "{:< 10.3g}"
-        :type fmt: str, optional
         :param squish: elements smaller than this times eps are displayed as
                        zero, defaults to 100
-        :type squish: int, optional
 
         Creates a formatter, or template, for formatting matrices.
 
-        .. code::
+        ===========   ==========================================================
+        Border        Description
+        ===========   ==========================================================
+        ascii         Use ASCII +-| characters
+        thin          Use ANSI thin box-drawing characters
+        round         Use ANSI thin box-drawing characters with rounded corners
+        thick         Use ANSI thick box-drawing characters
+        double        Use ANSI double-line box-drawing characters
+        ===========   ==========================================================
 
-            from ansitable import ANSIMatrix
-            import numpy as np
+        Example:
 
-            formatter = ANSIMatrix(style='ascii')
-            m = np.random.rand(4,4) - 0.5
-            formatter.print(m)
+        .. runblock:: pycon
 
-            +                                           +
-            | 0.23      -0.00542   -0.282      0.229    |
-            | 0.433      0.229      0.489     -0.414    |
-            | 0.0901    -0.351     -0.413     -0.418    |
-            | 0.433      0.233      0.0495     0.000281 |
-            +                                           +
+            >>> from ansitable import ANSIMatrix
+            >>> import numpy as np
+            >>> np.random.seed(0)
+            >>> formatter = ANSIMatrix(style="ascii")
+            >>> m = np.random.rand(4, 4) - 0.5
+            >>> formatter.print(m)
         """
 
         # TODO: add colored fields, specify by tuples (rowstart, rowend, colstart, colend, color)
@@ -428,22 +428,34 @@ class ANSIMatrix:
         else:
             self.squish = squish * np.finfo(float).eps
 
-    def str(self, matrix, suffix_super="", suffix_sub=""):
+    def str(
+        self,
+        matrix: NDArray,
+        suffix_super: builtins.str = "",
+        suffix_sub: builtins.str = "",
+    ) -> builtins.str:
         """
         Output the table as a string
 
         :param matrix: NumPy matrix to format
-        :type matrix: 1d or 2d ndarray
+        :type matrix: ndarray(n,) or ndarray(m,n)
         :param suffix_super: Right superscript, defaults to ''
-        :type suffix_super: str, optional
         :param suffix_sub: Right subscript, defaults to ''
-        :type suffix_sub: str, optional
         :raises ValueError: if the array has more than 2 dimensions
-        :return: ANSI string
-        :rtype: str
 
         ``suffix_super`` is where the transpose, inverse, pseudo-inverse, etc. symbol
         is shown.  ``suffix_sub`` is where the matrix name is typically shown.
+
+        Example:
+
+        .. runblock:: pycon
+
+            >>> from ansitable import ANSIMatrix
+            >>> import numpy as np
+            >>> np.random.seed(0)
+            >>> formatter = ANSIMatrix(style="ascii")
+            >>> m = np.random.rand(4, 4) - 0.5
+            >>> print(formatter.str(m))
         """
 
         import numpy as np  # only import if matrix is used
@@ -474,15 +486,26 @@ class ANSIMatrix:
         s += chr(_bl[b]) + " " * mwidth + chr(_br[b]) + suffix_sub
         return s
 
-    def print(self, matrix, *pos, file=None, **kwargs):
+    def print(
+        self, matrix: NDArray, *pos: Any, file: TextIO | None = None, **kwargs: Any
+    ) -> None:
         """
         Print the matrix
 
         :param file: Print the matrix to this file, defaults to stdout
-        :type file: writeable object, optional
 
         .. note:: Accepts the same arguments as ``str``.
 
+        Example:
+
+        .. runblock:: pycon
+
+            >>> from ansitable import ANSIMatrix
+            >>> import numpy as np
+            >>> np.random.seed(0)
+            >>> formatter = ANSIMatrix(style="ascii")
+            >>> m = np.random.rand(4, 4) - 0.5
+            >>> formatter.print(m, suffix_super="T", suffix_sub="3")
         """
 
         print(self.str(matrix, *pos, **kwargs), file=file)
@@ -494,36 +517,29 @@ class ANSIMatrix:
 class ANSITable:
     def __init__(
         self,
-        *pos,
-        colsep=1,
-        offset=0,
-        border=None,
-        bordercolor=None,
-        ellipsis=True,
-        columns=None,
-        header=True,
-        color=True,
-    ):
+        *pos: str | Column,
+        colsep: int = 1,
+        offset: int = 0,
+        border: Border | None = None,
+        bordercolor: str | None = None,
+        ellipsis: bool = True,
+        columns: int | None = None,
+        header: bool = True,
+        color: bool = True,
+    ) -> None:
         """
         Create a table object
 
         :param colsep: Blank padding on each side of column separator, defaults to 1
-        :type colsep: int, optional
         :param offset: Horizontal offset of the whole table, defaults to 0
-        :type offset: int, optional
-        :param border: Type of border, defaults to None
-        :type border: str, optional
+        :param border: Type of border, see table below, defaults to None
         :param bordercolor: Name of color to draw border in, defaults to None
-        :type bordercolor: str, optional
         :param ellipsis: truncated lines are shown with an ellipsis, defaults to True
-        :type ellipsis: bool, optional
-        :param columns: specify detailed column format options, defaults to None
-        :type columns: list of :class:`Column` objects, optional
+        :param columns: if no positional column names/:class:`Column` objects are
+            given, create this many empty placeholder columns instead, defaults to None
         :param header: Show table header, defaults to True
-        :type header: bool, optional
         :param color: enable color output for this table instance (also gated by
             global ``options()`` settings), defaults to True
-        :type color: bool, optional
         :raises TypeError: if a positional argument is not a ``str`` or :class:`Column`
 
         A table can be created in several different ways::
@@ -558,7 +574,6 @@ class ANSITable:
         self.colsep = colsep
         self.offset = offset
         self.ellipsis = ellipsis
-        self.rows = []
         self.bordercolor = bordercolor
         self.header = header
         self.color = bool(color)
@@ -591,21 +606,23 @@ class ANSITable:
         s += " " + "; ".join(column.name for column in self.columns)
         return s
 
-    def addcolumn(self, name, **kwargs):
+    def addcolumn(self, name: str, **kwargs: Any) -> None:
         """
         Add a column to the table
 
         :param name: column heading
-        :type name: str
 
         An alternative way to create a table, column at a time.
 
-        Example::
+        Example:
 
-            table = ANSITable()
-            table.addcolumn("col1")
-            table.addcolumn("column 2 has a big header", fmt="{:.3g}")
-            table.addcolumn("column 3", fmt="{:-10.4f}")
+        .. runblock:: pycon
+
+            >>> from ansitable import ANSITable
+            >>> table = ANSITable()
+            >>> table.addcolumn("col1")
+            >>> table.addcolumn("column 2 has a big header", fmt="{:.3g}")
+            >>> table.addcolumn("column 3", fmt="{:-10.4f}")
 
         .. note:: Additional arguments are passed directly to ``Column``.
 
@@ -614,17 +631,20 @@ class ANSITable:
         c.table = self
         self.columns.append(c)
 
-    def row(self, *values, fgcolor=None, bgcolor=None, style=None):
+    def row(
+        self,
+        *values: Any,
+        fgcolor: str | None = None,
+        bgcolor: str | None = None,
+        style: Style | None = None,
+    ) -> None:
         """
         Add a row of data
 
         :param values: data items for the row.  These can be of any type that can be converted to a string for display, eg. numbers, strings or objects with a ``__str__`` method. The :class:`Cell` encapsulates a value and allows the color or style defaults of the row or column to be overriden.
         :param fgcolor: foreground color override for all columns in the row, defaults to None
-        :type fgcolor: str, optional
         :param bgcolor: background color override for all columns in the row, defaults to None
-        :type bgcolor: str, optional
         :param style: style override for all columns in the row, defaults to None
-        :type style: str, optional
         :raises ValueError: invalid format string for the data provided
 
         ``table.row(d1, d2, ... dN)`` add data items that comprise a row of the
@@ -693,15 +713,14 @@ class ANSITable:
             c.style.append(_style)
         self.nrows += 1
 
-    def __len__(self):
+    def __len__(self) -> int:
         """Length of table
 
         :return: Number of rows in the table
-        :rtype: int
         """
         return self.nrows
 
-    def rule(self):
+    def rule(self) -> None:
         """
         Add a horizontal rule to the table
 
@@ -715,33 +734,37 @@ class ANSITable:
             c.style.append(None)
         self.nrows += 1
 
-    def sort(self, column: str | int, key=None, reverse: bool = False) -> "ANSITable":
+    def sort(
+        self,
+        column: str | int,
+        key: Callable[[str], Any] | None = None,
+        reverse: bool = False,
+    ) -> ANSITable:
         """
         Sort the table rows by a column, in place
 
         :param column: column to sort by, either the column name or its zero-based index
-        :type column: str or int
         :param key: callable applied to each formatted cell value before comparison,
             defaults to None (lexicographic order on the formatted string)
-        :type key: callable, optional
         :param reverse: sort in descending order, defaults to False
-        :type reverse: bool, optional
         :raises ValueError: if ``column`` is a string that does not match any column name
         :raises IndexError: if ``column`` is an integer index out of range
         :return: the table, to allow chaining
-        :rtype: :class:`ANSITable`
 
         Rows inserted with :meth:`rule` (horizontal rules) are silently dropped
         from the sorted output, as they have no meaningful position after reordering.
 
-        Example::
+        Example:
 
-            table = ANSITable("name", "score")
-            table.row("alice", 3)
-            table.row("bob", 1)
-            table.row("carol", 2)
-            table.sort("score", key=int)
-            table.print()
+        .. runblock:: pycon
+
+            >>> from ansitable import ANSITable
+            >>> table = ANSITable("name", "score")
+            >>> table.row("alice", 3)
+            >>> table.row("bob", 1)
+            >>> table.row("carol", 2)
+            >>> table.sort("score", key=int)
+            >>> table.print()
 
         """
         if isinstance(column, int):
@@ -936,28 +959,22 @@ class ANSITable:
 
         return text + "\n"
 
-    def print(self, file=None):
+    def print(self, file: TextIO | None = None) -> None:
         """
         Print the table
 
         :param file: Print the table to this file, defaults to stdout
-        :type file: writeable object, optional
 
-        Example::
+        Example:
 
-            table = ANSITable("col1", "column 2 has a big header", "column 3")
-            table.row("aaaaaaaaa", 2.2, 3)
-            table.row("bbbbbbbbbbbbb", -5.5, 6)
-            table.row("ccccccc", 8.8, -9)
-            table.print()
+        .. runblock:: pycon
 
-            +--------------+---------------------------+----------+
-            |         col1 | column 2 has a big header | column 3 |
-            +--------------+---------------------------+----------+
-            |    aaaaaaaaa |                       2.2 |        3 |
-            |bbbbbbbbbbbbb |                      -5.5 |        6 |
-            |      ccccccc |                       8.8 |       -9 |
-            +--------------+---------------------------+----------+
+            >>> from ansitable import ANSITable
+            >>> table = ANSITable("col1", "column 2 has a big header", "column 3", border="ascii")
+            >>> table.row("aaaaaaaaa", 2.2, 3)
+            >>> table.row("bbbbbbbbbbbbb", -5.5, 6)
+            >>> table.row("ccccccc", 8.8, -9)
+            >>> table.print()
 
         """
 
@@ -974,12 +991,11 @@ class ANSITable:
             c.width = c.width or c.maxwidth
             c.last = i == len(self.columns) - 1
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Output the table as a string
 
         :return: ANSI string
-        :rtype: str
         """
 
         if self.border is not None:
@@ -1017,21 +1033,17 @@ class ANSITable:
         Output the table in MarkDown markup format
 
         :return: ASCII markdown text
-        :rtype: str
 
-        Example::
+        Example:
 
-            table = ANSITable("col1", "column 2 has a big header", "column 3")
-            table.row("aaaaaaaaa", 2.2, 3)
-            table.row("bbbbbbbbbbbbb", -5.5, 6)
-            table.row("ccccccc", 8.8, -9)
-            table.markdown()
+        .. runblock:: pycon
 
-            |          col1 | column 2 has a big header | column 3 |
-            | ------------: | ------------------------: | -------: |
-            |     aaaaaaaaa |                       2.2 |        3 |
-            | bbbbbbbbbbbbb |                      -5.5 |        6 |
-            |       ccccccc |                       8.8 |       -9 |
+            >>> from ansitable import ANSITable
+            >>> table = ANSITable("col1", "column 2 has a big header", "column 3")
+            >>> table.row("aaaaaaaaa", 2.2, 3)
+            >>> table.row("bbbbbbbbbbbbb", -5.5, 6)
+            >>> table.row("ccccccc", 8.8, -9)
+            >>> print(table.markdown())
 
         This can be used inside a Jupyter notebook cell to display a table::
 
@@ -1080,23 +1092,17 @@ class ANSITable:
         Output the table in ReST "simple table" markup format
 
         :return: ASCII text for a ReST "simple table"
-        :rtype: str
 
-        Example::
+        Example:
 
-            table = ANSITable("col1", "column 2 has a big header", "column 3")
-            table.row("aaaaaaaaa", 2.2, 3)
-            table.row("bbbbbbbbbbbbb", -5.5, 6)
-            table.row("ccccccc", 8.8, -9)
-            table.rest()
+        .. runblock:: pycon
 
-            =============  =========================  ========
-                     col1  column 2 has a big header  column 3
-            =============  =========================  ========
-                aaaaaaaaa                        2.2         3
-            bbbbbbbbbbbbb                       -5.5         6
-                  ccccccc                        8.8        -9
-            =============  =========================  ========
+            >>> from ansitable import ANSITable
+            >>> table = ANSITable("col1", "column 2 has a big header", "column 3")
+            >>> table.row("aaaaaaaaa", 2.2, 3)
+            >>> table.row("bbbbbbbbbbbbb", -5.5, 6)
+            >>> table.row("ccccccc", 8.8, -9)
+            >>> print(table.rest())
 
         .. note::
             - does not support header or column alignment
@@ -1137,26 +1143,17 @@ class ANSITable:
         This is the markup format for tables in Wikipedia.
 
         :return: wikitable markup text
-        :rtype: str
 
-        Example::
+        Example:
 
-            table = ANSITable("col1", "column 2 has a big header", "column 3")
-            table.row("aaaaaaaaa", 2.2, 3)
-            table.row("bbbbbbbbbbbbb", -5.5, 6)
-            table.row("ccccccc", 8.8, -9)
-            table.wikitable()
+        .. runblock:: pycon
 
-            {| class="wikitable" col1right col2right col3right
-            |-
-            !           col1  !!  column 2 has a big header  !!  column 3
-            |-
-            |      aaaaaaaaa  ||                        2.2  ||         3
-            |-
-            |  bbbbbbbbbbbbb  ||                       -5.5  ||         6
-            |-
-            |        ccccccc  ||                        8.8  ||        -9
-            |}
+            >>> from ansitable import ANSITable
+            >>> table = ANSITable("col1", "column 2 has a big header", "column 3")
+            >>> table.row("aaaaaaaaa", 2.2, 3)
+            >>> table.row("bbbbbbbbbbbbb", -5.5, 6)
+            >>> table.row("ccccccc", 8.8, -9)
+            >>> print(table.wikitable())
 
         .. note::
             - supports column alignment
@@ -1211,56 +1208,37 @@ class ANSITable:
 
         return s
 
-    def html(self, td="", th="", trd="", trh="", table="") -> str:
+    def html(
+        self,
+        td: str = "",
+        th: str = "",
+        trd: str = "",
+        trh: str = "",
+        table: str = "",
+    ) -> str:
         r"""
         Output the table in HTML format
 
         :param td: CSS style for table data cells, defaults to ""
-        :type td: str, optional
         :param th: CSS style for table header cells, defaults to ""
-        :type th: str, optional
         :param trd: CSS style for table data rows, defaults to ""
-        :type trd: str, optional
         :param trh: CSS style for table header rows, defaults to ""
-        :type trh: str, optional
         :param table: CSS style for the table, defaults to ""
-        :type table: str, optional
         :return: table rendered in HTML
-        :rtype: str
 
         The table is rendered as a table between `<table>` and `</table>` tags.
         Table color and style options are supported.
 
-        Example::
+        Example:
 
-            table = ANSITable("col1", "column 2 has a big header", "column 3")
-            table.row("aaaaaaaaa", 2.2, 3)
-            table.row("bbbbbbbbbbbbb", -5.5, 6)
-            table.row("ccccccc", 8.8, -9)
-            table.html()
+        .. runblock:: pycon
 
-            <table>
-            <tr>
-                <th style='text-align:right;'>col1</th>
-                <th style='text-align:right;'>column 2 has a big header</th>
-                <th style='text-align:right;'>column 3</th>
-            </tr>
-            <tr>
-                <td style='text-align:right;'>aaaaaaaaa</td>
-                <td style='text-align:right;'>2.2</td>
-                <td style='text-align:right;'>3</td>
-            </tr>
-            <tr>
-                <td style='text-align:right;'>bbbbbbbbbbbbb</td>
-                <td style='text-align:right;'>-5.5</td>
-                <td style='text-align:right;'>6</td>
-            </tr>
-            <tr>
-                <td style='text-align:right;'>ccccccc</td>
-                <td style='text-align:right;'>8.8</td>
-                <td style='text-align:right;'>-9</td>
-            </tr>
-            </table>
+            >>> from ansitable import ANSITable
+            >>> table = ANSITable("col1", "column 2 has a big header", "column 3")
+            >>> table.row("aaaaaaaaa", 2.2, 3)
+            >>> table.row("bbbbbbbbbbbbb", -5.5, 6)
+            >>> table.row("ccccccc", 8.8, -9)
+            >>> print(table.html())
 
         CSS options defined in the document will apply.  These can be overridden for
         various table elements by passed arguments strings. For example, to create a
@@ -1350,23 +1328,17 @@ class ANSITable:
         Output the table in LaTeX format
 
         :return: LaTeX tabular markup
-        :rtype: str
 
-        Example::
+        Example:
 
-            table = ANSITable("col1", "column 2 has a big header", "column 3")
-            table.row("aaaaaaaaa", 2.2, 3)
-            table.row("bbbbbbbbbbbbb", -5.5, 6)
-            table.row("ccccccc", 8.8, -9)
-            table.latex()
+        .. runblock:: pycon
 
-            \begin{tabular}{ |r|r|r| }\hline
-            \multicolumn{1}{|r|}{col1} & \multicolumn{1}{|r|}{column 2 has a big header} & \multicolumn{1}{|r|}{column 3}\\\hline\\\hline
-            aaaaaaaaa & 2.2 & 3 \\
-            bbbbbbbbbbbbb & -5.5 & 6 \\
-            ccccccc & 8.8 & -9 \\
-            \hline
-            \end{tabular}
+            >>> from ansitable import ANSITable
+            >>> table = ANSITable("col1", "column 2 has a big header", "column 3")
+            >>> table.row("aaaaaaaaa", 2.2, 3)
+            >>> table.row("bbbbbbbbbbbbb", -5.5, 6)
+            >>> table.row("ccccccc", 8.8, -9)
+            >>> print(table.latex())
 
         .. note::
             - supports column alignment
@@ -1417,27 +1389,23 @@ class ANSITable:
         s += "\\end{tabular}\n"
         return s
 
-    def csv(self, delimiter=",") -> str:
+    def csv(self, delimiter: str = ",") -> str:
         r"""
         Output the table in comma separated column (CSV) format
 
         :param delimiter: column delimiter, defaults to ","
-        :type delimiter: str, optional
         :return: ASCII CSV text
-        :rtype: str
 
-        Example::
+        Example:
 
-            table = ANSITable("col1", "column 2 has a big header", "column 3")
-            table.row("aaaaaaaaa", 2.2, 3)
-            table.row("bbbbbbbbbbbbb", -5.5, 6)
-            table.row("ccccccc", 8.8, -9)
-            table.csv()
+        .. runblock:: pycon
 
-            col1,column 2 has a big header,column 3
-            aaaaaaaaa,2.2,3
-            bbbbbbbbbbbbb,-5.5,6
-            ccccccc,8.8,-9
+            >>> from ansitable import ANSITable
+            >>> table = ANSITable("col1", "column 2 has a big header", "column 3")
+            >>> table.row("aaaaaaaaa", 2.2, 3)
+            >>> table.row("bbbbbbbbbbbbb", -5.5, 6)
+            >>> table.row("ccccccc", 8.8, -9)
+            >>> print(table.csv())
 
         .. note::
             - does not support header or column alignment
@@ -1470,28 +1438,24 @@ class ANSITable:
 
         return s
 
-    def pandas(self, underscores=True):
+    def pandas(self, underscores: bool = True) -> pd.DataFrame:
         r"""
         Convert the table to a Pandas dataframe
 
         :param underscores: replace spaces in column names with underscores, defaults to True
-        :type underscores: bool, optional
         :return: Pandas dataframe
-        :rtype: `DataFrame` object
 
-        Example::
+        Example:
 
-            table = ANSITable("col1", "column 2 has a big header", "column 3")
-            table.row("aaaaaaaaa", 2.2, 3)
-            table.row("bbbbbbbbbbbbb", -5.5, 6)
-            table.row("ccccccc", 8.8, -9)
-            df = table.pandas()
-            print(df)
+        .. runblock:: pycon
 
-                        col1 column_2_has_a_big_header column_3
-            0      aaaaaaaaa                       2.2        3
-            1  bbbbbbbbbbbbb                      -5.5        6
-            2        ccccccc                       8.8       -9
+            >>> from ansitable import ANSITable
+            >>> table = ANSITable("col1", "column 2 has a big header", "column 3")
+            >>> table.row("aaaaaaaaa", 2.2, 3)
+            >>> table.row("bbbbbbbbbbbbb", -5.5, 6)
+            >>> table.row("ccccccc", 8.8, -9)
+            >>> df = table.pandas()
+            >>> print(df)
 
         .. note::
             - does not support header or column alignment
@@ -1515,32 +1479,23 @@ class ANSITable:
         return pd.DataFrame(data)
 
     @staticmethod
-    def Pandas(df, **kwargs):
+    def Pandas(df: pd.DataFrame, **kwargs: Any) -> ANSITable:
         """
         Create an ANSITable from a Pandas dataframe
 
         :param df: Pandas dataframe
-        :type df: :class:`pandas.DataFrame`
         :param kwargs: additional arguments to pass to the ANSITable constructor
         :return: an ansitable object
-        :rtype: :class:`ANSITable`
 
-        Example::
+        Example:
 
-            import pandas as pd
-            from ansitable import ANSITable
+        .. runblock:: pycon
 
-            df = pd.DataFrame({"calories": [420, 380, 390], "duration": [50, 40, 45]})
-            table = ANSITable.Pandas(df, border="thin")
-            table.print()
-
-            ┌──────────┬──────────┐
-            │ calories │ duration │
-            ├──────────┼──────────┤
-            │      420 │       50 │
-            │      380 │       40 │
-            │      390 │       45 │
-            └──────────┴──────────┘
+            >>> import pandas as pd
+            >>> from ansitable import ANSITable
+            >>> df = pd.DataFrame({"calories": [420, 380, 390], "duration": [50, 40, 45]})
+            >>> table = ANSITable.Pandas(df, border="thin")
+            >>> table.print()
 
         .. note::
             - options for header and column alignment and format are not supported
