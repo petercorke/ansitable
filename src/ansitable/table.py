@@ -376,8 +376,6 @@ borderdict = {
     "round": 2,
     "thick": 3,
     "double": 4,
-    "thick-thin": 5,
-    "double-thin": 6,
 }
 styledict = {"bold": 1, "dim": 2, "underlined": 4, "blink": 5, "reverse": 7}
 
