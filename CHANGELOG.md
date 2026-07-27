@@ -1,5 +1,30 @@
 CHANGELOG
 
+1.0.1:
+
+- **Fixed:** `rule()` rows crashed `csv()`/`html()`/`latex()` and rendered as garbled
+  blank rows in `markdown()`/`rest()`/`wikitable()`. Now `latex()` renders a rule as
+  `\hline` and `html()` as a spanning `<hr>`; the other formats cleanly skip the row,
+  matching how `.sort()` already treats it.
+- **Fixed:** `ANSITable.html()` ignored a `Column`'s `colcolor`/`colbgcolor` defaults,
+  only ever applying per-row/`Cell` color overrides.
+- **Fixed:** `ansitable.__version__` was undefined; now reads the installed package
+  version via `importlib.metadata`.
+- **Fixed:** the GitHub Pages documentation build — several examples in the "Getting
+  Started" guide were rendering raw Python tracebacks (missing numpy/pandas in the
+  docs build, a call to a nonexistent function, an unsupported directive option) and
+  the "Color and styling" section was showing malformed HTML source instead of a
+  rendered table.
+- Removed two dead `border=` values (`"thick-thin"`, `"double-thin"`) that crashed
+  with `IndexError` if used; never actually implemented.
+- Modernized type hints across the public API: `Literal` types for `border=`,
+  `style=`, and alignment parameters with their valid values now documented in the
+  signature; removed docstring `:type:`/`:rtype:` fields made redundant by the
+  annotations; converted docstring examples to `.. runblock::` directives (matching
+  the other Peter Corke toolboxes), which also corrected several examples whose
+  hand-written expected output no longer matched reality.
+- All 86 unit tests passing.
+
 1.0.0:
 
 - **First stable release.** Backward compatible with 0.11.7.
