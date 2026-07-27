@@ -9,7 +9,7 @@ Painless creation of nice-looking tables of data for Python.
 Starting simple
 ~~~~~~~~~~~~~~~
 
-.. code-block:: python
+.. autorun::
 
     from ansitable import ANSITable
 
@@ -20,14 +20,7 @@ Starting simple
     table.print()
 
 This produces a table with column widths automatically chosen, headings and column
-data all right-justified (default):
-
-.. code-block:: text
-
-           col1  column 2 has a big header  column 3
-      aaaaaaaaa                        2.2         3
-  bbbbbbbbbbbbb                        5.5         6
-        ccccccc                        8.8         9
+data all right-justified (default).
 
 By default output is printed to the console (``stdout``), but you can:
 
@@ -39,7 +32,7 @@ Borders
 
 You can add borders made up of regular ASCII characters:
 
-.. code-block:: python
+.. autorun::
 
     from ansitable import ANSITable, Column
     table = ANSITable(
@@ -53,37 +46,21 @@ You can add borders made up of regular ASCII characters:
     table.row("ccccccc", 8.8, 9)
     table.print()
 
-.. code-block:: text
-
-    +--------------+---------------------------+----------+
-    |         col1 | column 2 has a big header | column 3 |
-    +--------------+---------------------------+----------+
-    |    aaaaaaaaa |                       2.2 |        3 |
-    |bbbbbbbbbbbbb |                       5.5 |        6 |
-    |      ccccccc |                       8.8 |        9 |
-    +--------------+---------------------------+----------+
-
 Or use ANSI box-drawing characters (supported by most terminal emulators):
 
-.. code-block:: python
+.. autorun::
 
+    from ansitable import ANSITable, Column
     table = ANSITable(
             Column("col1"),
             Column("column 2 has a big header"),
             Column("column 3"),
             border="thick"
         )
-    # ... add rows ...
-
-.. code-block:: text
-
-    ┏━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┓
-    ┃         col1 ┃ column 2 has a big header ┃ column 3 ┃
-    ┣━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━━━┫
-    ┃    aaaaaaaaa ┃                       2.2 ┃        3 ┃
-    ┃bbbbbbbbbbbbb ┃                       5.5 ┃        6 ┃
-    ┃      ccccccc ┃                       8.8 ┃        9 ┃
-    ┗━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━┛
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row("bbbbbbbbbbbbb", 5.5, 6)
+    table.row("ccccccc", 8.8, 9)
+    table.print()
 
 Other border options: ``"thin"``, ``"round"`` (thin with rounded corners), and ``"double"``.
 
@@ -92,7 +69,7 @@ Formatting and alignment
 
 Specify Python format strings for columns:
 
-.. code-block:: python
+.. autorun::
 
     from ansitable import ANSITable, Column
     table = ANSITable(
@@ -110,19 +87,31 @@ Control alignment with ``colalign`` (data) and ``headalign`` (heading):
 - ``">"`` — right (default)
 - ``"^"`` — center
 
-.. code-block:: python
+.. autorun::
 
+    from ansitable import ANSITable, Column
     table = ANSITable(
             Column("col1", headalign="<"),
             Column("column 2 has a big header", colalign="^"),
             Column("column 3", colalign="<"),
             border="thick"
         )
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row("bbbbbbbbbbbbb", -5.5, 6)
+    table.row("ccccccc", 8.8, 9)
+    table.print()
 
 Add dividing lines with ``.rule()``:
 
-.. code-block:: python
+.. autorun::
 
+    from ansitable import ANSITable, Column
+    table = ANSITable(
+            Column("col1", headalign="<"),
+            Column("column 2 has a big header", colalign="^"),
+            Column("column 3", colalign="<"),
+            border="thick"
+        )
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", -5.5, 6)
     table.rule()
@@ -134,8 +123,9 @@ Width constraints
 
 Limit column width with the ``width`` argument:
 
-.. code-block:: python
+.. autorun::
 
+    from ansitable import ANSITable, Column
     table = ANSITable(
             Column("col1", width=10),
             Column("column 2 has a big header", "{:.3g}"),
@@ -154,7 +144,7 @@ Color and styling
 If you have the `colored <https://pypi.org/project/colored>`_ package installed,
 you can set foreground/background colors and text styles (bold, reverse, underlined, dim):
 
-.. code-block:: python
+.. autorun::
 
     from ansitable import ANSITable, Column, Cell
     table = ANSITable(
@@ -170,8 +160,15 @@ you can set foreground/background colors and text styles (bold, reverse, underli
 
 Override styles per-row or per-cell:
 
-.. code-block:: python
+.. autorun::
 
+    from ansitable import ANSITable, Column, Cell
+    table = ANSITable(
+        Column("col1", headalign="<"),
+        Column("column 2 has a big header", colalign="^"),
+        Column("column 3", colalign="<"),
+        border="thick"
+    )
     table.row("aaaaaaaaa", 2.2, 3)
     table.row("bbbbbbbbbbbbb", Cell(-5.5, bgcolor="blue"), 6, bgcolor="yellow")
     table.row("ccccccc", 8.8, 9)
@@ -182,8 +179,9 @@ Sorting
 
 Sort table rows by a column:
 
-.. code-block:: python
+.. autorun::
 
+    from ansitable import ANSITable
     table = ANSITable("name", "score")
     table.row("alice", 3)
     table.row("bob", 1)
@@ -206,89 +204,105 @@ Export tables to markup languages for use in documents:
 
 **Markdown:**
 
-.. code-block:: python
+.. autorun::
+    :hide-code:
 
-    table.markdown()
-
-.. code-block:: text
-
-    |          col1 | column 2 has a big header | column 3 |
-    | ------------: | ------------------------: | -------: |
-    |     aaaaaaaaa |                       2.2 |        3 |
-    | bbbbbbbbbbbbb |                      -5.5 |        6 |
-    |       ccccccc |                       8.8 |       -9 |
+    from ansitable import ANSITable
+    table = ANSITable("col1", "column 2 has a big header", "column 3")
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row("bbbbbbbbbbbbb", -5.5, 6)
+    table.row("ccccccc", 8.8, -9)
+    print(table.markdown())
 
 **HTML:**
 
-.. code-block:: python
-
-    table.html()
-
 Supports CSS styling of cells and colors.
+
+.. autorun::
+    :hide-code:
+
+    from ansitable import ANSITable
+    table = ANSITable("col1", "column 2 has a big header", "column 3")
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row("bbbbbbbbbbbbb", -5.5, 6)
+    table.row("ccccccc", 8.8, -9)
+    print(table.html()[:200] + "...")
 
 **reStructuredText (ReST) "simple table":**
 
-.. code-block:: python
+.. autorun::
+    :hide-code:
 
-    table.rest()
-
-.. code-block:: text
-
-    =============  =========================  ========
-             col1  column 2 has a big header  column 3
-    =============  =========================  ========
-        aaaaaaaaa                        2.2         3
-    bbbbbbbbbbbbb                       -5.5         6
-          ccccccc                        8.8        -9
-    =============  =========================  ========
+    from ansitable import ANSITable
+    table = ANSITable("col1", "column 2 has a big header", "column 3")
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row("bbbbbbbbbbbbb", -5.5, 6)
+    table.row("ccccccc", 8.8, -9)
+    print(table.rest())
 
 **LaTeX:**
 
-.. code-block:: python
-
-    table.latex()
-
 Alignment options supported.
+
+.. autorun::
+    :hide-code:
+
+    from ansitable import ANSITable
+    table = ANSITable("col1", "column 2 has a big header", "column 3")
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row("bbbbbbbbbbbbb", -5.5, 6)
+    table.row("ccccccc", 8.8, -9)
+    print(table.latex()[:150] + "...")
 
 **Wikitable (Wikipedia):**
 
-.. code-block:: python
+.. autorun::
+    :hide-code:
 
-    table.wikitable()
+    from ansitable import ANSITable
+    table = ANSITable("col1", "column 2 has a big header", "column 3")
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row("bbbbbbbbbbbbb", -5.5, 6)
+    table.row("ccccccc", 8.8, -9)
+    print(table.wikitable())
 
 **CSV:**
 
-.. code-block:: python
+.. autorun::
+    :hide-code:
 
-    table.csv()
+    from ansitable import ANSITable
+    table = ANSITable("col1", "column 2 has a big header", "column 3")
+    table.row("aaaaaaaaa", 2.2, 3)
+    table.row("bbbbbbbbbbbbb", -5.5, 6)
+    table.row("ccccccc", 8.8, -9)
+    print(table.csv())
 
 Matrices
 --------
 
 Display NumPy arrays as formatted matrices:
 
-.. code-block:: python
+.. autorun::
 
     from ansitable import ANSIMatrix
     import numpy as np
 
+    np.random.seed(42)
     formatter = ANSIMatrix(style='thick')
     m = np.random.rand(4, 4) - 0.5
     formatter.print(m)
 
-.. code-block:: text
-
-    ┏                                           ┓
-    ┃ 0.234     -0.385     -0.106      0.296    ┃
-    ┃ 0.0432     0.339      0.119     -0.468    ┃
-    ┃ 0.405     -0.306      0.0165    -0.439    ┃
-    ┃ 0.203      0.4       -0.499     -0.487    ┃
-    ┗                                           ┛
-
 Add superscript and subscript suffixes:
 
-.. code-block:: python
+.. autorun::
 
+    from ansitable import ANSIMatrix
+    import numpy as np
+
+    np.random.seed(42)
+    formatter = ANSIMatrix(style='thick')
+    m = np.random.rand(4, 4) - 0.5
     formatter.print(m, suffix_super='T', suffix_sub='3')
 
 Pandas integration
@@ -296,7 +310,7 @@ Pandas integration
 
 Convert Pandas DataFrames to ANSITable:
 
-.. code-block:: python
+.. autorun::
 
     import pandas as pd
     from ansitable import ANSITable
@@ -307,7 +321,10 @@ Convert Pandas DataFrames to ANSITable:
 
 Convert ANSITable back to DataFrame:
 
-.. code-block:: python
+.. autorun::
+
+    from ansitable import ANSITable
+    import pandas as pd
 
     table = ANSITable("col1", "column 2 has a big header", "column 3")
     table.row("aaaaaaaaa", 2.2, 3)
@@ -320,11 +337,3 @@ Convert ANSITable back to DataFrame:
 Column names are converted to valid Python identifiers (spaces → underscores),
 allowing attribute access like ``df.column_2_has_a_big_header``.
 Disable this with ``underscores=False``.
-
-Use Pandas ``read_csv()`` to load CSV files directly into ANSITable:
-
-.. code-block:: python
-
-    df = pd.read_csv("mydata.csv")
-    table = ANSITable.Pandas(df, border="thin")
-    table.print()
