@@ -9,7 +9,7 @@ multiple output formats (Markdown, HTML, LaTeX, CSV, RST, wikitable, Pandas).
 Original author: Peter Corke
 """
 import builtins
-from typing import Any, Callable, Literal, TextIO, TYPE_CHECKING
+from typing import Any, Callable, Literal, TextIO, TYPE_CHECKING, cast
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
@@ -118,6 +118,44 @@ class Cell:
         return self.text
 
 
+_align_chars = "<^>"
+
+
+def _parse_alignment_prefix(name: str) -> tuple[str, Align | None, Align | None]:
+    """
+    Parse a leading alignment marker from a column name
+
+    :param name: raw column/header name, possibly with a leading ``{X}``
+        or ``{XY}`` alignment marker, or an escaped ``\\{`` literal
+    :return: name with any marker or escape removed, header alignment
+        (or None if not specified), column alignment (or None if not
+        specified)
+
+    A name beginning with ``\\{`` is unescaped to a literal ``{`` and is
+    never treated as a marker. Otherwise, a name beginning with ``{X}``
+    where ``X`` is one of ``"<"``, ``"^"``, ``">"`` sets both the header
+    and column alignment to ``X``; a name beginning with ``{XY}`` sets
+    the header alignment to ``X`` and the column alignment to ``Y``. Any
+    other leading ``{...}`` is left untouched, since it doesn't match
+    the marker pattern.
+    """
+    if name.startswith("\\{"):
+        return name[1:], None, None
+
+    if name.startswith("{"):
+        end = name.find("}")
+        if end != -1:
+            marker = name[1:end]
+            if 1 <= len(marker) <= 2 and all(c in _align_chars for c in marker):
+                align: list[Align] = [cast(Align, c) for c in marker]
+                rest = name[end + 1 :]
+                if len(align) == 1:
+                    return rest, align[0], align[0]
+                return rest, align[0], align[1]
+
+    return name, None, None
+
+
 class Column:
     name: str
     fmt: str | Callable[[Any], str] | None
@@ -151,10 +189,11 @@ class Column:
         headstyle: Style | None = None,
         headalign: Align | None = ">",
     ) -> None:
-        """
+        r"""
         Create a table column
 
-        :param name: Name of column, also the column heading
+        :param name: Name of column, also the column heading. May begin with an
+            alignment shorthand marker, see below, defaults to right-aligned
         :param fmt: Python format string, defaults to "{}"
         :param width: Column width, defaults to auto-fit
         :param colcolor: Color of column text, defaults to None
@@ -194,7 +233,37 @@ class Column:
         The implementation of these options depends heavily on the terminal emulator
         used.
 
+        Alignment shorthand
+        --------------------
+
+        ``name`` can begin with a marker that sets alignment without needing
+        ``colalign``/``headalign`` keyword arguments, or a full :class:`Column`
+        object -- handy when using :class:`ANSITable`'s quick string-based
+        constructor:
+
+        - ``"{X}Name"`` sets both header and column alignment to ``X``
+        - ``"{XY}Name"`` sets header alignment to ``X`` and column alignment to ``Y``
+
+        where ``X``/``Y`` are one of ``"<"``, ``"^"``, ``">"``, e.g.
+        ``Column("{<^}Name")`` left-aligns the header and centres the column data.
+        An explicit ``colalign``/``headalign`` argument takes precedence over the
+        marker for that axis.
+
+        A name that must literally start with ``{`` (and isn't meant as a marker)
+        needs a single leading backslash in the resulting string *value*. ``\{``
+        is not itself a valid Python escape sequence, so in ordinary (non-raw)
+        source that means doubling the backslash, e.g. ``Column("\\{note}")``;
+        with a raw string it's just ``Column(r"\{note}")``. Either way, the
+        column's name is ``"{note}"``. Anything else in the name is left
+        untouched -- there's nothing else to escape.
+
         """
+
+        name, marker_headalign, marker_colalign = _parse_alignment_prefix(name)
+        if marker_colalign is not None and colalign == ">":
+            colalign = marker_colalign
+        if marker_headalign is not None and headalign == ">":
+            headalign = marker_headalign
 
         self.name = name
         self.fmt = fmt
@@ -557,8 +626,16 @@ class ANSITable:
             table.addcolumn("column 2 has a big header", fmt="{:.3g}")
             table.addcolumn("column 3", fmt="{:-10.4f}")
 
-        The first option is quick and easy but does not allow any control of
-        formatting or alignment.
+        The first option is quick and easy, and by default both header and column
+        data are right-aligned. Formatting options like ``fmt`` need the second or
+        third form, using :class:`Column` objects, but header/column alignment can
+        still be set in the quick string form with a leading marker, see
+        :class:`Column` for details::
+
+            table = ANSITable("{<}col1", "{^}column 2 has a big header", "column 3")
+
+        left-aligns ``col1``, centres ``column 2 has a big header``, and leaves
+        ``column 3`` at the default right alignment.
 
         ===========   ==========================================================
         Border        Description

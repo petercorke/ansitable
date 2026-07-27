@@ -371,6 +371,79 @@ ccccccc,8.8,-9
 
 # ----------------------------------------------------------------------- #
 
+class TestColumnAlignmentPrefix(unittest.TestCase):
+    """Test the {X}/{XY} alignment shorthand in Column/ANSITable names"""
+
+    def test_single_char_sets_both(self):
+        c = Column("{<}Header")
+        self.assertEqual(c.name, "Header")
+        self.assertEqual(c.headalign, "<")
+        self.assertEqual(c.colalign, "<")
+
+    def test_two_char_sets_head_and_col_respectively(self):
+        c = Column("{<^}Header")
+        self.assertEqual(c.name, "Header")
+        self.assertEqual(c.headalign, "<")
+        self.assertEqual(c.colalign, "^")
+
+    def test_all_three_alignment_chars(self):
+        for ch in ("<", "^", ">"):
+            c = Column(f"{{{ch}}}Header")
+            self.assertEqual(c.name, "Header")
+            self.assertEqual(c.headalign, ch)
+            self.assertEqual(c.colalign, ch)
+
+    def test_explicit_colalign_overrides_marker(self):
+        c = Column("{^}Header", colalign="<")
+        self.assertEqual(c.name, "Header")
+        self.assertEqual(c.colalign, "<")  # explicit kwarg wins
+        self.assertEqual(c.headalign, "^")  # marker still applies to this axis
+
+    def test_explicit_headalign_overrides_marker(self):
+        c = Column("{^}Header", headalign="<")
+        self.assertEqual(c.name, "Header")
+        self.assertEqual(c.headalign, "<")  # explicit kwarg wins
+        self.assertEqual(c.colalign, "^")  # marker still applies to this axis
+
+    def test_no_marker_unaffected(self):
+        c = Column("Header")
+        self.assertEqual(c.name, "Header")
+        self.assertEqual(c.headalign, ">")
+        self.assertEqual(c.colalign, ">")
+
+    def test_escaped_brace_is_literal(self):
+        c = Column("\\{note}Header")
+        self.assertEqual(c.name, "{note}Header")
+        self.assertEqual(c.headalign, ">")
+        self.assertEqual(c.colalign, ">")
+
+    def test_invalid_marker_chars_left_untouched(self):
+        c = Column("{note}Header")
+        self.assertEqual(c.name, "{note}Header")
+        self.assertEqual(c.headalign, ">")
+        self.assertEqual(c.colalign, ">")
+
+    def test_three_char_marker_left_untouched(self):
+        c = Column("{<^>}Header")
+        self.assertEqual(c.name, "{<^>}Header")
+        self.assertEqual(c.headalign, ">")
+        self.assertEqual(c.colalign, ">")
+
+    def test_ansitable_quick_string_constructor(self):
+        table = ANSITable("{<}col1", "{^}col2", "col3", border="ascii")
+        self.assertEqual(table.columns[0].name, "col1")
+        self.assertEqual(table.columns[0].headalign, "<")
+        self.assertEqual(table.columns[0].colalign, "<")
+        self.assertEqual(table.columns[1].name, "col2")
+        self.assertEqual(table.columns[1].headalign, "^")
+        self.assertEqual(table.columns[1].colalign, "^")
+        self.assertEqual(table.columns[2].name, "col3")
+        self.assertEqual(table.columns[2].headalign, ">")
+        self.assertEqual(table.columns[2].colalign, ">")
+
+
+# ----------------------------------------------------------------------- #
+
 class TestANSITableSort(unittest.TestCase):
 
     def _make_table(self):
