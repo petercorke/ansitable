@@ -62,7 +62,7 @@ autorun_languages = {
     "plain_python": "python3",
     "plain_python_prefix_chars": 0,
     "plain_python_show_source": False,
-    "plain_python_runfirst": "from ansitable import set_options\nset_options(color=True, unicode=True)",
+    "plain_python_runfirst": "from ansitable import options\noptions(True, color=True)",
 }
 
 # copybutton configuration: strip >>> and ... prompts when copying

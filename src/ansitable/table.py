@@ -8,7 +8,6 @@ multiple output formats (Markdown, HTML, LaTeX, CSV, RST, wikitable, Pandas).
 
 Original author: Peter Corke
 """
-import sys
 from typing import Any, Callable
 
 try:
@@ -475,7 +474,7 @@ class ANSIMatrix:
         s += chr(_bl[b]) + " " * mwidth + chr(_br[b]) + suffix_sub
         return s
 
-    def print(self, matrix, *pos, file=sys.stdout, **kwargs):
+    def print(self, matrix, *pos, file=None, **kwargs):
         """
         Print the matrix
 

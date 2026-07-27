@@ -215,7 +215,6 @@ Export tables to markup languages for use in documents:
 **Markdown:**
 
 .. runblock:: plain_python
-    :hide-code:
 
     from ansitable import ANSITable
     table = ANSITable("col1", "column 2 has a big header", "column 3")
@@ -229,7 +228,6 @@ Export tables to markup languages for use in documents:
 Supports CSS styling of cells and colors.
 
 .. runblock:: plain_python
-    :hide-code:
 
     from ansitable import ANSITable
     table = ANSITable("col1", "column 2 has a big header", "column 3")
@@ -241,7 +239,6 @@ Supports CSS styling of cells and colors.
 **reStructuredText (ReST) "simple table":**
 
 .. runblock:: plain_python
-    :hide-code:
 
     from ansitable import ANSITable
     table = ANSITable("col1", "column 2 has a big header", "column 3")
@@ -255,7 +252,6 @@ Supports CSS styling of cells and colors.
 Alignment options supported.
 
 .. runblock:: plain_python
-    :hide-code:
 
     from ansitable import ANSITable
     table = ANSITable("col1", "column 2 has a big header", "column 3")
@@ -267,7 +263,6 @@ Alignment options supported.
 **Wikitable (Wikipedia):**
 
 .. runblock:: plain_python
-    :hide-code:
 
     from ansitable import ANSITable
     table = ANSITable("col1", "column 2 has a big header", "column 3")
@@ -279,7 +274,6 @@ Alignment options supported.
 **CSV:**
 
 .. runblock:: plain_python
-    :hide-code:
 
     from ansitable import ANSITable
     table = ANSITable("col1", "column 2 has a big header", "column 3")
