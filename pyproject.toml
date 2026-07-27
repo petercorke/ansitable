@@ -55,6 +55,7 @@ docs = [
     "sphinx",
     "sphinx-rtd-theme",
     "sphinx-autorun",
+    "sphinx-copybutton",
     "sphinxcontrib-jsmath",
     "sphinx-markdown-tables",
     "sphinx-autodoc-typehints",
