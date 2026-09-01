@@ -55,7 +55,7 @@ dependencies = ["colored"]
 docs = [
     "sphinx",
     "sphinx-rtd-theme",
-    "sphinx-autorun",
+    "sphinx-pyrunblock",
     "sphinx-copybutton",
     "sphinxcontrib-jsmath",
     "sphinx-markdown-tables",

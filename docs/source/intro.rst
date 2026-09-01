@@ -10,6 +10,7 @@ Starting simple
 ~~~~~~~~~~~~~~~
 
 .. runblock:: plain_python
+    :no-prompt:
 
     from ansitable import ANSITable
 
@@ -33,6 +34,7 @@ Borders
 You can add borders made up of regular ASCII characters:
 
 .. runblock:: plain_python
+    :no-prompt:
 
     from ansitable import ANSITable, Column
     table = ANSITable(
@@ -49,6 +51,7 @@ You can add borders made up of regular ASCII characters:
 Or use ANSI box-drawing characters (supported by most terminal emulators):
 
 .. runblock:: plain_python
+    :no-prompt:
 
     from ansitable import ANSITable, Column
     table = ANSITable(
@@ -70,6 +73,7 @@ Formatting and alignment
 Specify Python format strings for columns:
 
 .. runblock:: plain_python
+    :no-prompt:
 
     from ansitable import ANSITable, Column
     table = ANSITable(
@@ -88,6 +92,7 @@ Control alignment with ``colalign`` (data) and ``headalign`` (heading):
 - ``"^"`` — center
 
 .. runblock:: plain_python
+    :no-prompt:
 
     from ansitable import ANSITable, Column
     table = ANSITable(
@@ -104,6 +109,7 @@ Control alignment with ``colalign`` (data) and ``headalign`` (heading):
 Add dividing lines with ``.rule()``:
 
 .. runblock:: plain_python
+    :no-prompt:
 
     from ansitable import ANSITable, Column
     table = ANSITable(
@@ -124,6 +130,7 @@ Width constraints
 Limit column width with the ``width`` argument:
 
 .. runblock:: plain_python
+    :no-prompt:
 
     from ansitable import ANSITable, Column
     table = ANSITable(
@@ -190,6 +197,7 @@ Sorting
 Sort table rows by a column:
 
 .. runblock:: plain_python
+    :no-prompt:
 
     from ansitable import ANSITable
     table = ANSITable("name", "score")
@@ -215,6 +223,7 @@ Export tables to markup languages for use in documents:
 **Markdown:**
 
 .. runblock:: plain_python
+    :no-prompt:
 
     from ansitable import ANSITable
     table = ANSITable("col1", "column 2 has a big header", "column 3")
@@ -228,6 +237,7 @@ Export tables to markup languages for use in documents:
 Supports CSS styling of cells and colors.
 
 .. runblock:: plain_python
+    :no-prompt:
 
     from ansitable import ANSITable
     table = ANSITable("col1", "column 2 has a big header", "column 3")
@@ -239,6 +249,7 @@ Supports CSS styling of cells and colors.
 **reStructuredText (ReST) "simple table":**
 
 .. runblock:: plain_python
+    :no-prompt:
 
     from ansitable import ANSITable
     table = ANSITable("col1", "column 2 has a big header", "column 3")
@@ -252,6 +263,7 @@ Supports CSS styling of cells and colors.
 Alignment options supported.
 
 .. runblock:: plain_python
+    :no-prompt:
 
     from ansitable import ANSITable
     table = ANSITable("col1", "column 2 has a big header", "column 3")
@@ -263,6 +275,7 @@ Alignment options supported.
 **Wikitable (Wikipedia):**
 
 .. runblock:: plain_python
+    :no-prompt:
 
     from ansitable import ANSITable
     table = ANSITable("col1", "column 2 has a big header", "column 3")
@@ -274,6 +287,7 @@ Alignment options supported.
 **CSV:**
 
 .. runblock:: plain_python
+    :no-prompt:
 
     from ansitable import ANSITable
     table = ANSITable("col1", "column 2 has a big header", "column 3")
@@ -288,6 +302,7 @@ Matrices
 Display NumPy arrays as formatted matrices:
 
 .. runblock:: plain_python
+    :no-prompt:
 
     from ansitable import ANSIMatrix
     import numpy as np
@@ -300,6 +315,7 @@ Display NumPy arrays as formatted matrices:
 Add superscript and subscript suffixes:
 
 .. runblock:: plain_python
+    :no-prompt:
 
     from ansitable import ANSIMatrix
     import numpy as np
@@ -315,6 +331,7 @@ Pandas integration
 Convert Pandas DataFrames to ANSITable:
 
 .. runblock:: plain_python
+    :no-prompt:
 
     import pandas as pd
     from ansitable import ANSITable
@@ -326,6 +343,7 @@ Convert Pandas DataFrames to ANSITable:
 Convert ANSITable back to DataFrame:
 
 .. runblock:: plain_python
+    :no-prompt:
 
     from ansitable import ANSITable
     import pandas as pd

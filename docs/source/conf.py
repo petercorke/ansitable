@@ -47,14 +47,14 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx_autodoc_typehints",
     "sphinx_favicon",
-    "sphinx_autorun",
+    "sphinx_pyrunblock",
     "sphinx_copybutton",
 ]
 
 autosummary_generate = True
 autodoc_member_order = "bysource"
 
-# sphinx-autorun configuration
+# sphinx-pyrunblock configuration
 autorun_languages = {
     "pycon": "python3",
     "pycon_prefix_chars": 4,
