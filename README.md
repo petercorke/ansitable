@@ -1,22 +1,33 @@
-[![PyPI version fury.io](https://badge.fury.io/py/ansitable.svg)](https://pypi.python.org/pypi/ansitable/)
-[![Anaconda version](https://anaconda.org/conda-forge/ansitable/badges/version.svg)](https://anaconda.org/conda-forge/ansitable)
-[![pyversions](https://img.shields.io/pypi/pyversions/ansitable)](https://pypi.python.org/pypi/ansitable/)
-[![Build Status](https://github.com/petercorke/ansitable/actions/workflows/master.yml/badge.svg)](https://github.com/petercorke/ansitable/actions?query=workflow%3Abuild)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/petercorke/ansitable/graphs/commit-activity)
-[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/petercorke/ansitable/blob/master/LICENSE)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/ansitable)](https://pypistats.org/packages/ansitable)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e43d7415ba234101be49128fd0d354fa)](https://app.codacy.com/gh/petercorke/ansitable/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-
-![ANSITable logo](https://github.com/petercorke/ansitable/raw/master/figs/ansi_logo.png)
-
 # ANSITable
 
-Pretty tables and matrices for Python
+<div align="center">
+  <img src="https://github.com/petercorke/ansitable/raw/master/figs/ansi_logo.png" width="300">
+  <br>
+  <strong>Pretty tables and matrices for Python</strong>
+  <br><br>
 
-- [GitHub repository](https://github.com/petercorke/ansitable)
-- [Documentation](https://petercorke.github.io/ansitable)
-- [PyPI](https://pypi.org/project/ansitable)
-- [Conda](https://anaconda.org/conda-forge/ansitable)
+[![PyPI version](https://img.shields.io/pypi/v/ansitable?style=for-the-badge&color=blue)](https://pypi.org/project/ansitable/)
+  [![Documentation](https://img.shields.io/badge/Docs-View_Online-blue?style=for-the-badge)](https://petercorke.github.io/ansitable)
+
+  <p>
+    <a href="https://github.com/petercorke/ansitable">GitHub</a> •
+    <a href="https://anaconda.org/conda-forge/ansitable">Conda</a> •
+    <a href="#quick-example">Quick example</a>
+  </p>
+</div>
+
+---
+
+### Status & Project Health
+[![Build Status](https://github.com/petercorke/ansitable/actions/workflows/master.yml/badge.svg)](https://github.com/petercorke/ansitable/actions/workflows/master.yml)
+[![Downloads](https://static.pepy.tech/badge/ansitable/month)](https://pepy.tech/projects/ansitable)
+![Python Version](https://img.shields.io/pypi/pyversions/ansitable.svg)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e43d7415ba234101be49128fd0d354fa)](https://app.codacy.com/gh/petercorke/ansitable/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+### Ecosystem & Dependencies
+[![A Python Robotics Package](https://raw.githubusercontent.com/petercorke/robotics-toolbox-python/main/.github/svg/py_collection.min.svg)](https://github.com/petercorke/robotics-toolbox-python)
+[![QUT Centre for Robotics Open Source](https://github.com/qcr/qcr.github.io/raw/master/misc/badge.svg)](https://qcr.github.io)
 
 ## Quick example
 
