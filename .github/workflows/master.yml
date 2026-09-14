@@ -7,8 +7,8 @@ name: CI
 on:
   push:
     branches: [ master ]
-#   pull_request:
-#     branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   # Run tests on different versions of python
@@ -36,9 +36,23 @@ jobs:
       run: |
         pytest -s --ignore=W605
 
+  all-tests-passed:
+    name: All tests passed
+    needs: unittest
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check test matrix result
+        run: |
+          if [ "${{ needs.unittest.result }}" != "success" ]; then
+            echo "test matrix did not succeed: ${{ needs.unittest.result }}"
+            exit 1
+          fi
+
   sphinx:
-    # If the above worked:
+    # If the above worked, and this is a real push to master (not a PR):
     # Build docs and deploy to GH Pages
+    if: github.event_name == 'push'
     needs: unittest
     runs-on: ubuntu-latest
     permissions:
