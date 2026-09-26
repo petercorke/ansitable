@@ -1,5 +1,27 @@
 CHANGELOG
 
+1.1.0:
+
+- Added a `{X}`/`{XY}` alignment shorthand prefix for column names, e.g.
+  `ANSITable("{<}col1", "{^}col2")`, no more needing full `Column` objects
+  just to set alignment.
+- **Fixed:** a cell combining `fgcolor` with `bgcolor`/`style` lost its background
+  color in the padding after the text — an inner ANSI reset fired before the padding
+  was written, clearing formatting an outer wrap had just applied. Mainly visible on
+  header cells, since `headcolor`/`headbgcolor`/`headstyle` are commonly combined
+  together; data cells that only set `bgcolor` were unaffected.
+- **Fixed:** `ANSITable.html()` wrote `colored`'s color specifiers (e.g. `"grey_37"`)
+  straight into CSS unmodified — only the handful of names that happen to also be CSS
+  keywords worked, everything else produced invalid CSS that browsers silently drop.
+  Colors are now translated to real `#rrggbb` hex via `colored`'s own palette table.
+  Also, `headstyle`/`colstyle`/per-cell `style` was never referenced anywhere in
+  `html()` despite the docstring claiming style support; now mapped to CSS
+  (`font-weight`, `text-decoration`, `opacity`), with `reverse` swapping the resolved
+  foreground/background colors.
+- Added a searchable, click-to-copy 256-color swatch reference page, generated at
+  doc-build time directly from `colored`'s own palette table so it can't go stale.
+- All 110 unit tests passing.
+
 1.0.1:
 
 - **Fixed:** `rule()` rows crashed `csv()`/`html()`/`latex()` and rendered as garbled
