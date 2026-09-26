@@ -21,13 +21,20 @@ Starting simple
     table.row("Michelangelo", 35, 88.0)
     table.print()
 
-This produces a table with column widths automatically chosen, headings and column
+.. note:: The lines prefixed by ``# →`` indicate the **output**  of the preceding code block.
+    They are commented to distinguish them from lines of executable code.
+    This also means that if you
+    copy and paste this code, using the icon in the top-right corner of the code block,  these
+    output lines will not be executed.
+
+
+The result is a table with column widths automatically chosen, headings and column
 data all right-justified (default).
 
-By default output is printed to the console (``stdout``), but you can:
+By default output is written to the console (``stdout``), but you can also:
 
-- Provide a ``file`` option to ``.print()`` to write to a specified output stream
-- Obtain a multi-line string version with ``str(table)``
+- write to a specific file by passing the ``file`` option to ``.print()``
+- obtain the table as a multi-line string using ``str(table)``
 
 Borders
 --------
@@ -475,7 +482,7 @@ Add superscript and subscript suffixes:
 Pandas integration
 ===================
 
-Convert Pandas DataFrames to ANSITable:
+Convert Pandas ``DataFrames`` to ``ANSITable``:
 
 .. runblock:: plain_python
     :no-prompt:
@@ -487,7 +494,7 @@ Convert Pandas DataFrames to ANSITable:
     table = ANSITable.Pandas(df, border="thin")
     table.print()
 
-Convert ANSITable back to DataFrame:
+Convert ``ANSITable`` back to ``DataFrame``:
 
 .. runblock:: plain_python
     :no-prompt:
