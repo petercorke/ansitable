@@ -2,6 +2,7 @@ import importlib
 import unittest
 import numpy as np
 from ansitable import ANSITable, Column, Cell, ANSIMatrix, options
+from ansitable.table import _css_color
 
 pandas_available = importlib.util.find_spec("pandas") is not None
 skip_no_pandas = unittest.skipUnless(pandas_available, "pandas not installed")
@@ -645,31 +646,33 @@ class TestHTMLGeneration(unittest.TestCase):
         self.assertIn('background: #f0f0f0;', html)
 
     def test_html_column_default_colors(self):
-        """Test that Column-level colcolor/colbgcolor are applied to HTML cells"""
+        """Test that Column-level colcolor/colbgcolor are applied to HTML cells,
+        translated from colored's palette names to real CSS hex values"""
         table = ANSITable(Column("col1", colcolor="red", colbgcolor="green"))
         table.row("x")
         html = table.html()
-        self.assertIn("color:red;", html)
-        self.assertIn("background-color:green;", html)
+        self.assertIn(f"color:{_css_color('red')};", html)
+        self.assertIn(f"background-color:{_css_color('green')};", html)
 
     def test_html_row_and_cell_override_column_defaults(self):
         """Test that row/Cell colors override Column-level defaults in HTML"""
         table = ANSITable(Column("col1", colcolor="red", colbgcolor="green"))
         table.row(Cell("x", fgcolor="blue", bgcolor="yellow"))
         html = table.html()
-        self.assertIn("color:blue;", html)
-        self.assertIn("background-color:yellow;", html)
-        self.assertNotIn("color:red;", html)
-        self.assertNotIn("background-color:green;", html)
+        self.assertIn(f"color:{_css_color('blue')};", html)
+        self.assertIn(f"background-color:{_css_color('yellow')};", html)
+        self.assertNotIn(f"color:{_css_color('red')};", html)
+        self.assertNotIn(f"background-color:{_css_color('green')};", html)
 
     def test_html_header_colors(self):
-        """Test that Column-level headcolor/headbgcolor are applied to HTML header cells"""
+        """Test that Column-level headcolor/headbgcolor are applied to HTML header cells,
+        translated from colored's palette names to real CSS hex values"""
         table = ANSITable(Column("col1", headcolor="red", headbgcolor="green"))
         table.row("x")
         html = table.html()
         th_line = [line for line in html.splitlines() if "<th" in line][0]
-        self.assertIn("color:red;", th_line)
-        self.assertIn("background-color:green;", th_line)
+        self.assertIn(f"color:{_css_color('red')};", th_line)
+        self.assertIn(f"background-color:{_css_color('green')};", th_line)
 
     def test_html_escape_ellipsis(self):
         """Test that ellipsis character is escaped in HTML"""
@@ -690,6 +693,98 @@ class TestHTMLGeneration(unittest.TestCase):
         self.assertIn('<td colspan="2"><hr></td>', html)
         self.assertIn(">1</td>", html)
         self.assertIn(">3</td>", html)
+
+
+class TestHTMLColorStyleTranslation(unittest.TestCase):
+    """Regression tests for html() color/style rendering.
+
+    Previously html() wrote colored's color specifiers straight into the
+    style attribute unmodified, and never referenced style at all -- see
+    _css_color()/_cell_style_css() in table.py for the full explanation.
+    """
+
+    def test_256_palette_name_translated_to_valid_css_hex(self):
+        # "grey_37" is a real colored 256-color name but not a CSS
+        # keyword; writing it through unmodified silently produces
+        # invalid, browser-ignored CSS.
+        table = ANSITable(Column("col1", colbgcolor="grey_37"))
+        table.row("x")
+        html = table.html()
+        self.assertIn(f"background-color:{_css_color('grey_37')};", html)
+        self.assertNotIn("background-color:grey_37;", html)
+        self.assertTrue(_css_color("grey_37").startswith("#"))
+
+    def test_256_palette_number_translated_to_valid_css_hex(self):
+        table = ANSITable(Column("col1", colcolor="196"))
+        table.row("x")
+        html = table.html()
+        self.assertIn(f"color:{_css_color('196')};", html)
+        self.assertNotIn("color:196;", html)
+
+    def test_hex_color_passed_through_unchanged(self):
+        table = ANSITable(Column("col1", colbgcolor="#123456"))
+        table.row("x")
+        html = table.html()
+        self.assertIn("background-color:#123456;", html)
+
+    def test_unrecognised_name_passed_through_unchanged(self):
+        # not in colored's palette and not a hex string: assume it's a
+        # literal CSS value the caller intended, same permissive behavior
+        # html() has always had (it doesn't validate colors like the
+        # terminal renderer does at print time)
+        table = ANSITable(Column("col1", colbgcolor="rebeccapurple"))
+        table.row("x")
+        html = table.html()
+        self.assertIn("background-color:rebeccapurple;", html)
+
+    def test_colstyle_bold_rendered_as_font_weight(self):
+        table = ANSITable(Column("col1", colstyle="bold"))
+        table.row("x")
+        html = table.html()
+        self.assertIn("font-weight:bold;", html)
+
+    def test_colstyle_underlined_rendered_as_text_decoration(self):
+        table = ANSITable(Column("col1", colstyle="underlined"))
+        table.row("x")
+        html = table.html()
+        self.assertIn("text-decoration:underline;", html)
+
+    def test_headstyle_bold_rendered_in_header(self):
+        table = ANSITable(Column("col1", headstyle="bold"))
+        table.row("x")
+        html = table.html()
+        th_line = [line for line in html.splitlines() if "<th" in line][0]
+        self.assertIn("font-weight:bold;", th_line)
+
+    def test_row_and_cell_style_override_column_style(self):
+        table = ANSITable(Column("col1", colstyle="bold"))
+        table.row(Cell("x", style="underlined"))
+        html = table.html()
+        td_line = [line for line in html.splitlines() if "<td" in line][0]
+        self.assertIn("text-decoration:underline;", td_line)
+        self.assertNotIn("font-weight:bold;", td_line)
+
+    def test_reverse_style_swaps_fg_and_bg(self):
+        table = ANSITable(Column("col1", colcolor="black", colbgcolor="white", colstyle="reverse"))
+        table.row("x")
+        html = table.html()
+        td_line = [line for line in html.splitlines() if "<td" in line][0]
+        # after the swap, the foreground carries what was the background
+        # color and vice versa
+        self.assertIn(f"color:{_css_color('white')};", td_line)
+        self.assertIn(f"background-color:{_css_color('black')};", td_line)
+
+    def test_th_td_override_last_wins_against_computed_color(self):
+        # documents the documented (see html()'s docstring warning), still
+        # very real footgun: a th=/td= override that itself sets a color
+        # or the background shorthand silently wins over headbgcolor/
+        # colbgcolor, since it's concatenated after them in the same
+        # style attribute and CSS uses last-declaration-wins.
+        table = ANSITable(Column("col1", headbgcolor="white"))
+        table.row("x")
+        html = table.html(th="background: #f0f0f0;")
+        th_line = [line for line in html.splitlines() if "<th" in line][0]
+        self.assertIn(f"background-color:{_css_color('white')};background: #f0f0f0;", th_line)
 
 
 class TestMarkdownExport(unittest.TestCase):
