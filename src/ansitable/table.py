@@ -385,19 +385,27 @@ class Column:
         if table is None:
             raise ValueError("Column is not part of a table")
 
-        if fgcolor:
-            text = table._FG(fgcolor) + text + table._ATTR(0)
-
         if style == "underlined":
             text = table._ATTR(styledict[style]) + text + table._ATTR(0)
 
         text = gap1 + text + gap2
 
+        # fgcolor, bgcolor and non-underline style all apply to the whole
+        # padded cell, so they're combined into a single on/off pair rather
+        # than each wrapping their own reset -- an inner reset would
+        # otherwise clear formatting applied by an outer one before the end
+        # of the cell is reached (e.g. fgcolor's reset wiping out bgcolor
+        # partway through the padding).
+        prefix = ""
         if bgcolor:
-            text = table._BG(bgcolor) + text + table._ATTR(0)
-
+            prefix += table._BG(bgcolor)
+        if fgcolor:
+            prefix += table._FG(fgcolor)
         if style and style != "underlined":
-            text = table._ATTR(styledict[style]) + text + table._ATTR(0)
+            prefix += table._ATTR(styledict[style])
+        if prefix:
+            text = prefix + text + table._ATTR(0)
+
         return text
 
 
