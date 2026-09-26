@@ -1,6 +1,8 @@
 import importlib
+import os
 import unittest
 import numpy as np
+import ansitable.table as _ansitable_table
 from ansitable import ANSITable, Column, Cell, ANSIMatrix, options
 
 pandas_available = importlib.util.find_spec("pandas") is not None
@@ -1101,6 +1103,80 @@ class TestPandasExport(unittest.TestCase):
         df = table.pandas()
         self.assertEqual(len(df), 2)
         self.assertEqual(list(df["a"]), ["1", "3"])
+
+
+class TestCellBackgroundReset(unittest.TestCase):
+    """Regression tests: combining fgcolor with bgcolor/style on a cell must
+    not let an inner ANSI reset clear the background/style before the
+    cell's padding is written. Previously, a cell that set fgcolor together
+    with bgcolor and/or a non-underline style emitted a full reset (\\x1b[0m)
+    right after the text and before the trailing padding, so the padding
+    -- and hence the right/bottom edge of the colored box -- lost its
+    background. Column._formatcolumn wraps fgcolor, bgcolor and style
+    around the whole gap1+text+gap2 string with a single trailing reset to
+    avoid this. colored's ``Colored.enabled()`` suppresses all output when
+    not attached to a TTY, so FORCE_COLOR is set to get real escape codes
+    under pytest.
+    """
+
+    def setUp(self):
+        self._old_force_color = os.environ.get("FORCE_COLOR")
+        os.environ["FORCE_COLOR"] = "1"
+        # other tests (e.g. test_options_updates_existing_and_future_tables)
+        # can leave the module-level color-enabled flag turned off; pin it
+        # on for this class regardless of run order.
+        self._old_unicode = _ansitable_table._unicode
+        self._old_color_enabled = _ansitable_table._color_enabled
+        options(True, color=True)
+
+    def tearDown(self):
+        if self._old_force_color is None:
+            os.environ.pop("FORCE_COLOR", None)
+        else:
+            os.environ["FORCE_COLOR"] = self._old_force_color
+        _ansitable_table._unicode = self._old_unicode
+        _ansitable_table._color_enabled = self._old_color_enabled
+
+    def test_header_cell_has_single_trailing_reset(self):
+        table = ANSITable(
+            Column("Name", headcolor="black", headbgcolor="white", headstyle="bold"),
+        )
+        table.row("Alice")
+        header_line = str(table).split("\n")[0]
+        self.assertEqual(header_line.count("\x1b[0m"), 1)
+        self.assertTrue(header_line.endswith("\x1b[0m "))
+
+    def test_data_cell_has_single_trailing_reset(self):
+        table = ANSITable(
+            Column(
+                "Name", colcolor="black", colbgcolor="grey_37", colstyle="reverse"
+            ),
+        )
+        table.row("Alice")
+        data_line = str(table).split("\n")[1]
+        self.assertEqual(data_line.count("\x1b[0m"), 1)
+        self.assertTrue(data_line.endswith("\x1b[0m "))
+
+    def test_header_background_covers_padding_after_text(self):
+        table = ANSITable(
+            Column("Name", width=10, headcolor="black", headbgcolor="white"),
+        )
+        table.row("Alice")
+        header_line = str(table).split("\n")[0]
+        bg_on = "\x1b[48;5;15m"
+        reset = "\x1b[0m"
+        # everything between the background switching on and the single
+        # trailing reset -- including the padding -- must be uninterrupted
+        self.assertEqual(header_line.count(reset), 1)
+        between = header_line[header_line.index(bg_on) : header_line.index(reset)]
+        self.assertNotIn(reset, between)
+        self.assertIn(" " * 6, between)  # "Name" padded out to width 10
+
+    def test_row_override_combining_fg_and_bg_has_single_trailing_reset(self):
+        table = ANSITable("col1")
+        table.row("x", fgcolor="blue", bgcolor="yellow")
+        data_line = str(table).split("\n")[1]
+        self.assertEqual(data_line.count("\x1b[0m"), 1)
 
 
 # ----------------------------------------------------------------------- #
