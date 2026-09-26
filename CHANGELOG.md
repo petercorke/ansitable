@@ -2,9 +2,13 @@ CHANGELOG
 
 1.1.0:
 
+- Complete rewrite of the online documentation
+- Added a searchable, click-to-copy 256-color swatch reference page, generated at
+  doc-build time directly from `colored`'s own palette table so it can't go stale.
 - Added a `{X}`/`{XY}` alignment shorthand prefix for column names, e.g.
-  `ANSITable("{<}col1", "{^}col2")`, no more needing full `Column` objects
+  `ANSITable("{^<}col1", "{^}col2")`, no more needing full `Column` objects
   just to set alignment.
+- Classifier and test for Python 3.14
 - **Fixed:** a cell combining `fgcolor` with `bgcolor`/`style` lost its background
   color in the padding after the text — an inner ANSI reset fired before the padding
   was written, clearing formatting an outer wrap had just applied. Mainly visible on
@@ -18,8 +22,6 @@ CHANGELOG
   `html()` despite the docstring claiming style support; now mapped to CSS
   (`font-weight`, `text-decoration`, `opacity`), with `reverse` swapping the resolved
   foreground/background colors.
-- Added a searchable, click-to-copy 256-color swatch reference page, generated at
-  doc-build time directly from `colored`'s own palette table so it can't go stale.
 - All 110 unit tests passing.
 
 1.0.1:
