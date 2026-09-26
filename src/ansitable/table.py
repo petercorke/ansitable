@@ -17,6 +17,7 @@ if TYPE_CHECKING:
 
 try:
     from colored import fore, back, style
+    from colored.library import Library
 
     _color_available = True
 except ImportError:
@@ -450,6 +451,100 @@ borderdict = {
     "double": 4,
 }
 styledict = {"bold": 1, "dim": 2, "underlined": 4, "blink": 5, "reverse": 7}
+
+# CSS declarations for the SGR styles in styledict that have a direct CSS
+# equivalent. "reverse" is deliberately absent: it isn't a standalone
+# declaration, it swaps the resolved foreground/background colors -- see
+# _cell_style_css().
+_css_styledict = {
+    "bold": "font-weight:bold;",
+    "dim": "opacity:0.6;",
+    "underlined": "text-decoration:underline;",
+    # deprecated/unsupported by every modern browser, but still valid CSS
+    # and kept for parity with the terminal renderer's "blink" style
+    "blink": "text-decoration:blink;",
+}
+
+
+def _css_color(name: str | None) -> str | None:
+    """
+    Translate a ``colored``-style color specifier to a CSS color value
+
+    :param name: color name, 256-color number, or ``#rrggbb``/``#rgb`` hex
+        string as accepted by the ``colored`` package, or None
+    :return: a ``#rrggbb`` hex string, or None if ``name`` is None
+
+    ``colored``'s 256-color palette names (e.g. ``"grey_37"``) and bare
+    color numbers (e.g. ``"196"``) are not CSS color keywords -- only the
+    16 or so basic names (``"red"``, ``"black"``, ...) happen to also be
+    valid CSS/SVG keywords, by coincidence rather than by design. Writing
+    an unrecognised name like ``"grey_37"`` straight into a ``style``
+    attribute produces a CSS declaration the browser can't parse, which it
+    silently drops rather than erroring -- so the color just doesn't show
+    up, with no visible sign of why.
+
+    This looks the name up in ``colored``'s own 256-color table
+    (``colored.library.Library``) and returns the palette hex value
+    instead, so :meth:`ANSITable.html` renders the same color the
+    terminal does for the same name via :meth:`Column._formatcolumn`. A
+    literal ``#rrggbb``/``#rgb`` hex string is returned unchanged --
+    that's already valid CSS, and more precise than snapping it to the
+    nearest of the 256 palette entries the way the terminal renderer must.
+    Anything neither recognised by ``colored`` nor a hex string (e.g. a
+    CSS-only color word ``colored`` doesn't know, such as
+    ``"rebeccapurple"``) is also passed through unchanged, on the
+    assumption it's a literal CSS value the caller intended -- ``html()``
+    has never validated color names the way the terminal renderer does at
+    print time.
+    """
+    if name is None:
+        return None
+    if not _color_available:
+        return name
+    name = str(name).lower()
+    if name.startswith("#"):
+        return name
+    code = Library.COLORS.get(name)
+    if code is None and name in Library.HEX_COLORS:
+        # name is already a bare palette number, e.g. "196"
+        code = name
+    if code is None:
+        return name
+    return Library.HEX_COLORS[code]
+
+
+def _cell_style_css(
+    fgcolor: str | None, bgcolor: str | None, style: str | None
+) -> str:
+    """
+    Build the color/style portion of a table cell's inline CSS
+
+    :param fgcolor: foreground color specifier, or None
+    :param bgcolor: background color specifier, or None
+    :param style: one of ``styledict``'s keys, or None
+    :return: CSS declarations (each ending in ``;``), possibly ""
+
+    Shared by :meth:`ANSITable.html`'s header and data cell rendering, so
+    the color/style translation only needs explaining once. Colors go
+    through :func:`_css_color` -- see there for why they can't be written
+    through as-is. ``reverse`` swaps the already-resolved foreground and
+    background colors rather than adding a declaration of its own,
+    mirroring the terminal renderer's "reverse video" SGR code; the other
+    styles map onto CSS via ``_css_styledict``.
+    """
+    css_fgcolor = _css_color(fgcolor)
+    css_bgcolor = _css_color(bgcolor)
+    if style == "reverse":
+        css_fgcolor, css_bgcolor = css_bgcolor, css_fgcolor
+    css = ""
+    if css_fgcolor is not None:
+        css += f"color:{css_fgcolor};"
+    if css_bgcolor is not None:
+        css += f"background-color:{css_bgcolor};"
+    if style is not None:
+        css += _css_styledict.get(style, "")
+    return css
+
 
 # ------------------------------------------------------------------------- #
 
@@ -1349,6 +1444,21 @@ class ANSITable:
 
         The CSS style strings must end with a semi-colon.
 
+        .. warning::
+            ``td``/``th``/``trd``/``trh`` are concatenated *after* the color
+            and style declarations computed from ``fgcolor``/``bgcolor``/
+            ``style`` (and their column/header equivalents), all in the same
+            ``style`` attribute. Within one ``style`` attribute, the last
+            declaration of a given CSS property wins -- so a ``th``/``td``
+            string that itself sets ``color``/``background-color`` (or the
+            ``background`` shorthand, which includes ``background-color``)
+            silently overrides whatever color the table computed, with no
+            error or warning. If a colored header or cell isn't showing the
+            color you set, check whether ``th``/``td`` is also setting a
+            color for the same cells. Restrict these arguments to properties
+            the table itself never sets (border, padding, font-weight of
+            unstyled cells, etc.) to avoid this.
+
         .. note::
             - supports column alignment
             - supports header alignment
@@ -1389,12 +1499,9 @@ class ANSITable:
         # column headers
         s += "  <tr style='" + trh + "'>\n"
         for c in self.columns:
-            style = "text-align:" + align[c.headalign]
-            if c.headcolor is not None:
-                style += "color:" + c.headcolor + ";"
-            if c.headbgcolor is not None:
-                style += "background-color:" + c.headbgcolor + ";"
-            s += "    <th style='" + style + th + "'>" + c.name + "</th>\n"
+            cell_css = "text-align:" + align[c.headalign]
+            cell_css += _cell_style_css(c.headcolor, c.headbgcolor, c.headstyle)
+            s += "    <th style='" + cell_css + th + "'>" + c.name + "</th>\n"
         s += "  </tr>\n"
 
         # rows
@@ -1407,16 +1514,14 @@ class ANSITable:
                 continue
             s += "  <tr style='" + trd + "'>\n"
             for c in self.columns:
-                style = "text-align:" + align[c.colalign]
+                cell_css = "text-align:" + align[c.colalign]
                 fgcolor = c.fgcolor[i] or c.colcolor
                 bgcolor = c.bgcolor[i] or c.colbgcolor
-                if fgcolor is not None:
-                    style += "color:" + fgcolor + ";"
-                if bgcolor is not None:
-                    style += "background-color:" + bgcolor + ";"
+                cellstyle = c.style[i] or c.colstyle
+                cell_css += _cell_style_css(fgcolor, bgcolor, cellstyle)
                 s += (
                     "    <td style='"
-                    + style
+                    + cell_css
                     + td
                     + "'>"
                     + c.formatted[i].replace(
