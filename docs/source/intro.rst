@@ -65,7 +65,8 @@ Other border options: ``"thin"``, ``"round"`` (thin with rounded corners), and `
 Column options
 ---------------
 
-To gain additional control, you can create a table with ``Column`` objects, which allow you to specify formatting, alignment, and width constraints for each column:
+To gain additional control, you can create a table with ``Column`` objects, which allow
+you to specify formatting, alignment, and width constraints for each column:
 
 .. runblock:: plain_python
     :no-prompt:
@@ -88,6 +89,24 @@ Control alignment with ``colalign`` (data) and ``headalign`` (heading):
 - ``"<"`` - left
 - ``">"`` - right (default)
 - ``"^"`` - center
+
+There is also a shorthand way to control header and column alignment using a format string in the column headers.
+
+.. runblock:: plain_python
+    :no-prompt:
+
+    from ansitable import ANSITable, Column
+
+    table = ANSITable("{<}Name", "{^<}Age", "{^>}Admission score", border="thin")
+    table.row("Alice", 25, 95.1)
+    table.row("Bob", 30, 87.3)
+    table.row("Carol", 28, 92.1)
+    table.row("Michelangelo", 35, 88.0)
+    table.print()
+
+If the header string starts with ``{XY}`` where ``X`` and ``Y`` are alignment
+characters, these apply to the header and column alignment respectively.
+If the header string starts with ``{X}`` then ``X`` is used as the alignment character for both the header and the column.  
 
 Width constraints
 ------------------
