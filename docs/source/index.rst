@@ -10,3 +10,4 @@ This Python package allows pretty printing of tables and matrices.  Tables can a
    intro
    table
    matrix
+   colors
