@@ -1,7 +1,7 @@
 # ANSITable
 
 <div align="center">
-  <img src="https://github.com/petercorke/ansitable/raw/master/figs/ansi_logo.png" width="300">
+  <img src="https://github.com/petercorke/ansitable/raw/main/figs/ansi_logo.png" width="300">
   <br>
   <strong>Pretty tables and matrices for Python</strong>
   <br><br>

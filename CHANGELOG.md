@@ -1,5 +1,15 @@
 CHANGELOG
 
+1.1.1:
+
+- **Fixed:** renaming the default branch `master` → `main` broke the README's logo image
+  (a hardcoded `raw/master/...` GitHub URL, which 404s once the branch is gone — unlike
+  `blob/master/...` page links, GitHub doesn't redirect raw-content URLs after a branch
+  rename) and silently stopped CI/docs-deploy from running at all, since `master.yml`'s
+  `push`/`pull_request` triggers still watched `branches: [master]`. Both now point at
+  `main`. This release exists mainly to get a correctly-rendering README back onto PyPI,
+  since 1.1.0's is permanently baked with the broken link.
+
 1.1.0:
 
 - Complete rewrite of the online documentation
