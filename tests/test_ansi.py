@@ -4,10 +4,13 @@ import unittest
 import numpy as np
 import ansitable.table as _ansitable_table
 from ansitable import ANSITable, Column, Cell, ANSIMatrix, options
-from ansitable.table import _css_color
+from ansitable.table import _css_color, _color_available, styledict
 
 pandas_available = importlib.util.find_spec("pandas") is not None
 skip_no_pandas = unittest.skipUnless(pandas_available, "pandas not installed")
+skip_no_colored = unittest.skipUnless(
+    _color_available, "colored package not installed"
+)
 
 unittest.TestCase.maxDiff = None
 
@@ -729,15 +732,14 @@ class TestHTMLColorStyleTranslation(unittest.TestCase):
         html = table.html()
         self.assertIn("background-color:#123456;", html)
 
-    def test_unrecognised_name_passed_through_unchanged(self):
-        # not in colored's palette and not a hex string: assume it's a
-        # literal CSS value the caller intended, same permissive behavior
-        # html() has always had (it doesn't validate colors like the
-        # terminal renderer does at print time)
-        table = ANSITable(Column("col1", colbgcolor="rebeccapurple"))
-        table.row("x")
-        html = table.html()
-        self.assertIn("background-color:rebeccapurple;", html)
+    def test_css_color_passes_through_names_colored_does_not_recognise(self):
+        # _css_color() itself stays permissive for a name colored doesn't
+        # recognise (e.g. a CSS-only keyword): assume it's a literal CSS
+        # value the caller intended. In practice Column/Cell/row now
+        # validate color names eagerly against colored's own palette (see
+        # TestColorValidation), so this path is only reachable by calling
+        # _css_color() directly, or if colored is somehow bypassed.
+        self.assertEqual(_css_color("rebeccapurple"), "rebeccapurple")
 
     def test_colstyle_bold_rendered_as_font_weight(self):
         table = ANSITable(Column("col1", colstyle="bold"))
@@ -1272,6 +1274,123 @@ class TestCellBackgroundReset(unittest.TestCase):
         table.row("x", fgcolor="blue", bgcolor="yellow")
         data_line = str(table).split("\n")[1]
         self.assertEqual(data_line.count("\x1b[0m"), 1)
+
+
+class TestStyleValidation(unittest.TestCase):
+    """Style names are checked eagerly against ANSITable's own style set,
+    independent of whether the colored package is installed."""
+
+    def test_all_supported_styles_accepted(self):
+        for name in styledict:
+            with self.subTest(style=name):
+                Cell("x", style=name)
+
+    def test_unsupported_style_rejected(self):
+        with self.assertRaisesRegex(ValueError, "invalid style"):
+            Cell("x", style="bogus")
+
+    def test_colored_own_style_name_rejected(self):
+        # colored calls this style "underline"; ANSITable's own name is
+        # "underlined", so the raw colored name must not be accepted.
+        with self.assertRaises(ValueError):
+            Cell("x", style="underline")
+
+    def test_none_style_not_validated(self):
+        c = Cell("x", style=None)
+        self.assertIsNone(c.style)
+
+    def test_column_colstyle_and_headstyle_validated(self):
+        Column("c", colstyle="bold", headstyle="dim")
+        with self.assertRaises(ValueError):
+            Column("c", colstyle="bogus")
+        with self.assertRaises(ValueError):
+            Column("c", headstyle="bogus")
+
+    def test_row_style_validated(self):
+        table = ANSITable("a", color=False)
+        table.row("x", style="bold")
+        with self.assertRaises(ValueError):
+            table.row("y", style="bogus")
+
+
+@skip_no_colored
+class TestColorValidation(unittest.TestCase):
+    """Color names/numbers/hex strings are checked eagerly against the same
+    rules the colored package applies when actually rendering the color."""
+
+    def test_valid_named_color_accepted(self):
+        Cell("x", fgcolor="red")
+
+    def test_invalid_named_color_rejected(self):
+        with self.assertRaisesRegex(ValueError, "InvalidColor"):
+            Cell("x", fgcolor="not_a_color")
+
+    def test_color_name_case_insensitive(self):
+        # colored lower-cases names before comparing, so this must match
+        # what actually happens at print time.
+        Cell("x", fgcolor="RED")
+
+    def test_256_color_name_accepted(self):
+        Cell("x", fgcolor="grey_37")
+
+    def test_256_color_number_string_accepted(self):
+        Cell("x", fgcolor="196")
+
+    def test_exact_palette_hex_accepted(self):
+        Cell("x", fgcolor="#ff0000")
+
+    def test_shorthand_hex_accepted(self):
+        Cell("x", fgcolor="#f00")
+
+    def test_arbitrary_hex_snapped_to_nearest_is_accepted(self):
+        # not an exact 256-color palette entry, but colored.fg() snaps any
+        # well-formed hex to the nearest palette color rather than failing
+        Cell("x", fgcolor="#123456")
+
+    def test_malformed_hex_digits_rejected(self):
+        with self.assertRaisesRegex(ValueError, "InvalidHexColor"):
+            Cell("x", fgcolor="#zzzzzz")
+
+    def test_wrong_length_hex_rejected(self):
+        with self.assertRaisesRegex(ValueError, "InvalidHexColor"):
+            Cell("x", fgcolor="#12345")
+
+    def test_none_color_not_validated(self):
+        c = Cell("x", fgcolor=None)
+        self.assertIsNone(c.fgcolor)
+
+    def test_cell_validates_fgcolor_and_bgcolor(self):
+        Cell("x", fgcolor="blue", bgcolor="green")
+        with self.assertRaises(ValueError):
+            Cell("x", fgcolor="bogus")
+        with self.assertRaises(ValueError):
+            Cell("x", bgcolor="bogus")
+
+    def test_column_validates_all_color_fields(self):
+        for field in ("colcolor", "colbgcolor", "headcolor", "headbgcolor"):
+            with self.subTest(field=field):
+                Column("c", **{field: "blue"})
+                with self.assertRaises(ValueError):
+                    Column("c", **{field: "bogus"})
+
+    def test_ansitable_validates_bordercolor(self):
+        ANSITable("a", bordercolor="blue", color=False)
+        with self.assertRaises(ValueError):
+            ANSITable("a", bordercolor="bogus", color=False)
+
+    def test_row_validates_fgcolor_and_bgcolor(self):
+        table = ANSITable("a", color=False)
+        table.row("x", fgcolor="green")
+        with self.assertRaises(ValueError):
+            table.row("y", fgcolor="bogus")
+        with self.assertRaises(ValueError):
+            table.row("y", bgcolor="bogus")
+
+    def test_inline_color_markup_validated(self):
+        table = ANSITable("a", color=False)
+        table.row("<<red>>hello")
+        with self.assertRaises(ValueError):
+            table.row("<<bogus>>hello")
 
 
 # ----------------------------------------------------------------------- #
