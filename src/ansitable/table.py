@@ -18,8 +18,13 @@ if TYPE_CHECKING:
 try:
     from colored import fore, back, style
     from colored.library import Library
+    from colored.exceptions import InvalidColor, InvalidHexColor
+    from colored.hexadecimal import Hex
+    from colored.utilities import Utilities
 
     _color_available = True
+    _color_utils = Utilities()
+    _hex = Hex()
 except ImportError:
     _color_available = False
 
@@ -31,6 +36,51 @@ _unicode = True
 Align = Literal["<", "^", ">"]
 Style = Literal["bold", "dim", "underlined", "blink", "reverse"]
 Border = Literal["ascii", "thin", "round", "thick", "double"]
+
+
+def _check_color(name: str | None) -> None:
+    """
+    Validate a color specifier
+
+    :param name: color name, 256-color number, or ``#rrggbb``/``#rgb`` hex
+        string, defaults to None
+    :raises ValueError: if the ``colored`` package is installed and ``name``
+        is not a color it would accept
+
+    Applies the same rules ``colored`` uses when it actually renders the
+    color, so a bad name is reported immediately -- e.g. when a
+    :class:`Column`, :class:`Cell`, or table row is created -- rather than
+    only when the table is printed. Does nothing if ``name`` is ``None`` or
+    ``colored`` is not installed.
+    """
+    if name is None or not _color_available:
+        return
+    name = str(name).lower()
+    try:
+        if name.startswith("#"):
+            _hex.find(name)
+        else:
+            _color_utils.is_color_exist(name)
+    except (InvalidColor, InvalidHexColor) as e:
+        raise ValueError(str(e)) from e
+
+
+def _check_style(name: str | None) -> None:
+    """
+    Validate a text style specifier
+
+    :param name: style name, defaults to None
+    :raises ValueError: if ``name`` is not one of the supported styles
+
+    Checked eagerly, e.g. when a :class:`Column`, :class:`Cell`, or table row
+    is created, rather than deferred until :meth:`ANSITable.print`.
+    """
+    if name is None:
+        return
+    if name not in styledict:
+        raise ValueError(
+            f"invalid style {name!r}, must be one of {', '.join(styledict)}"
+        )
 
 
 def options(use_unicode: bool, color: bool | None = None) -> None:
@@ -93,6 +143,7 @@ class Cell:
         :param bgcolor: background color, defaults to None
         :param style: text style, one of ``"bold"``, ``"dim"``, ``"underlined"``,
             ``"blink"``, ``"reverse"``, defaults to None
+        :raises ValueError: if fgcolor, bgcolor, or style is not valid
 
         Example:
 
@@ -108,6 +159,9 @@ class Cell:
         Will print a table with the first cell in the last row having a red background.  The colors and style override those specified when the column was created
         or specified for a row.
         """
+        _check_color(fgcolor)
+        _check_color(bgcolor)
+        _check_style(style)
         self.text = str(text)
         self.fgcolor = fgcolor
         self.bgcolor = bgcolor
@@ -205,6 +259,7 @@ class Column:
         :param headbgcolor: Color of heading background, defaults to None
         :param headstyle: Heading text style, see table below, defaults to None
         :param headalign: Heading text alignment, see table below, defaults to ">"
+        :raises ValueError: if a color or style argument is not valid
 
         The :class:`Column` object can passed to the :class:`ANSITable` constructor
         or to :meth:`~ANSITable.addcolumn` to specify the format of a column in a table.
@@ -259,6 +314,12 @@ class Column:
         untouched -- there's nothing else to escape.
 
         """
+        _check_color(colcolor)
+        _check_color(colbgcolor)
+        _check_style(colstyle)
+        _check_color(headcolor)
+        _check_color(headbgcolor)
+        _check_style(headstyle)
 
         name, marker_headalign, marker_colalign = _parse_alignment_prefix(name)
         if marker_colalign is not None and colalign == ">":
@@ -713,6 +774,7 @@ class ANSITable:
         :param color: enable color output for this table instance (also gated by
             global ``options()`` settings), defaults to True
         :raises TypeError: if a positional argument is not a ``str`` or :class:`Column`
+        :raises ValueError: if bordercolor is not a valid color
 
         A table can be created in several different ways::
 
@@ -751,6 +813,7 @@ class ANSITable:
         ===========   ==========================================================
 
         """
+        _check_color(bordercolor)
         self.colsep = colsep
         self.offset = offset
         self.ellipsis = ellipsis
@@ -825,7 +888,8 @@ class ANSITable:
         :param fgcolor: foreground color override for all columns in the row, defaults to None
         :param bgcolor: background color override for all columns in the row, defaults to None
         :param style: style override for all columns in the row, defaults to None
-        :raises ValueError: invalid format string for the data provided
+        :raises ValueError: invalid format string for the data provided, or fgcolor,
+            bgcolor, style, or an inline ``"<<color>>"`` specifier is not valid
 
         ``table.row(d1, d2, ... dN)`` add data items that comprise a row of the
         table.  ``N`` is the number of columns.
@@ -845,6 +909,10 @@ class ANSITable:
                     len(self.columns), len(values)
                 )
             )
+
+        _check_color(fgcolor)
+        _check_color(bgcolor)
+        _check_style(style)
 
         for value, c in zip(values, self.columns):
 
@@ -878,6 +946,7 @@ class ANSITable:
                 # color specifier is given
                 end = s.find(">>")
                 _fgcolor = s[2:end]
+                _check_color(_fgcolor)
                 s = s[end + 2 :]
 
             if c.width is not None and len(s) > c.width:
