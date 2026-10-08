@@ -76,7 +76,7 @@ jobs:
       run: |
         cd docs
         python generate_color_examples.py
-        make html
+        make html llms
         touch build/html/.nojekyll
     - name: Setup Pages
       uses: actions/configure-pages@v6
