@@ -1,5 +1,7 @@
 # ansitable — Agent Instructions
 
+> **Audience:** agents working on ansitable's source code. If you're helping someone *use* ansitable, read https://petercorke.github.io/ansitable/llms.txt instead (or `llms-full.txt` for the complete documentation).
+
 Part of the RVC ecosystem. **Read [rvc-ecosystem/AGENTS.md](https://github.com/petercorke/rvc-ecosystem/blob/main/AGENTS.md) first** — it defines shared conventions: repo ownership, math invariants, dependency boundaries, git/PR workflow, code standards, tech-debt tracking. This file only adds what's specific to this repo.
 
 | | |

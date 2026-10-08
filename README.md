@@ -78,4 +78,6 @@ pip install colored
 ## Documentation
 
 See the [comprehensive documentation](https://petercorke.github.io/ansitable) for tutorials,
-examples, and API reference.
+examples, and API reference. AI assistants can read
+[llms.txt](https://petercorke.github.io/ansitable/llms.txt) or the complete
+[llms-full.txt](https://petercorke.github.io/ansitable/llms-full.txt).
