@@ -813,6 +813,43 @@ class TestMarkdownExport(unittest.TestCase):
         self.assertIn("–", str(table))
         self.assertNotIn("None", str(table))
 
+    def test_export(self):
+        """export() is a switchyard over the individual exporters"""
+        import io
+        import tempfile
+        from pathlib import Path
+
+        table = ANSITable("a", "b")
+        table.row(1, 2)
+        for fmt in ("markdown", "rest", "html", "latex", "wikitable"):
+            self.assertEqual(table.export(fmt), getattr(table, fmt)())
+        self.assertEqual(table.export("csv", delimiter=";"), table.csv(";"))
+        self.assertEqual(table.export("text"), str(table))
+
+        # stream: written, left open, nothing returned
+        stream = io.StringIO()
+        self.assertIsNone(table.export("csv", stream))
+        self.assertEqual(stream.getvalue(), table.csv())
+        self.assertFalse(stream.closed)
+
+        with tempfile.TemporaryDirectory() as d:
+            # Path and str, format inferred from the extension or given
+            table.export(file=Path(d) / "t.md")
+            self.assertEqual((Path(d) / "t.md").read_text(), table.markdown())
+            table.export(file=str(Path(d) / "t.TEX"))
+            self.assertEqual((Path(d) / "t.TEX").read_text(), table.latex())
+            table.export("csv", str(Path(d) / "t.dat"))
+            self.assertEqual((Path(d) / "t.dat").read_text(), table.csv())
+
+            with self.assertRaises(ValueError):
+                table.export(file=Path(d) / "t.zzz")
+            self.assertFalse((Path(d) / "t.zzz").exists())
+
+        with self.assertRaises(ValueError):
+            table.export()
+        with self.assertRaises(ValueError):
+            table.export("pdf")  # type: ignore[arg-type]
+
     def test_markdown_tidy(self):
         """Markdown cells have one space of padding and the separator row matches
         the width of the header, including for very narrow columns"""
