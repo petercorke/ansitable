@@ -243,6 +243,7 @@ class Column:
         headbgcolor: str | None = None,
         headstyle: Style | None = None,
         headalign: Align | None = ">",
+        na_rep: str | None = None,
     ) -> None:
         r"""
         Create a table column
@@ -259,6 +260,9 @@ class Column:
         :param headbgcolor: Color of heading background, defaults to None
         :param headstyle: Heading text style, see table below, defaults to None
         :param headalign: Heading text alignment, see table below, defaults to ">"
+        :param na_rep: Text shown for a missing value (``None``) in this column,
+            ``fmt`` is not applied to it.  Defaults to None, which uses the
+            table's ``na_rep``
         :raises ValueError: if a color or style argument is not valid
 
         The :class:`Column` object can passed to the :class:`ANSITable` constructor
@@ -345,6 +349,7 @@ class Column:
         self.headstyle = headstyle
         self.headalign = colalign if headalign is None else headalign
 
+        self.na_rep = na_rep
         self.width = width
         self.maxwidth = len(name)
 
@@ -759,6 +764,7 @@ class ANSITable:
         columns: int | None = None,
         header: bool = True,
         color: bool = True,
+        na_rep: str = "",
     ) -> None:
         """
         Create a table object
@@ -773,6 +779,9 @@ class ANSITable:
         :param header: Show table header, defaults to True
         :param color: enable color output for this table instance (also gated by
             global ``options()`` settings), defaults to True
+        :param na_rep: text shown for a missing value (``None``), the column's
+            ``fmt`` is not applied to it.  Can be overridden per column with
+            :class:`Column`'s ``na_rep``, defaults to ""
         :raises TypeError: if a positional argument is not a ``str`` or :class:`Column`
         :raises ValueError: if bordercolor is not a valid color
 
@@ -820,6 +829,7 @@ class ANSITable:
         self.bordercolor = bordercolor
         self.header = header
         self.color = bool(color)
+        self.na_rep = na_rep
 
         if border is not None and not _unicode:
             border = "ascii"
@@ -927,7 +937,10 @@ class ANSITable:
                 _bgcolor = bgcolor
                 _style = style
 
-            if c.fmt is None:
+            if value is None:
+                # missing value, shown as na_rep without going through fmt
+                s = c.na_rep if c.na_rep is not None else self.na_rep
+            elif c.fmt is None:
                 s = value
             elif isinstance(c.fmt, str):
                 s = c.fmt.format(value)

@@ -794,6 +794,25 @@ class TestHTMLColorStyleTranslation(unittest.TestCase):
 class TestMarkdownExport(unittest.TestCase):
     """Test Markdown table export format"""
 
+    def test_none_value(self):
+        """None is a missing value: fmt is not applied, na_rep is shown"""
+        table = ANSITable("a", Column("b", "{:.1f}"), Column("c", "{:.1%}", na_rep="-"))
+        table.row("x", None, None)
+        table.row("y", 1.25, 0.5)
+        lines = table.markdown().splitlines()
+        self.assertEqual(lines[2], "|   x |     |     - |")
+        self.assertEqual(lines[3], "|   y | 1.2 | 50.0% |")
+
+        table = ANSITable("a", Column("b", "{:.1f}", na_rep="n/a"), na_rep="?")
+        table.row(None, None)
+        self.assertEqual(table.csv().splitlines()[1], "?,n/a")
+
+        # unformatted columns also show na_rep, not the string "None"
+        table = ANSITable("a", "b", na_rep="–")
+        table.row(1, None)
+        self.assertIn("–", str(table))
+        self.assertNotIn("None", str(table))
+
     def test_markdown_tidy(self):
         """Markdown cells have one space of padding and the separator row matches
         the width of the header, including for very narrow columns"""
