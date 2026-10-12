@@ -136,8 +136,9 @@ Column width can be limited using the ``width`` argument:
     table.row("Michelangelo", 35, 88.0)
     table.print()
 
-Excess text is truncated with an ellipsis (U+2026). Disable with ``ellipsis=False`` which simply
-truncates the field.
+Text wider than a column's explicit ``width`` is truncated with an ellipsis (U+2026). Disable
+with ``ellipsis=False`` which simply truncates the field.  Columns without a ``width`` are sized to
+fit their widest cell, so nothing is truncated.
 
 
 Field formatting
@@ -340,6 +341,18 @@ Export formats
 
 Tables can be exported, as a string, in a number of common markup languages for use in documents.
 Capabilities for alignment, text formatting and color vary across these markup formats.
+
+Each format has its own method, and :meth:`~ansitable.table.ANSITable.export` is a single entry
+point to all of them, which can also write to a file::
+
+    table.export("markdown")                    # returns a string
+    table.export("csv", "results.csv", delimiter=";")
+    table.export(file="table.md")               # format from the file extension
+    table.export("rest", sys.stdout)            # any open text stream
+
+Missing values (``None``) are shown as ``na_rep``, which is blank by default.  It can be set for
+the whole table, ``ANSITable(..., na_rep="-")``, or per column, ``Column("Age", na_rep="n/a")``,
+and the column's format string is not applied to it.
 
 Markdown
 ~~~~~~~~~

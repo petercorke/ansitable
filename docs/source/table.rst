@@ -58,6 +58,6 @@ Render in markup formats
 These methods are used to export an ANSI table to different markup languages.
 
 .. autoclass:: ansitable.table.ANSITable
-   :members: latex, markdown, html, wikitable, csv, pandas, rest
+   :members: export, latex, markdown, html, wikitable, csv, pandas, rest
    :undoc-members:
    :show-inheritance:
