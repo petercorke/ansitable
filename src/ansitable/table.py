@@ -9,7 +9,9 @@ multiple output formats (Markdown, HTML, LaTeX, CSV, RST, wikitable, Pandas).
 Original author: Peter Corke
 """
 import builtins
-from typing import Any, Callable, Literal, TextIO, TYPE_CHECKING, cast
+import os
+from pathlib import Path
+from typing import Any, Callable, Literal, TextIO, TYPE_CHECKING, cast, get_args
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
@@ -36,6 +38,21 @@ _unicode = True
 Align = Literal["<", "^", ">"]
 Style = Literal["bold", "dim", "underlined", "blink", "reverse"]
 Border = Literal["ascii", "thin", "round", "thick", "double"]
+ExportFormat = Literal["text", "markdown", "rest", "csv", "html", "latex", "wikitable"]
+_EXPORT_FORMATS = get_args(ExportFormat)
+
+# file extension -> export format, used when export() is given a path but no format
+_EXPORT_EXTENSIONS: dict[str, ExportFormat] = {
+    ".txt": "text",
+    ".md": "markdown",
+    ".markdown": "markdown",
+    ".rst": "rest",
+    ".csv": "csv",
+    ".html": "html",
+    ".htm": "html",
+    ".tex": "latex",
+    ".wiki": "wikitable",
+}
 
 
 def _check_color(name: str | None) -> None:
@@ -1245,6 +1262,71 @@ class ANSITable:
         except UnicodeEncodeError:
             self.border = "ascii"
             print(str(self), file=file)
+
+    def export(
+        self,
+        format: ExportFormat | None = None,
+        file: str | os.PathLike[str] | TextIO | None = None,
+        **kwargs: Any,
+    ) -> str | None:
+        """
+        Export the table in the given format
+
+        :param format: output format, one of ``"text"``, ``"markdown"``, ``"rest"``,
+            ``"csv"``, ``"html"``, ``"latex"`` or ``"wikitable"``.  If None it is
+            inferred from the extension of ``file``
+        :param file: file name, :class:`~pathlib.Path` or open text stream to write
+            to, defaults to None which returns the text instead
+        :param kwargs: passed to the exporter method, eg. ``delimiter`` for ``"csv"``
+        :raises ValueError: if the format is unknown or cannot be inferred
+        :return: the exported text if ``file`` is None, otherwise None
+
+        This is a single entry point to the output methods :meth:`__str__`,
+        :meth:`markdown`, :meth:`rest`, :meth:`csv`, :meth:`html`, :meth:`latex` and
+        :meth:`wikitable`.  A file name is opened for writing as UTF-8 and closed,
+        a stream is written to but left open.
+
+        Example::
+
+            table.export("markdown")                  # returns a string
+            table.export("csv", "results.csv", delimiter=";")
+            table.export(file="table.md")             # format from the extension
+            table.export("rest", sys.stdout)
+
+        .. note::
+            - ``"text"`` is the same as ``str(table)`` and includes ANSI escape
+              codes if color is enabled, use :meth:`print` to display it.
+            - use :meth:`pandas` for a DataFrame.
+        """
+        valid = ", ".join(f'"{f}"' for f in _EXPORT_FORMATS)
+        if format is None:
+            if file is None or hasattr(file, "write"):
+                raise ValueError(f"format is required, one of {valid}")
+            ext = Path(file).suffix.lower()  # type: ignore[arg-type]
+            if ext not in _EXPORT_EXTENSIONS:
+                raise ValueError(
+                    f"cannot infer format from file extension {ext!r}, "
+                    f"give format as one of {valid}"
+                )
+            format = _EXPORT_EXTENSIONS[ext]
+
+        if format == "text":
+            if kwargs:
+                raise TypeError("export format 'text' takes no extra arguments")
+            text = str(self)
+        elif format in _EXPORT_FORMATS:
+            text = getattr(self, format)(**kwargs)
+        else:
+            raise ValueError(f"unknown export format {format!r}, one of {valid}")
+
+        if file is None:
+            return text
+        if hasattr(file, "write"):
+            file.write(text)  # type: ignore[union-attr]
+        else:
+            with open(file, "w", encoding="utf-8") as f:  # type: ignore[arg-type]
+                f.write(text)
+        return None
 
     def _findwidths(self):
         # find the width of each column and flag if it is
