@@ -790,7 +790,10 @@ class ANSITable:
         :param offset: Horizontal offset of the whole table, defaults to 0
         :param border: Type of border, see table below, defaults to None
         :param bordercolor: Name of color to draw border in, defaults to None
-        :param ellipsis: truncated lines are shown with an ellipsis, defaults to True
+        :param ellipsis: cells wider than a column's explicit ``width`` are cut
+            short and shown with an ellipsis, otherwise they are simply cut, defaults
+            to True.  Columns without a ``width`` fit their widest cell and nothing
+            is ever truncated
         :param columns: if no positional column names/:class:`Column` objects are
             given, create this many empty placeholder columns instead, defaults to None
         :param header: Show table header, defaults to True
@@ -827,6 +830,16 @@ class ANSITable:
 
         left-aligns ``col1``, centres ``column 2 has a big header``, and leaves
         ``column 3`` at the default right alignment.
+
+        Add data with :meth:`row` and :meth:`rule`.  There are two kinds of output:
+
+        - :meth:`print` writes the table to a terminal (or ``file=``), and
+          ``str(table)`` returns the same text.
+        - the exporters return a string with no side effects:
+          :meth:`markdown`, :meth:`rest`, :meth:`csv`, :meth:`html`,
+          :meth:`latex`, :meth:`wikitable` and :meth:`pandas` (a DataFrame).
+          :meth:`export` is a single entry point to all of these, which can also
+          write to a file.
 
         ===========   ==========================================================
         Border        Description

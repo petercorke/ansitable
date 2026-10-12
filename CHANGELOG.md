@@ -1,5 +1,18 @@
 CHANGELOG
 
+1.2.0:
+
+- Added `ANSITable.export(format, file=None, **kwargs)`, a single entry point to the text,
+  markdown, rest, csv, html, latex and wikitable exporters that returns a string or writes to a
+  path or stream, and infers the format from the file extension (#26).
+- Added `na_rep` (on `ANSITable` and `Column`) for missing values; `None` no longer crashes a
+  column `fmt` string or prints as `"None"`, it is shown as `na_rep`, blank by default.
+- **Fixed:** `markdown()` output is tidy: cells have a single space of padding and the separator
+  row is as wide as the header.
+- Docs: exporters are listed in the `ANSITable` docs, and `ellipsis` is explained as applying
+  only to columns with an explicit `width`.
+- llms.txt and llms-full.txt are published with the documentation site.
+
 1.1.1:
 
 - **Fixed:** renaming the default branch `master` → `main` broke the README's logo image
