@@ -1307,36 +1307,49 @@ class ANSITable:
 
         self._findwidths()
 
-        # markdown table setup
-        s = ""
-
-        # column headers
+        # Cell padding is supplied by the "| " ... " " delimiters, so suppress colsep
+        # and make every column at least 3 wide, the minimum for a separator cell.
+        colsep = self.colsep
+        widths = [c.width for c in self.columns]
+        self.colsep = 0
         for c in self.columns:
-            s += "| " + c._formatcolumn(c.name, header=True, plain=True) + " "
-        s += "|\n"
+            c.width = max(c.width, 3)
 
-        for c in self.columns:
-            if c.headalign == "<":
-                bar = ":" + "-" * (c.width - 1)
-            elif c.headalign == "^":
-                bar = ":" + "-" * (c.width - 2) + ":"
-            elif c.headalign == ">":
-                bar = "-" * (c.width - 1) + ":"
-            s += "| " + bar + " "
-        s += "|\n"
+        try:
+            # markdown table setup
+            s = ""
 
-        # rows
-        for i in range(self.nrows):
-            if self.columns[0].formatted[i] is None:
-                # rule row, not supported in markdown
-                continue
+            # column headers
             for c in self.columns:
-                s += (
-                    "| "
-                    + c._formatcolumn(c.formatted[i], header=False, plain=True)
-                    + " "
-                )
+                s += "| " + c._formatcolumn(c.name, header=True, plain=True) + " "
             s += "|\n"
+
+            for c in self.columns:
+                if c.headalign == "<":
+                    bar = ":" + "-" * (c.width - 1)
+                elif c.headalign == "^":
+                    bar = ":" + "-" * (c.width - 2) + ":"
+                else:
+                    bar = "-" * (c.width - 1) + ":"
+                s += "| " + bar + " "
+            s += "|\n"
+
+            # rows
+            for i in range(self.nrows):
+                if self.columns[0].formatted[i] is None:
+                    # rule row, not supported in markdown
+                    continue
+                for c in self.columns:
+                    s += (
+                        "| "
+                        + c._formatcolumn(c.formatted[i], header=False, plain=True)
+                        + " "
+                    )
+                s += "|\n"
+        finally:
+            self.colsep = colsep
+            for c, w in zip(self.columns, widths):
+                c.width = w
 
         return s
 
