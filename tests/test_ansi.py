@@ -312,11 +312,11 @@ ccccccc & 8.8 & -9 \\
 """
         self.assertEqual(table.latex(), ans)
 
-        ans = r"""|           col1  |  column 2 has a big header  |  column 3  |
+        ans = r"""|          col1 | column 2 has a big header | column 3 |
 | ------------: | ------------------------: | -------: |
-|      aaaaaaaaa  |                        2.2  |         3  |
-|  bbbbbbbbbbbbb  |                       -5.5  |         6  |
-|        ccccccc  |                        8.8  |        -9  |
+|     aaaaaaaaa |                       2.2 |        3 |
+| bbbbbbbbbbbbb |                      -5.5 |        6 |
+|       ccccccc |                       8.8 |       -9 |
 """
         self.assertEqual(table.markdown(), ans)
 
@@ -793,6 +793,26 @@ class TestHTMLColorStyleTranslation(unittest.TestCase):
 
 class TestMarkdownExport(unittest.TestCase):
     """Test Markdown table export format"""
+
+    def test_markdown_tidy(self):
+        """Markdown cells have one space of padding and the separator row matches
+        the width of the header, including for very narrow columns"""
+        table = ANSITable("{<}Name", "N", Column("Mid", headalign="^"))
+        table.row("a", 1, 2)
+        lines = table.markdown().splitlines()
+        self.assertEqual(len(set(len(line) for line in lines)), 1)
+        self.assertEqual(lines[0], "| Name |   N | Mid |")
+        self.assertEqual(lines[1], "| :--- | --: | :-: |")
+        self.assertEqual(lines[2], "| a    |   1 |   2 |")
+
+    def test_markdown_does_not_change_table(self):
+        """Exporting markdown leaves colsep and widths as they were"""
+        table = ANSITable("a", "b", colsep=2)
+        table.row(1, 2)
+        before = str(table)
+        table.markdown()
+        self.assertEqual(table.colsep, 2)
+        self.assertEqual(str(table), before)
 
     def test_markdown_header_row(self):
         """Test that markdown output includes header row"""
