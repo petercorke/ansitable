@@ -75,3 +75,8 @@ packages = ["src/ansitable"]
 [tool.black]
 line-length = 88
 target-version = ['py311']
+
+[[tool.mypy.overrides]]
+# pandas is an optional dependency, only used in type annotations
+module = "pandas"
+ignore_missing_imports = true
