@@ -370,6 +370,17 @@ class Column:
         self.width = width
         self.maxwidth = len(name)
 
+    def _cell(self, i: int) -> str:
+        """Formatted text of row ``i``, which must be a data row, not a rule"""
+        s = self.formatted[i]
+        assert s is not None, "rule rows have no cell text"
+        return s
+
+    def _fitwidth(self) -> int:
+        """Column width, valid once :meth:`ANSITable._findwidths` has run"""
+        assert self.width is not None, "column width has not been resolved"
+        return self.width
+
     def _setstyle(self, header: bool) -> str:
         if header:
             color = self.headcolor
@@ -770,6 +781,8 @@ class ANSIMatrix:
 
 
 class ANSITable:
+    borderdict: int | None
+
     def __init__(
         self,
         *pos: str | Column,
@@ -1071,9 +1084,9 @@ class ANSITable:
         data_indices = [i for i in range(self.nrows) if self.columns[0].formatted[i] is not None]
 
         if key is not None:
-            sort_key = lambda i: key(col.formatted[i])  # noqa: E731
+            sort_key = lambda i: key(col._cell(i))  # noqa: E731
         else:
-            sort_key = lambda i: col.formatted[i]  # noqa: E731
+            sort_key = lambda i: col._cell(i)  # noqa: E731
 
         sorted_indices = sorted(data_indices, key=sort_key, reverse=reverse)
 
@@ -1421,7 +1434,7 @@ class ANSITable:
         widths = [c.width for c in self.columns]
         self.colsep = 0
         for c in self.columns:
-            c.width = max(c.width, 3)
+            c.width = max(c._fitwidth(), 3)
 
         try:
             # markdown table setup
@@ -1433,12 +1446,13 @@ class ANSITable:
             s += "|\n"
 
             for c in self.columns:
+                w = c._fitwidth()
                 if c.headalign == "<":
-                    bar = ":" + "-" * (c.width - 1)
+                    bar = ":" + "-" * (w - 1)
                 elif c.headalign == "^":
-                    bar = ":" + "-" * (c.width - 2) + ":"
+                    bar = ":" + "-" * (w - 2) + ":"
                 else:
-                    bar = "-" * (c.width - 1) + ":"
+                    bar = "-" * (w - 1) + ":"
                 s += "| " + bar + " "
             s += "|\n"
 
@@ -1456,8 +1470,8 @@ class ANSITable:
                 s += "|\n"
         finally:
             self.colsep = colsep
-            for c, w in zip(self.columns, widths):
-                c.width = w
+            for c, old_width in zip(self.columns, widths):
+                c.width = old_width
 
         return s
 
@@ -1493,7 +1507,7 @@ class ANSITable:
         # column headers
         divider = ""
         for c in self.columns:
-            divider += "=" * c.width + "  "
+            divider += "=" * c._fitwidth() + "  "
 
         s += divider + "\n"
 
@@ -1714,7 +1728,7 @@ class ANSITable:
                     + cell_css
                     + td
                     + "'>"
-                    + c.formatted[i].replace(
+                    + c._cell(i).replace(
                         "\u2026", "&hellip;"
                     )  # replace unicode ellipsis with HTML entity
                     + "</td>\n"
@@ -1788,7 +1802,7 @@ class ANSITable:
                     first = False
                 else:
                     s += " & "
-                s += c.formatted[i]
+                s += c._cell(i)
             s += " \\\\\n"
         s += "\\hline\n"
         s += "\\end{tabular}\n"
@@ -1842,7 +1856,7 @@ class ANSITable:
                     first = False
                 else:
                     s += delimiter
-                s += c.formatted[i]
+                s += c._cell(i)
             s += "\n"
 
         return s
