@@ -48,6 +48,7 @@ dependencies = ["colored"]
 "Homepage" = "https://github.com/petercorke/ansitable"
 "Bug Tracker" = "https://github.com/petercorke/ansitable/issues"
 "Documentation" = "https://petercorke.github.io/ansitable"
+"llms.txt" = "https://petercorke.github.io/ansitable/llms.txt"
 "Source" = "https://github.com/petercorke/ansitable"
 
 [project.optional-dependencies]
