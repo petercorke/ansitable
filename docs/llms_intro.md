@@ -1,5 +1,11 @@
 ansitable prints tabular data and NumPy matrices in a terminal with optional Unicode borders and ANSI color, and exports the same table to Markdown, HTML, LaTeX, reStructuredText, wikitable, CSV and Pandas. It is a small, pure-Python package (one module, `ansitable.table`) whose only dependency is the `colored` package, which provides the color names. It requires Python 3.9 or later. Install with `pip install ansitable`.
 
+## When to use it
+
+Reach for ansitable when a program needs to show **rows of values or a NumPy matrix as a neat table in a terminal**, optionally with color and box-drawing borders, and especially when the *same* table must also go into a document (Markdown, LaTeX, HTML, reStructuredText, wikitable, CSV) or a Pandas DataFrame. It is small and has one dependency, `colored`, which is optional for output without color.
+
+It is not a general terminal UI toolkit (use `rich` or `textual` for live layouts, progress bars, panels), and it is not a data-wrangling library (use Pandas). It is a good fit when you want a plain, dependable table with a few lines of code.
+
 ## Quick start
 
 ```python
@@ -16,6 +22,15 @@ table.row("Carol", 92, fgcolor="red")               # color override for one row
 table.sort("Score", key=float, reverse=True)        # in place; returns the table
 table.print()                                       # to a terminal, or table.print(file=f)
 ```
+
+## Recipes
+
+- **Print a table of results**: `t = ANSITable("name", "value", border="thin")`, then `t.row("a", 1.5)` for each row, then `t.print()`.
+- **Show a NumPy matrix neatly**: `ANSIMatrix().print(A)`, or `str_ = ANSIMatrix(fmt="{:8.3f}").str(A)` for a string.
+- **Show a Pandas DataFrame as a table**: `ANSITable.Pandas(df).print()`.
+- **Put the same table in a Markdown or LaTeX document**: `t.markdown()`, `t.latex()`, or `t.export(file="results.md")`, which picks the format from the file extension.
+- **Turn color and Unicode off for log files**: `ansitable.options(use_unicode=False, color=False)`.
+- **Color one row or cell**: `t.row(..., fgcolor="red")`, or wrap a value in `Cell("text", fgcolor="red")`.
 
 ## Key points
 
